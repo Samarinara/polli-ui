@@ -1,0 +1,10 @@
+import {mkdir,writeFile,readFile} from 'node:fs/promises';
+const pkg=JSON.parse(await readFile(new URL('../packages/ui/package.json',import.meta.url),'utf8'));
+const components={button:['Button','buttonVariants'],field:['Input','Textarea','NativeSelect','Label','Field'],badge:['Badge'],selection:['Checkbox','Switch'],dialog:['Dialog','DialogTrigger','DialogClose','DialogTitle','DialogDescription','DialogContent'],tabs:['Tabs','TabsList','TabsTrigger','TabsContent'],accordion:['Accordion','AccordionItem','AccordionTrigger','AccordionContent'],menu:['DropdownMenu','DropdownMenuTrigger','DropdownMenuContent','DropdownMenuItem'],tooltip:['TooltipProvider','Tooltip','TooltipTrigger','TooltipContent'],layout:['Surface','Separator','Skeleton','Avatar','EmptyState','ListRow','Alert']};
+const output=new URL('../apps/preview/public/r/',import.meta.url);await mkdir(output,{recursive:true});
+const items=Object.entries(components).map(([name,exports])=>({$schema:'https://ui.shadcn.com/schema/registry-item.json',name:`polli-${name}`,type:'registry:ui',title:`Polli ${name}`,description:'A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.',dependencies:[`${pkg.name}@latest`],files:[{path:`ui/polli-${name}.tsx`,type:'registry:ui',content:`"use client";\nexport { ${exports.join(', ')} } from '${pkg.name}/components/${name}';\n`}]}));
+for(const item of items)await writeFile(new URL(`${item.name}.json`,output),JSON.stringify(item,null,2)+'\n');
+const registry={$schema:'https://ui.shadcn.com/schema/registry.json',name:'polli',homepage:'https://polli.page',items};
+await writeFile(new URL('../apps/preview/public/registry.json',import.meta.url),JSON.stringify(registry,null,2)+'\n');
+await writeFile(new URL('../registry.json',import.meta.url),JSON.stringify(registry,null,2)+'\n');
+console.log(`Built ${items.length} package-backed shadcn registry items.`);

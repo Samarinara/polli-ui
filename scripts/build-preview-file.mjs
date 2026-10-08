@@ -1,0 +1,13 @@
+import {readFile,writeFile} from 'node:fs/promises';
+const base=new URL('../apps/preview/dist/',import.meta.url);
+let html=await readFile(new URL('index.html',base),'utf8');
+const script=html.match(/<script[^>]*src="([^"]+)"[^>]*><\/script>/);
+const style=html.match(/<link[^>]*href="([^"]+\.css)"[^>]*>/);
+if(!script||!style)throw new Error('Build the Vite preview first.');
+const assetPath=path=>new URL('assets/'+path.split('/assets/')[1],base);
+const js=await readFile(assetPath(script[1]),'utf8');
+const css=await readFile(assetPath(style[1]),'utf8');
+html=html.replace(script[0],()=>'<script type="module">'+js.replaceAll('</script','<\\/script')+'</script>');
+html=html.replace(style[0],()=>'<style>'+css+'</style>');
+await writeFile(new URL('../polli-ui-preview.html',import.meta.url),html);
+console.log('Created self-contained polli-ui-preview.html');

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "polli-tabs",
+  "type": "registry:ui",
+  "title": "Polli tabs",
+  "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+  "dependencies": [
+    "@samarinara/polli-ui@latest"
+  ],
+  "files": [
+    {
+      "path": "ui/polli-tabs.tsx",
+      "type": "registry:ui",
+      "content": "\"use client\";\nexport { Tabs, TabsList, TabsTrigger, TabsContent } from '@samarinara/polli-ui/components/tabs';\n"
+    }
+  ]
+}

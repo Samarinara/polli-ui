@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "polli-selection",
+  "type": "registry:ui",
+  "title": "Polli selection",
+  "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+  "dependencies": [
+    "@samarinara/polli-ui@latest"
+  ],
+  "files": [
+    {
+      "path": "ui/polli-selection.tsx",
+      "type": "registry:ui",
+      "content": "\"use client\";\nexport { Checkbox, Switch } from '@samarinara/polli-ui/components/selection';\n"
+    }
+  ]
+}

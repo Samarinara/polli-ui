@@ -1,0 +1,41 @@
+# Copy to an enrolled React app's .github/workflows/polli-ui-update.yml.
+# App must use npm, have a lockfile, and define test:ci and build scripts.
+name: Receive Polli UI updates
+on:
+  repository_dispatch:
+    types: [polli-ui-released]
+  workflow_dispatch:
+permissions:
+  contents: write
+  packages: read
+concurrency:
+  group: polli-ui-update
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.POLLI_APP_UPDATE_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://npm.pkg.github.com
+          scope: '@samarinara'
+      - name: Update shared components and lockfile
+        run: npm install @samarinara/polli-ui@latest --save-exact
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.POLLI_PACKAGES_READ_TOKEN }}
+      - run: npm run test:ci && npm run build
+      - name: Commit only after checks pass
+        run: |
+          git config user.name "polli-ui-bot"
+          git config user.email "polli-ui-bot@users.noreply.github.com"
+          git add package.json package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update shared Polli UI"
+            git push origin HEAD:main
+          fi

@@ -1,0 +1,37 @@
+name: Publish shared components
+on:
+  push:
+    branches: [main]
+    paths: ['packages/ui/**', 'package-lock.json', 'scripts/build-registry.mjs', '.github/workflows/release.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+concurrency:
+  group: polli-package-release
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://npm.pkg.github.com
+          scope: '@samarinara'
+      - run: npm ci
+      - run: npm run build && npm run typecheck && npm test
+      - name: Give this build a unique patch version
+        run: npm version "0.1.${GITHUB_RUN_NUMBER}" -w @samarinara/polli-ui --no-git-tag-version
+      - name: Publish to GitHub Packages
+        run: npm publish -w @samarinara/polli-ui --tag latest
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Notify enrolled apps
+        if: vars.POLLI_APP_REPOSITORIES != ''
+        run: node scripts/notify-apps.mjs
+        env:
+          POLLI_APP_REPOSITORIES: ${{ vars.POLLI_APP_REPOSITORIES }}
+          POLLI_APP_UPDATE_TOKEN: ${{ secrets.POLLI_APP_UPDATE_TOKEN }}

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.tgz
+playwright-report/
+test-results/
+.env*
+.DS_Store
+.tmp/
+.browsers/
+polli-ui-preview.html

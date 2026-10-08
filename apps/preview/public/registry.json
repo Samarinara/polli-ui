@@ -1,0 +1,177 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "polli",
+  "homepage": "https://polli.page",
+  "items": [
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-button",
+      "type": "registry:ui",
+      "title": "Polli button",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-button.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { Button, buttonVariants } from '@samarinara/polli-ui/components/button';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-field",
+      "type": "registry:ui",
+      "title": "Polli field",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-field.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { Input, Textarea, NativeSelect, Label, Field } from '@samarinara/polli-ui/components/field';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-badge",
+      "type": "registry:ui",
+      "title": "Polli badge",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-badge.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { Badge } from '@samarinara/polli-ui/components/badge';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-selection",
+      "type": "registry:ui",
+      "title": "Polli selection",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-selection.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { Checkbox, Switch } from '@samarinara/polli-ui/components/selection';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-dialog",
+      "type": "registry:ui",
+      "title": "Polli dialog",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-dialog.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription, DialogContent } from '@samarinara/polli-ui/components/dialog';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-tabs",
+      "type": "registry:ui",
+      "title": "Polli tabs",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-tabs.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { Tabs, TabsList, TabsTrigger, TabsContent } from '@samarinara/polli-ui/components/tabs';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-accordion",
+      "type": "registry:ui",
+      "title": "Polli accordion",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-accordion.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@samarinara/polli-ui/components/accordion';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-menu",
+      "type": "registry:ui",
+      "title": "Polli menu",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-menu.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@samarinara/polli-ui/components/menu';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-tooltip",
+      "type": "registry:ui",
+      "title": "Polli tooltip",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-tooltip.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@samarinara/polli-ui/components/tooltip';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-layout",
+      "type": "registry:ui",
+      "title": "Polli layout",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-layout.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { Surface, Separator, Skeleton, Avatar, EmptyState, ListRow, Alert } from '@samarinara/polli-ui/components/layout';\n"
+        }
+      ]
+    }
+  ]
+}
