@@ -1,9 +1,134 @@
-import {useState,type ReactNode} from 'react';
-import {ArrowUpRight, Plus, Search, MoreHorizontal, Heart, Leaf, Sun, Moon, Check, BookOpen, Bookmark, Users, Settings, ArrowRight, Copy} from 'lucide-react';
-import {Button,Badge,Input,Textarea,NativeSelect,Label,Field,Checkbox,Switch,Dialog,DialogTrigger,DialogContent,DialogTitle,DialogDescription,DialogClose,Tabs,TabsList,TabsTrigger,TabsContent,Accordion,AccordionItem,AccordionTrigger,AccordionContent,DropdownMenu,DropdownMenuTrigger,DropdownMenuContent,DropdownMenuItem,TooltipProvider,Tooltip,TooltipTrigger,TooltipContent,Surface,Separator,Skeleton,Avatar,EmptyState,ListRow,Alert,palette} from '@samarinara/polli-ui';
-const groups=['Foundations','Buttons','Fields','Selection','Navigation','Overlays','Feedback','Patterns'];
-const usage:Record<string,string>={Foundations:"import '@samarinara/polli-ui/styles.css';",Buttons:"import { Button } from '@samarinara/polli-ui/components/button';\n<Button variant=\"coral\">Add a little something</Button>",Fields:'<Field label={<Label htmlFor="title">Title</Label>}>\n  <Input id="title" placeholder="A little idea…" />\n</Field>',Selection:'<Checkbox id="done" />\n<Label htmlFor="done">Keep in touch</Label>',Navigation:'<Tabs defaultValue="notes">\n  <TabsList><TabsTrigger value="notes">Notes</TabsTrigger></TabsList>\n  <TabsContent value="notes">Your notes</TabsContent>\n</Tabs>',Overlays:'<Dialog>\n  <DialogTrigger asChild><Button>Open</Button></DialogTrigger>\n  <DialogContent>\n    <DialogTitle>A new idea</DialogTitle>\n    <DialogDescription>Make room for something good.</DialogDescription>\n  </DialogContent>\n</Dialog>',Feedback:'<Alert title="All together now">Your changes are saved.</Alert>',Patterns:'<ListRow leading={<Avatar name="Alex Chen" />}\n  title="Alex Chen" description="A friend from the garden" />'};
-function Example({title,description,children}: {title:string;description?:string;children:ReactNode}){return <section className="example"><div className="example-heading"><h3>{title}</h3>{description?<p>{description}</p>:null}</div><div className="example-content">{children}</div></section>}
-function FormDemo(){const [saved,setSaved]=useState(false);return <form className="form-grid" onSubmit={e=>{e.preventDefault();setSaved(true)}}><Field label={<Label htmlFor="name">A name to remember</Label>} hint="Just the way you know them."><Input id="name" name="name" placeholder="Alex Chen" required/></Field><Field label={<Label htmlFor="email">Email address</Label>}><Input id="email" type="email" placeholder="alex@example.com" required/></Field><Field label={<Label htmlFor="category">Category</Label>}><NativeSelect id="category"><option>Friends & family</option><option>Work</option><option>Neighbours</option></NativeSelect></Field><Field label={<Label htmlFor="note">A little note</Label>}><Textarea id="note" placeholder="Loves houseplants. Birthday in June."/></Field><div className="row"><Button type="submit"><Plus/>Save person</Button><Button variant="ghost" type="reset" onClick={()=>setSaved(false)}>Clear</Button></div>{saved?<Alert title="A new connection">Your preview entry is saved for this session.</Alert>:null}</form>}
-function Content({active}:{active:string}){const [checks,setChecks]=useState(false);const [notice,setNotice]=useState('');switch(active){case 'Foundations':return <><Example title="Colour, with a purpose" description="Green anchors the brand. Pastels make room for personality."><div className="palette">{Object.entries(palette).map(([name,hex])=><div key={name}><div className="swatch" style={{background:hex}}/><strong>{name==='white'?'Cloud white':name==='yellow'?'Butter yellow':name==='blue'?'Sky blue':name==='coral'?'Soft coral':name==='green'?'Polli green':name==='ink'?'Ink':'Mint'}</strong><code>{hex}</code></div>)}</div></Example><Example title="A quiet hierarchy" description="System typography feels familiar everywhere."><div className="type-sample"><span className="eyebrow">EVERYDAY THINGS, A LITTLE LIGHTER</span><h2>A little more human.</h2><p>A place for the recipes, ideas, people, and little things that make up your life.</p><span className="muted">Small details. Thoughtfully connected.</span></div></Example><Example title="Space does the organising"><div className="principles"><div><span className="principle-dot mint"/><h4>Connected, not boxed in</h4><p>Use rhythm and margins before borders and cards.</p></div><div><span className="principle-dot coral"/><h4>Soft around the edges</h4><p>Round controls. Gentle colours. Clear actions.</p></div><div><span className="principle-dot butter"/><h4>Simple until you need more</h4><p>Reveal detail at the moment it becomes useful.</p></div></div></Example></>;case 'Buttons':return <><Example title="A friendly next step" description="One primary action. Colour where it earns its place."><div className="row"><Button><Plus/>Add something</Button><Button variant="secondary">Keep exploring<ArrowRight/></Button><Button variant="ghost">Maybe later</Button></div></Example><Example title="A little colour"><div className="row"><Button variant="coral"><Heart/>Favourite</Button><Button variant="butter"><Sun/>Plan my day</Button><Button variant="sky"><Bookmark/>Save for later</Button><Button variant="destructive">Remove</Button></div></Example><Example title="Sizes & states"><div className="row"><Button size="sm">Small</Button><Button>Everyday</Button><Button size="lg">A bigger moment</Button><Button size="icon" aria-label="Add item"><Plus/></Button><Button disabled>Unavailable</Button><Button asChild variant="ghost"><a href="https://polli.page">Visit Polli<ArrowUpRight/></a></Button></div></Example></>;case 'Fields':return <><Example title="Make it easy to begin" description="Real labels, gentle hints, and room to write."><FormDemo/></Example><Example title="Search & validation"><Field label={<Label htmlFor="search-demo">Find something</Label>}><div className="search-field"><Search size={18}/><Input id="search-demo" placeholder="Recipes, notes, people…"/></div></Field><Field label={<Label htmlFor="invalid">Email address</Label>} error={<span id="email-error">Please enter a complete email address.</span>}><Input id="invalid" defaultValue="alex@" aria-invalid="true" aria-describedby="email-error"/></Field><Field label={<Label htmlFor="disabled">Unavailable field</Label>}><Input id="disabled" value="Synced from your profile" disabled/></Field></Example></>;case 'Selection':return <><Example title="Little decisions"><div className="stack"><div className="row"><Checkbox id="check-demo" checked={checks} onCheckedChange={v=>setChecks(v===true)}/><Label htmlFor="check-demo">Remember to send a birthday card</Label>{checks?<Badge>All done</Badge>:null}</div><div className="row"><Checkbox id="indeterminate" checked="indeterminate"/><Label htmlFor="indeterminate">Some items selected</Label></div><div className="row"><Checkbox id="disabled-check" disabled/><Label htmlFor="disabled-check">Not available</Label></div></div></Example><Example title="Preferences"><ListRow title={<Label htmlFor="sync">Keep my apps connected</Label>} description="Share categories across your Polli apps." trailing={<Switch id="sync" defaultChecked/>}/><ListRow title={<Label htmlFor="remind">A gentle reminder</Label>} description="Make room for the things you care about." trailing={<Switch id="remind"/>}/></Example><Example title="Categories"><div className="row"><Badge>Everyday</Badge><Badge tone="coral">People</Badge><Badge tone="butter">Ideas</Badge><Badge tone="sky">Inspiration</Badge><Badge tone="neutral">Unsorted</Badge></div></Example></>;case 'Navigation':return <><Example title="Switch your perspective"><Tabs defaultValue="notes"><TabsList><TabsTrigger value="notes">Notes</TabsTrigger><TabsTrigger value="links">Saved links</TabsTrigger><TabsTrigger value="people">People</TabsTrigger><TabsTrigger value="disabled" disabled>Coming soon</TabsTrigger></TabsList><TabsContent value="notes"><ListRow leading={<BookOpen size={22}/>} title="An idea for a rainy day" description="Make something with your hands."/></TabsContent><TabsContent value="links"><ListRow leading={<Bookmark size={22}/>} title="A little inspiration" description="Something worth coming back to."/></TabsContent><TabsContent value="people"><ListRow leading={<Avatar name="Alex Chen"/>} title="Alex Chen" description="A friend from the garden."/></TabsContent></Tabs></Example><Example title="Detail, when you need it"><Accordion type="single" collapsible><AccordionItem value="one"><AccordionTrigger>How does Polli stay connected?</AccordionTrigger><AccordionContent>Shared components and a common visual language make every app feel like home.</AccordionContent></AccordionItem><AccordionItem value="two"><AccordionTrigger>Can I make it my own?</AccordionTrigger><AccordionContent>Compose the primitives, choose pastel accents, and keep app-specific behaviour in your app.</AccordionContent></AccordionItem></Accordion></Example></>;case 'Overlays':return <><Example title="One thing at a time" description="Keyboard-friendly overlays with focus management."><div className="row"><Dialog><DialogTrigger asChild><Button><Plus/>Start a little idea</Button></DialogTrigger><DialogContent><DialogTitle>A little idea</DialogTitle><DialogDescription>Give it a name. You can add the details later.</DialogDescription><Label htmlFor="idea">Title</Label><Input id="idea" placeholder="Something worth remembering"/><DialogClose asChild><Button onClick={()=>setNotice('Your idea is tucked away.')}>Save idea</Button></DialogClose></DialogContent></Dialog><DropdownMenu><DropdownMenuTrigger asChild><Button variant="secondary">More options<MoreHorizontal/></Button></DropdownMenuTrigger><DropdownMenuContent><DropdownMenuItem onSelect={()=>setNotice('Added to your favourites.')}><Heart size={16}/>Favourite</DropdownMenuItem><DropdownMenuItem onSelect={()=>setNotice('Link copied in this demo.')}><Copy size={16}/>Copy link</DropdownMenuItem><DropdownMenuItem disabled>Archive (unavailable)</DropdownMenuItem></DropdownMenuContent></DropdownMenu><Tooltip><TooltipTrigger asChild><Button size="icon" variant="ghost" aria-label="Preferences"><Settings/></Button></TooltipTrigger><TooltipContent>Your preferences</TooltipContent></Tooltip></div>{notice?<p role="status" className="muted">{notice}</p>:null}</Example></>;case 'Feedback':return <><Example title="A little reassurance"><Alert title="All together now">Your changes are saved. Everything is in its place.</Alert></Example><Example title="Something is on its way"><div className="stack"><Skeleton style={{width:'45%'}}/><Skeleton style={{width:'90%'}}/><Skeleton style={{width:'70%'}}/></div></Example><Example title="Room for a fresh start"><EmptyState icon={<span className="empty-icon"><Leaf size={28}/></span>} title="A little room to grow" description="Save your first idea, and give it a place to belong." action={<Button onClick={()=>setNotice('Your first idea is ready to name.')}><Plus/>Add an idea</Button>}/>{notice?<p role="status">{notice}</p>:null}</Example></>;default:return <><Example title="A familiar place" description="Lists that feel connected, without enclosing every item."><ListRow leading={<Avatar name="Alex Chen"/>} title="Alex Chen" description="Birthday · June 12" trailing={<Badge tone="coral">Friend</Badge>}/><ListRow leading={<Avatar name="Sam Rivera"/>} title="Sam Rivera" description="Always has a book recommendation" trailing={<Button variant="ghost" size="icon" aria-label="Sam's options"><MoreHorizontal/></Button>}/><Separator/><ListRow leading={<span className="app-icon butter"><BookOpen size={20}/></span>} title="An idea worth keeping" description="Topix · Everyday" trailing={<Badge tone="butter">Idea</Badge>}/><ListRow leading={<span className="app-icon sky"><Bookmark size={20}/></span>} title="A place to come back to" description="Pinnit · Inspiration" trailing={<Badge tone="sky">Saved</Badge>}/></Example><Example title="A soft place to land" description="Use a surface for a meaningful group, with open space around it."><Surface><div className="row spread"><div><span className="eyebrow">A LITTLE MOMENT</span><h3>Good things take root.</h3><p className="muted">Start small. Make it yours.</p></div><Button variant="secondary" onClick={()=>setNotice('A small beginning. A good one.')}><Plus/>Begin</Button></div></Surface>{notice?<p role="status">{notice}</p>:null}</Example></>}}
-export function App(){const [active,setActive]=useState('Foundations');const [dark,setDark]=useState(false);const [query,setQuery]=useState('');return <TooltipProvider delayDuration={250}><div className={`polli-root ${dark?'dark':''}`}><header className="topbar"><a className="wordmark" href="#" onClick={()=>setActive('Foundations')}><span className="brand-flower" aria-hidden="true">✿</span>polli<span className="brand-label">design system</span></a><div className="row"><span className="version">v0.1 · a shared beginning</span><Button variant="ghost" size="icon" aria-label={dark?'Use light theme':'Use dark theme'} onClick={()=>{setDark(!dark);document.documentElement.classList.toggle('dark',!dark)}}>{dark?<Sun/>:<Moon/>}</Button><a className="github-link" href="https://github.com/Samarinara/polli-ui">GitHub<ArrowUpRight size={14}/></a></div></header><div className="shell"><aside className="sidebar"><p className="nav-caption">THE POLLI TOOLKIT</p><label className="gallery-search"><Search size={16}/><input aria-label="Find a component group" placeholder="Find an element…" value={query} onChange={e=>setQuery(e.target.value)}/></label><nav aria-label="Component groups">{groups.filter(g=>g.toLowerCase().includes(query.toLowerCase())).map(g=><button key={g} aria-current={active===g?'page':undefined} onClick={()=>setActive(g)} className={active===g?'active':''}>{g}{active===g?<span className="nav-dot"/>:null}</button>)}</nav><div className="sidebar-note"><span className="tiny-flower">✿</span><p>Small experiences.<br/>One familiar feeling.</p><a href="https://polli.page">Made for polli.page<ArrowUpRight size={12}/></a></div></aside><main><div className="hero"><div className="eyebrow"><span className="green-dot"/>THE LITTLE THINGS, TOGETHER</div><h1>{active==='Foundations'?'A little more human.':active}</h1><p>{active==='Foundations'?'A shared language for everything Polli. Friendly colours, soft edges, and room to breathe.':'Thoughtful building blocks for everyday experiences. Try them out. Make yourself at home.'}</p>{active==='Foundations'?<div className="row"><Badge>Open by design</Badge><span className="hero-meta">React · shadcn · Tailwind</span></div>:null}<div className="hero-decoration" aria-hidden="true"><div className="deco-circle"/><div className="deco-flower">✿</div><div className="deco-dot"/></div></div><Content key={active} active={active}/><section className="code-section"><div className="row spread"><h3>Bring it into your app</h3><Badge tone="neutral">Shared package</Badge></div><pre><code>{usage[active]}</code></pre><p>Import the shared package to receive updates. Registry copies are available for intentional customisations.</p></section><footer><span>Made with a little care. ✿</span><span>Polli · {active}</span></footer></main></div></div></TooltipProvider>}
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Github,
+  Menu,
+} from "lucide-react";
+import { pages, pageHref, repoUrl, resolvePage, type PageId } from "./pages";
+import { Sidebar, SearchDialog } from "./ui";
+import { Content } from "./content";
+
+export function App({ initialPage = "overview" }: { initialPage?: PageId }) {
+  const page = resolvePage(initialPage);
+  const index = pages.findIndex((item) => item.id === page.id);
+  const previous = pages[index - 1];
+  const next = pages[index + 1];
+  return (
+    <div className="polli-root docs-root">
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
+      <header className="topbar">
+        <a
+          className="brand"
+          href={pageHref("overview")}
+          aria-label="Polli guidelines home"
+        >
+          <img
+            src="./brand/polli-wordmark.svg"
+            width="78"
+            height="35"
+            alt="Polli"
+          />
+          <span className="brand-divider" />
+          <span>Guidelines</span>
+        </a>
+        <SearchDialog />
+        <div className="header-links">
+          <a href="https://polli.page">
+            polli.page
+            <ArrowUpRight size={14} />
+          </a>
+          <a href={repoUrl} aria-label="Polli UI on GitHub">
+            <Github size={19} />
+          </a>
+        </div>
+      </header>
+      <details className="mobile-navigation">
+        <summary>
+          <span>
+            <Menu size={17} />
+            Documentation
+          </span>
+          <span>{page.title}</span>
+        </summary>
+        <Sidebar active={page.id} />
+      </details>
+      <div className="docs-shell">
+        <aside className="sidebar">
+          <Sidebar active={page.id} />
+          <a className="sidebar-source" href={repoUrl}>
+            View source
+            <ArrowUpRight size={13} />
+          </a>
+        </aside>
+        <main id="main-content" className="doc-main" tabIndex={-1}>
+          <article>
+            <header className="page-header">
+              <p className="breadcrumb">{page.group}</p>
+              <h1>{page.title}</h1>
+              <p className="page-description">{page.description}</p>
+            </header>
+            <details className="mobile-outline">
+              <summary>On this page</summary>
+              <nav aria-label="On this page">
+                {page.sections.map((section) => (
+                  <a key={section.id} href={`#${section.id}`}>
+                    {section.title}
+                  </a>
+                ))}
+              </nav>
+            </details>
+            <Content page={page.id} />
+          </article>
+          <nav className="page-pagination" aria-label="Previous and next pages">
+            {previous ? (
+              <a href={pageHref(previous.id)}>
+                <ArrowLeft size={17} />
+                <span>
+                  <small>Previous</small>
+                  {previous.title}
+                </span>
+              </a>
+            ) : (
+              <span />
+            )}
+            {next ? (
+              <a className="next-page" href={pageHref(next.id)}>
+                <span>
+                  <small>Next</small>
+                  {next.title}
+                </span>
+                <ArrowRight size={17} />
+              </a>
+            ) : (
+              <span />
+            )}
+          </nav>
+          <footer className="page-footer">
+            <span>Polli brand guidelines</span>
+            <a href={`${repoUrl}/blob/main/apps/preview/src/content.tsx`}>
+              Edit this page
+              <ArrowUpRight size={12} />
+            </a>
+          </footer>
+        </main>
+        <aside className="page-outline">
+          <nav aria-label="On this page">
+            <h2>On this page</h2>
+            {page.sections.map((section) => (
+              <a key={section.id} href={`#${section.id}`}>
+                {section.title}
+              </a>
+            ))}
+          </nav>
+          <a className="outline-resource" href={pageHref("getting-started")}>
+            Build with Polli
+            <ArrowUpRight size={13} />
+          </a>
+        </aside>
+      </div>
+    </div>
+  );
+}

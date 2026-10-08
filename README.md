@@ -1,8 +1,8 @@
-# Polli UI ✿
+# Polli UI
 
-A shared design language for the small experiences at **polli.page**: friendly pastel colours, soft controls, clear typography, and connected layouts organised with space.
+A brand documentation site and shared component package for **polli.page**. Editorial layouts, serif headings, readable handwritten content, and purposeful pastel accents.
 
-## Try the gallery
+## Run the guidelines
 
 ```sh
 npm ci
@@ -10,7 +10,11 @@ npm run build
 npm run dev
 ```
 
-Open the Vite URL. `npm run preview:file` also generates a self-contained HTML gallery that you can open directly. The gallery includes every exported component family, interactive controls, keyboard-friendly overlays, responsive layouts, a dark theme, and usage examples. Production output is `apps/preview/dist`.
+Open the Vite URL. The site has dedicated pages for the brand, logo, colour, typography, layout, components, motion, writing, and installation. Navigation uses ordinary links, with a searchable index (Cmd/Ctrl K), section anchors, and mobile navigation.
+
+`npm run build` prerenders all nine pages to `apps/preview/dist`. Every page is readable before JavaScript loads, with no loading screen or entrance animations. JavaScript adds search, clipboard actions, and live component examples. Fonts and official logo artwork are hosted locally. Pages work at the domain root or a GitHub Pages subpath through `PREVIEW_BASE`.
+
+`npm run preview:file` generates an offline `polli-ui-preview/` directory with inlined JavaScript, CSS, and fonts. Open its `index.html` to browse the guidelines. Ordinary page links and the registry files remain available in that directory.
 
 ## Use it in an app
 
@@ -62,7 +66,7 @@ Stable compatibility: `0.1` is the initial API. Breaking changes require a delib
 
 ## shadcn registry
 
-The gallery serves `/registry.json` and `/r/polli-button.json` (and other component families). `npm run registry` rebuilds these from the package version. For local development, after `npm run build` / `npm run dev`:
+The guidelines serve `/registry.json` and `/r/polli-button.json` (and other component families). `npm run registry` rebuilds these from the package version. For local development, after `npm run build` / `npm run dev`:
 
 ```sh
 npx shadcn@latest add http://localhost:5173/r/polli-button.json
@@ -70,22 +74,24 @@ npx shadcn@latest add http://localhost:5173/r/polli-button.json
 
 Configure GitHub Packages access first and import the package stylesheet in your app entry point. The registry installs thin re-exports of the shared package, preserving central ownership. Registry wrappers install the latest published package build. A component copied and edited into an app becomes an intentional fork and no longer receives central implementation updates.
 
-## Publish the gallery
+## Publish the guidelines
 
-Enable **Settings → Pages → Build and deployment → GitHub Actions**. The included workflow deploys the gallery to `https://samarinara.github.io/polli-ui/` on pushes to `main`. This URL becomes live only after Pages is enabled and deployment succeeds. Private repo Pages availability depends on the GitHub plan. If hosting under another path or domain, change `PREVIEW_BASE`. Alternatively deploy `apps/preview/dist` as a static site.
+Enable **Settings → Pages → Build and deployment → GitHub Actions**. The included workflow deploys the guidelines to `https://samarinara.github.io/polli-ui/` on pushes to `main`. This URL becomes live only after Pages is enabled and deployment succeeds. Private repo Pages availability depends on the GitHub plan. If hosting under another path or domain, change `PREVIEW_BASE`. Alternatively deploy `apps/preview/dist` as a static site.
 
 ## What's inside
 
 - `packages/ui`: shared components, brand tokens, stylesheet, shadcn configuration.
-- `apps/preview`: live component gallery and registry endpoint.
+- `apps/preview`: static brand documentation, live examples, local fonts and logos, and registry endpoints.
 - `docs/brand.md`: brand rules, hierarchy, accessibility, and composition.
-- `.github/workflows`: checks, package publishing, and gallery deployment.
+- `.github/workflows`: checks, package publishing, and documentation deployment.
 - `examples/polli-ui-update.yml`: app enrollment workflow.
 
 ```sh
 npm run build
 npm run typecheck
 npm test
+npx playwright install chromium
+npm run test:docs
 npm pack -w @samarinara/polli-ui --dry-run
 ```
 

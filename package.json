@@ -11,6 +11,7 @@
     "build": "npm run build -w @samarinara/polli-ui && npm run registry && npm run build -w @polli/preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:docs": "playwright test",
     "registry": "node scripts/build-registry.mjs",
     "preview:file": "npm run build && node scripts/build-preview-file.mjs"
   },
@@ -22,6 +23,7 @@
     "@types/node": "^22.19.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "esbuild": "^0.25.12",
     "jsdom": "^26.1.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.11"

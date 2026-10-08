@@ -1,5 +1,9 @@
 # Third-party notices
 
+The documentation self-hosts Lora, Inter, and Patrick Hand, distributed under the SIL Open Font License 1.1. Font sources: `https://github.com/google/fonts/tree/main/ofl/lora`, `https://github.com/google/fonts/tree/main/ofl/inter`, and `https://github.com/google/fonts/tree/main/ofl/patrickhand`. Local web fonts are Latin subsets converted to WOFF. The full licences and copyright notices are in `apps/preview/src/fonts/licenses/` and are copied into the built site's `font-licenses/` directory.
+
+Official Polli artwork was obtained from `https://www.polli.page/PolliLogo.svg` and `https://polli.page/favicon.svg`. The brand name and artwork remain the property of their owner.
+
 Polli's source uses the composition patterns of shadcn/ui: Radix primitives, class-variance-authority, clsx, and tailwind-merge. Polli-specific source and styling are authored for this project. Dependencies retain their own licences.
 
 shadcn/ui — Copyright (c) 2023 shadcn — MIT License.
