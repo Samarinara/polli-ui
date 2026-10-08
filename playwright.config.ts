@@ -14,5 +14,6 @@ export default defineConfig({
     command: "npm run preview -w @polli/preview -- --port 4173",
     port: 4173,
     reuseExistingServer: !process.env.CI,
+    env: {PREVIEW_BASE: process.env.DOCS_BASE ?? "/"},
   },
 });
