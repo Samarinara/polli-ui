@@ -506,6 +506,11 @@ export const pages = [
         keywords: "duration easing transitions weight",
       },
       {
+        id: "notebook-gestures",
+        title: "Notebook gestures",
+        keywords: "animated icon copy pencil bookmark bell check ink cross out removal underline",
+      },
+      {
         id: "reduced-motion",
         title: "Reduced motion",
         keywords: "accessibility loading skeleton entrance reveal",

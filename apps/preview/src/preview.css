@@ -1006,7 +1006,6 @@ code {
   overflow-wrap: anywhere;
 }
 .note-complete .note-title {
-  text-decoration: line-through;
   color: var(--docs-muted);
 }
 .notebook-demo > .demo-status {
@@ -1399,3 +1398,8 @@ code {
 .motion-notebook { display: grid; gap: 20px; width: 100%; max-width: 440px; margin-inline: auto; }
 .motion-notebook-row { display: flex; align-items: center; gap: 14px; }
 .motion-notebook-row label { cursor: pointer; }
+
+.motion-note-actions { margin-top: 12px; }
+.motion-saved-note { margin: 0; font-size: 20px; }
+.motion-notebook-row label { flex: 1; }
+.motion-notebook [data-polli="ink-removal-content"] > .motion-notebook-row { padding-block: 3px; }

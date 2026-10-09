@@ -5,6 +5,40 @@
   "items": [
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-animated-icon",
+      "type": "registry:ui",
+      "title": "Polli animated-icon",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-animated-icon.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { AnimatedIcon } from '@samarinara/polli-ui/components/animated-icon';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "polli-ink",
+      "type": "registry:ui",
+      "title": "Polli ink",
+      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "dependencies": [
+        "@samarinara/polli-ui@latest"
+      ],
+      "files": [
+        {
+          "path": "ui/polli-ink.tsx",
+          "type": "registry:ui",
+          "content": "\"use client\";\nexport { InkText, InkRemoval } from '@samarinara/polli-ui/components/ink';\n"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "polli-button",
       "type": "registry:ui",
       "title": "Polli button",

@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import {
   ArrowUpRight,
   ArrowRight,
@@ -35,6 +35,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@samarinara/polli-ui/components/menu";
+import { AnimatedIcon } from "@samarinara/polli-ui/components/animated-icon";
+import { InkText, InkRemoval } from "@samarinara/polli-ui/components/ink";
 import { ListRow, EmptyState } from "@samarinara/polli-ui/components/layout";
 import { Section, RelatedLink } from "./ui";
 import { Playground, SelectControl, ToggleControl } from "./playground";
@@ -156,12 +158,14 @@ import { Input, Label } from "@samarinara/polli-ui/components/field";
 import { Checkbox } from "@samarinara/polli-ui/components/selection";
 import { Badge } from "@samarinara/polli-ui/components/badge";
 import { ListRow } from "@samarinara/polli-ui/components/layout";
+import { InkText, InkRemoval } from "@samarinara/polli-ui/components/ink";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@samarinara/polli-ui/components/menu";
 
 export function Notebook() {
   const [notes, setNotes] = useState(${JSON.stringify(initialNotes, null, 2).replaceAll("\n", "\n  ")});
   const [title, setTitle] = useState("");
   const [nextId, setNextId] = useState(3);
+  const [removing, setRemoving] = useState<number[]>([]);
   const [notice, setNotice] = useState("Try adding a note or completing an item.");
   const visible = notes.filter((note) => ${showCompleted ? "true" : "!note.done"});
   return (
@@ -180,17 +184,25 @@ export function Notebook() {
         <Button type="submit">Add note</Button>
       </form>
       {visible.map((note) => (
-        <ListRow key={note.id}
+        <InkRemoval key={note.id} removed={removing.includes(note.id)} onExitComplete={() => {
+          setNotes((items) => items.filter((item) => item.id !== note.id));
+          setRemoving((items) => items.filter((id) => id !== note.id));
+          setNotice("Note removed in this example.");
+        }}>
+        <ListRow
           leading={<Checkbox aria-label={\`Complete \${note.title}\`} checked={note.done}
             onCheckedChange={(done) => setNotes((items) => items.map((item) => item.id === note.id ? { ...item, done: done === true } : item))} />}
-          title={note.title} description={<Badge>{note.category}</Badge>}
+          title={<InkText crossedOut={note.done}>{note.title}</InkText>} description={<Badge>{note.category}</Badge>}
           trailing={<DropdownMenu>
             <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label={\`Actions for \${note.title}\`}><MoreHorizontal /></Button></DropdownMenuTrigger>
-            <DropdownMenuContent align="end"><DropdownMenuItem onSelect={() => {
-              setNotes((items) => items.filter((item) => item.id !== note.id));
-              setNotice("Note removed in this example.");
+            <DropdownMenuContent align="end" onCloseAutoFocus={(event) => {
+              if (removing.includes(note.id)) { event.preventDefault(); document.getElementById("new-note")?.focus(); }
+            }}><DropdownMenuItem onSelect={() => {
+              document.getElementById("new-note")?.focus();
+              setRemoving((items) => [...items, note.id]);
             }}><Trash2 size={16} />Delete note</DropdownMenuItem></DropdownMenuContent>
           </DropdownMenu>} />
+        </InkRemoval>
       ))}
       {visible.length === 0 ? <p>No notes in this view.</p> : null}
       <p role="status">{notice}</p>
@@ -200,6 +212,8 @@ export function Notebook() {
 
 function Notebook() {
   const [notes, setNotes] = useState(initialNotes);
+  const [removing, setRemoving] = useState<number[]>([]);
+  const input = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [nextId, setNextId] = useState(3);
   const [category, setCategory] = useState<"Ideas" | "Recipes" | "Home">(
@@ -216,6 +230,7 @@ function Notebook() {
   const visible = notes.filter((note) => showCompleted || !note.done);
   const reset = () => {
     setNotes(initialNotes);
+    setRemoving([]);
     setTitle("");
     setNextId(3);
     setCategory("Ideas");
@@ -285,6 +300,7 @@ function Notebook() {
               <div>
                 <Label htmlFor={id}>A new note</Label>
                 <Input
+                  ref={input}
                   id={id}
                   placeholder="Something worth remembering"
                   value={title}
@@ -303,6 +319,11 @@ function Notebook() {
             </form>
             <div className="notebook-rows">
               {visible.map((note) => (
+                <InkRemoval key={note.id} removed={removing.includes(note.id)} onExitComplete={() => {
+                  setNotes(items => items.filter(item => item.id !== note.id));
+                  setRemoving(items => items.filter(item => item !== note.id));
+                  setNotice("Note removed in this example.");
+                }}>
                 <ListRow
                   className={note.done ? "note-complete" : undefined}
                   key={note.id}
@@ -327,7 +348,7 @@ function Notebook() {
                     />
                   }
                   title={
-                    <span className="handwritten note-title">{note.title}</span>
+                    <InkText className="note-title" crossedOut={note.done}>{note.title}</InkText>
                   }
                   description={
                     <Badge
@@ -353,13 +374,12 @@ function Notebook() {
                           <MoreHorizontal />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" onCloseAutoFocus={event => {
+                        if (removing.includes(note.id)) { event.preventDefault(); input.current?.focus(); }
+                      }}>
                         <DropdownMenuItem
                           onSelect={() => {
-                            setNotes((items) =>
-                              items.filter((item) => item.id !== note.id),
-                            );
-                            setNotice("Note removed in this example.");
+                            setRemoving(items => [...items, note.id]);
                           }}
                         >
                           <Trash2 size={16} />
@@ -369,6 +389,7 @@ function Notebook() {
                     </DropdownMenu>
                   }
                 />
+                </InkRemoval>
               ))}
             </div>
             {visible.length === 0 ? (
@@ -401,6 +422,7 @@ function Notebook() {
                     );
                   }}
                 >
+                  <AnimatedIcon name="bookmark" animationKey={bookmarked} active={bookmarked} />
                   {bookmarked ? "Saved" : "Keep it"}
                 </Button>
               }

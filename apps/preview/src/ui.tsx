@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
-  Check,
-  Copy,
   Search,
   X,
   ArrowUpRight,
   ChevronRight,
 } from "lucide-react";
+import { AnimatedIcon } from "@samarinara/polli-ui/components/animated-icon";
 import { groups, pages, pageHref, searchDocs, type PageId } from "./pages";
 
 export function Sidebar({ active }: { active: PageId }) {
@@ -61,6 +60,7 @@ export function CopyButton({
   value: string;
   label?: string;
 }) {
+  const [copyKey, setCopyKey] = useState(0);
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
   useEffect(() => {
     if (status === "idle") return;
@@ -71,6 +71,7 @@ export function CopyButton({
     try {
       await navigator.clipboard.writeText(value);
       setStatus("copied");
+      setCopyKey(key => key + 1);
     } catch {
       setStatus("failed");
     }
@@ -82,7 +83,7 @@ export function CopyButton({
       onClick={copy}
       aria-label={label === "Copy" ? "Copy code" : `${label}: ${value}`}
     >
-      {status === "copied" ? <Check size={14} /> : <Copy size={14} />}
+      <AnimatedIcon name="copy" size={14} animationKey={copyKey} />
       <span aria-live="polite">
         {status === "copied"
           ? "Copied"

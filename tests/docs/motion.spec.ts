@@ -50,6 +50,7 @@ test('checkbox draws a real 180ms stroke, reverses, and snaps under reduced moti
   expect(sample.offset).toBeLessThan(1);
   expect(sample.duration).toBe(180);
   await expect(stroke).toHaveCSS('stroke-dashoffset', '0px');
+  await expect(page.locator('label[for="motion-finished"] [data-polli="ink-words"]')).toHaveCSS('background-size', '100% 100%');
   await page.screenshot({ path: testInfo.outputPath('notebook-checked.png'), fullPage: true });
   await checkbox.click();
   await expect(checkbox).not.toBeChecked();
@@ -96,6 +97,136 @@ test('switch glides and reduced motion preserves its on position', async ({ page
   await page.keyboard.press('Space');
   await expect(thumb).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 20, 0)');
   await expect(thumb).toHaveCSS('transition-duration', '0s');
+});
+
+test('icons stay still on hover, replay on actions, and copy waits for success', async ({ page }) => {
+  await page.addInitScript(() => {
+    (window as Window & { motionStarts: string[] }).motionStarts = [];
+    document.addEventListener('animationstart', event => {
+      (window as Window & { motionStarts: string[] }).motionStarts.push(event.animationName);
+    });
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: {
+      writeText: async () => {},
+    } });
+  });
+  await page.goto('motion.html');
+  const starts = () => page.evaluate(() => (window as Window & { motionStarts: string[] }).motionStarts);
+  const copy = page.getByRole('button', { name: 'Copy reminder', exact: true });
+  await copy.hover();
+  expect(await starts()).toEqual([]);
+  const box = await copy.locator('svg').boundingBox();
+  await copy.click();
+  await expect.poll(starts).toContain('polli-copy-sheet');
+  expect(await copy.locator('svg').boundingBox()).toEqual(box);
+  await copy.click();
+  await expect.poll(async () => (await starts()).filter(name => name === 'polli-copy-sheet').length).toBe(2);
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: {
+      writeText: async () => { throw new Error('Denied'); },
+    } });
+  });
+  await copy.click();
+  await expect(page.getByText('Copy unavailable. Select the reminder text to copy it.')).toBeVisible();
+  expect((await starts()).filter(name => name === 'polli-copy-sheet')).toHaveLength(2);
+
+  const bookmark = page.getByRole('button', { name: 'Bookmark reminder', exact: true });
+  await bookmark.click();
+  await expect(bookmark).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(starts).toContain('polli-ribbon-tuck');
+  await page.getByRole('button', { name: 'Edit reminder', exact: true }).click();
+  await expect(page.getByRole('textbox', { name: 'A little reminder' })).toBeFocused();
+  await expect.poll(starts).toContain('polli-pencil-write');
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.getByRole('button', { name: 'Bookmarked', exact: true }).click();
+  await expect(page.locator('[data-icon="bookmark"] [data-icon-part="ribbon-tip"]')).toHaveCSS('animation-name', 'none');
+});
+
+test('saving draws a finishing underline and the switch stretches within its track', async ({ page }, testInfo) => {
+  await page.goto('motion.html');
+  const words = page.locator('.motion-saved-note');
+  await expect(words.locator('[data-polli="ink-underline"]')).toHaveCSS('opacity', '0');
+  await page.getByRole('textbox', { name: 'A little reminder' }).fill('Something yellow for the table');
+  await expect(words).toHaveText('Pick up flowers on the way home');
+  const ink = await words.evaluate(async element => {
+    (element.closest('.motion-notebook')!.querySelector('button[type="submit"]') as HTMLButtonElement).click();
+    let animation: Animation | undefined;
+    let line: Element | null = null;
+    for (let frame = 0; frame < 10 && !animation; frame++) {
+      await new Promise(requestAnimationFrame);
+      line = element.querySelector('[data-polli="ink-underline"]');
+      animation = line?.getAnimations().find(item => item instanceof CSSAnimation && item.animationName === 'polli-finishing-line');
+    }
+    if (!animation || !line) throw new Error('Missing finishing underline');
+    animation.pause();
+    animation.currentTime = 300;
+    return { opacity: getComputedStyle(line).opacity, duration: animation.effect?.getTiming().duration };
+  });
+  await expect(words).toHaveText('Something yellow for the table');
+  const underline = words.locator('[data-polli="ink-underline"]');
+  expect(Number(ink.opacity)).toBeGreaterThan(0);
+  expect(ink.duration).toBe(640);
+  await page.screenshot({ path: testInfo.outputPath('notebook-finishing-underline.png'), fullPage: true });
+  await underline.evaluate(element => element.getAnimations().forEach(animation => animation.finish()));
+  await expect(underline).toHaveCSS('opacity', '0');
+
+  const toggle = page.getByRole('switch', { name: 'Remind me tomorrow' });
+  const stretch = await toggle.evaluate(async element => {
+    const material = element.querySelector('[data-polli="switch-material"]')!;
+    (element as HTMLElement).click();
+    let animation: Animation | undefined;
+    for (let frame = 0; frame < 10 && !animation; frame++) {
+      await new Promise(requestAnimationFrame);
+      animation = material.getAnimations().find(item => item instanceof CSSAnimation && item.animationName === 'polli-switch-on');
+    }
+    if (!animation) throw new Error('Missing switch stretch');
+    animation.pause();
+    animation.currentTime = 96;
+    const scale = new DOMMatrix(getComputedStyle(material).transform).a;
+    animation.finish();
+    return scale;
+  });
+  expect(stretch).toBeGreaterThan(1);
+  expect(stretch).toBeLessThanOrEqual(1.11);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.getByRole('button', { name: 'Save edit', exact: true }).click();
+  await expect(underline).toHaveCSS('animation-name', 'none');
+});
+
+test('removal marks the note before closing the gap and restores under reduced motion', async ({ page }, testInfo) => {
+  await page.goto('motion.html');
+  const removal = page.locator('[data-polli="ink-removal"]');
+  await removal.scrollIntoViewIfNeeded();
+  const sample = await removal.evaluate(async element => {
+    const before = element.getBoundingClientRect().height;
+    (element.querySelector('button') as HTMLButtonElement).click();
+    let animation: Animation | undefined;
+    for (let frame = 0; frame < 10 && !animation; frame++) {
+      await new Promise(requestAnimationFrame);
+      animation = element.getAnimations().find(item => item instanceof CSSAnimation && item.animationName === 'polli-close-gap');
+    }
+    if (!animation) throw new Error('Missing gap closure');
+    animation.pause();
+    animation.currentTime = 90;
+    const markingHeight = element.getBoundingClientRect().height;
+    animation.currentTime = 300;
+    const closingHeight = element.getBoundingClientRect().height;
+    return { before, markingHeight, closingHeight, timing: animation.effect?.getTiming() };
+  });
+  expect(sample.markingHeight).toBe(sample.before);
+  expect(sample.closingHeight).toBeGreaterThan(0);
+  expect(sample.closingHeight).toBeLessThan(sample.before);
+  expect(sample.timing?.delay).toBe(180);
+  expect(sample.timing?.duration).toBe(240);
+  await expect(removal).toHaveAttribute('inert');
+  await expect(page.getByRole('textbox', { name: 'A little reminder' })).toBeFocused();
+  await page.screenshot({ path: testInfo.outputPath('notebook-removal.png'), fullPage: true });
+  await removal.evaluate(element => element.getAnimations().forEach(animation => animation.finish()));
+  await expect(page.getByRole('button', { name: 'Restore reminder', exact: true })).toBeVisible();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.getByRole('button', { name: 'Restore reminder', exact: true }).click();
+  await page.getByRole('button', { name: 'Remove reminder', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Restore reminder', exact: true })).toBeVisible();
 });
 
 test('disclosures, tabs, and portalled overlays animate after their triggers', async ({ page }) => {

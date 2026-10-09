@@ -8,4 +8,6 @@ export * from './components/accordion';
 export * from './components/menu';
 export * from './components/tooltip';
 export * from './components/layout';
+export * from './components/animated-icon';
+export * from './components/ink';
 export * from './tokens';

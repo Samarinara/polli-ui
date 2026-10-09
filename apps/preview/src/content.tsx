@@ -2,7 +2,7 @@ import { ArrowDownToLine } from "lucide-react";
 import { palette } from "@samarinara/polli-ui/tokens";
 import { Section, Code, Preview, CopyButton, RelatedLink } from "./ui";
 import { type PageId, pageHref } from "./pages";
-import { ButtonExample, NotebookMotionExample } from "./examples";
+import { ButtonExample, NotebookMotionExample, IconMotionExample } from "./examples";
 import { Showcase, ComponentCatalogue } from "./showcase";
 import { ComponentContent } from "./component-docs";
 
@@ -574,6 +574,9 @@ export function Content({ page }: { page: PageId }) {
             <Preview label="Notebook interactions">
               <NotebookMotionExample />
             </Preview>
+            <Preview label="Icon gestures">
+              <IconMotionExample />
+            </Preview>
             <p>
               Hover should change colour or emphasis. Avoid vertical lift on
               buttons. Pressing adds inset pressure without resizing the
@@ -605,7 +608,15 @@ export function Content({ page }: { page: PageId }) {
                   </tr>
                   <tr>
                     <td>Switch</td>
-                    <td>240ms glide with a gentle settling overshoot</td>
+                    <td>240ms glide, slight stretch, and a gentle settling overshoot</td>
+                  </tr>
+                  <tr>
+                    <td>Action icon</td>
+                    <td>180–320ms; one gesture within a steady icon box</td>
+                  </tr>
+                  <tr>
+                    <td>Removal & saved edit</td>
+                    <td>180ms cross out, then 240ms gap closure; 640ms finishing underline</td>
                   </tr>
                   <tr>
                     <td>Disclosure & overlay</td>
@@ -636,6 +647,52 @@ export function Content({ page }: { page: PageId }) {
               <code> --polli-motion-ink</code>,
               <code> --polli-motion-settle</code>, and
               <code> --polli-motion-reveal</code>.
+            </p>
+          </Section>
+          <Section id="notebook-gestures" title="Notebook gestures">
+            <p>
+              A checkmark finishes slowly at the pen tip. The switch stretches by
+              roughly a pixel at each edge as it slides, then becomes round again.
+              Completed handwriting takes a fine line through it. Removing a note
+              draws that line before closing the space it occupied.
+            </p>
+            <p>
+              A successful edit leaves a short underline that fades away. Keep
+              marks on personal content; headings and printed rules stay steady.
+              Move focus to a nearby action before removing its row.
+            </p>
+            <Code>{`import { useState } from "react";
+import { Button, AnimatedIcon, InkText, InkRemoval } from "@samarinara/polli-ui";
+
+function Note({ text, save, remove, focusNext }) {
+  const [saved, setSaved] = useState(0);
+  const [removing, setRemoving] = useState(false);
+  return <InkRemoval removed={removing} onExitComplete={remove}>
+    <InkText underlineKey={saved}>{text}</InkText>
+    <Button onClick={async () => {
+      await save();
+      setSaved(key => key + 1);
+    }}><AnimatedIcon name="check" animationKey={saved} />Save</Button>
+    <Button onClick={() => { focusNext(); setRemoving(true); }}>Remove</Button>
+  </InkRemoval>;
+}`}</Code>
+            <p>
+              <code>AnimatedIcon</code> includes copy, pencil, bookmark, bell, and
+              check. Change <code>animationKey</code> after an action to replay
+              its gesture. Keep the key steady while browsing. For bookmarks,
+              <code> active</code> preserves the filled resting state.
+            </p>
+            <p>
+              <code>InkText crossedOut</code> marks completed content;
+              <code> underlineKey</code> changes after a successful edit.
+              <code> InkRemoval</code> makes its content inert during removal and
+              calls <code>onExitComplete</code> after the gap closes. With reduced
+              motion, removal completes immediately.
+            </p>
+            <p>
+              Copy, bookmark, and bell gestures are adapted from
+              {" "}<a href="https://lucide-animated.com/">Lucide Animated</a>, with
+              Polli timing and CSS animation. The package includes attribution.
             </p>
           </Section>
           <Section id="reduced-motion" title="Reduced motion">

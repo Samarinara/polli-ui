@@ -1,3 +1,5 @@
+import { AnimatedIcon } from "@samarinara/polli-ui/components/animated-icon";
+import { InkText, InkRemoval } from "@samarinara/polli-ui/components/ink";
 import { useId, useState, type ReactNode } from "react";
 import {
   Plus,
@@ -1203,8 +1205,8 @@ function TooltipDoc() {
   const [text, setText] = useState("Keep this note close");
   const [saved, setSaved] = useState(false);
   const code = example(
-    `import { useState } from "react";\nimport { Bookmark } from "lucide-react";\nimport { Button } from "@samarinara/polli-ui/components/button";\nimport { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@samarinara/polli-ui/components/tooltip";`,
-    `  const [saved, setSaved] = useState(false);\n  return (\n    <TooltipProvider delayDuration={${delay}}>\n      <Tooltip>\n        <TooltipTrigger asChild>\n          <Button variant="secondary" size="icon" aria-label="Bookmark note"\n            aria-pressed={saved} onClick={() => setSaved((value) => !value)}>\n            <Bookmark fill={saved ? "currentColor" : "none"} />\n          </Button>\n        </TooltipTrigger>\n        <TooltipContent side="${side}">{${q(text || "Keep this note close")}}</TooltipContent>\n      </Tooltip>\n      <p role="status">{saved ? "Note bookmarked." : "Note is not bookmarked."}</p>\n    </TooltipProvider>\n  );`,
+    `import { useState } from "react";\nimport { AnimatedIcon } from "@samarinara/polli-ui/components/animated-icon";\nimport { Button } from "@samarinara/polli-ui/components/button";\nimport { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@samarinara/polli-ui/components/tooltip";`,
+    `  const [saved, setSaved] = useState(false);\n  return (\n    <TooltipProvider delayDuration={${delay}}>\n      <Tooltip>\n        <TooltipTrigger asChild>\n          <Button variant="secondary" size="icon" aria-label="Bookmark note"\n            aria-pressed={saved} onClick={() => setSaved((value) => !value)}>\n            <AnimatedIcon name="bookmark" animationKey={saved} active={saved} />\n          </Button>\n        </TooltipTrigger>\n        <TooltipContent side="${side}">{${q(text || "Keep this note close")}}</TooltipContent>\n      </Tooltip>\n      <p role="status">{saved ? "Note bookmarked." : "Note is not bookmarked."}</p>\n    </TooltipProvider>\n  );`,
   );
   return (
     <Documentation
@@ -1281,7 +1283,7 @@ function TooltipDoc() {
                     aria-pressed={saved}
                     onClick={() => setSaved((value) => !value)}
                   >
-                    <Bookmark fill={saved ? "currentColor" : "none"} />
+                    <AnimatedIcon name="bookmark" animationKey={saved} active={saved} />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side={side}>
@@ -1454,6 +1456,7 @@ function ListsDoc() {
   const [tone, setTone] = useState<(typeof tones)[number]>("coral");
   const [surface, setSurface] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [removing, setRemoving] = useState(false);
   const person = name.trim() || "Alex Chen";
   const rows = (
     <>
@@ -1465,31 +1468,37 @@ function ListsDoc() {
       />
       <Separator />
       {visible ? (
+        <InkRemoval removed={removing} onExitComplete={() => setVisible(false)}>
         <ListRow
           leading={<Bookmark size={20} />}
-          title={<span className="handwritten">A few things to remember</span>}
+          title={<InkText>A few things to remember</InkText>}
           description="Home · Saved note"
           trailing={
             <Button
               variant="ghost"
               size="icon"
               aria-label="Remove saved note"
-              onClick={() => setVisible(false)}
+              onClick={event => {
+                setRemoving(true);
+                const region = event.currentTarget.closest('[role="region"]');
+                (region?.querySelector('.playground-reset') as HTMLButtonElement | null)?.focus();
+              }}
             >
               <Trash2 />
             </Button>
           }
         />
+        </InkRemoval>
       ) : (
-        <Button variant="secondary" onClick={() => setVisible(true)}>
+        <Button variant="secondary" onClick={() => { setRemoving(false); setVisible(true); }}>
           Restore saved note
         </Button>
       )}
     </>
   );
   const code = example(
-    `import { useState } from "react";\nimport { Bookmark, Trash2 } from "lucide-react";\nimport { Avatar, ListRow, Separator${surface ? ", Surface" : ""} } from "@samarinara/polli-ui/components/layout";\nimport { Badge } from "@samarinara/polli-ui/components/badge";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
-    `  const [visible, setVisible] = useState(true);\n  return (\n    <${surface ? "Surface" : "div"}>\n      <ListRow leading={<Avatar name={${q(person)}} />} title={${q(person)}}\n        description="Birthday · 12 June" trailing={<Badge tone="${tone}">People</Badge>} />\n      <Separator />\n      {visible ? <ListRow leading={<Bookmark size={20} />} title="A few things to remember"\n        description="Home · Saved note" trailing={\n          <Button variant="ghost" size="icon" aria-label="Remove saved note" onClick={() => setVisible(false)}><Trash2 /></Button>\n        } /> : <Button variant="secondary" onClick={() => setVisible(true)}>Restore saved note</Button>}\n    </${surface ? "Surface" : "div"}>\n  );`,
+    `import { useRef, useState } from "react";\nimport { InkText, InkRemoval } from "@samarinara/polli-ui/components/ink";\nimport { Bookmark, Trash2 } from "lucide-react";\nimport { Avatar, ListRow, Separator${surface ? ", Surface" : ""} } from "@samarinara/polli-ui/components/layout";\nimport { Badge } from "@samarinara/polli-ui/components/badge";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
+    `  const [visible, setVisible] = useState(true);\n  const [removing, setRemoving] = useState(false);\n  const restore = useRef<HTMLButtonElement>(null);\n  return (\n    <${surface ? "Surface" : "div"}>\n      <ListRow leading={<Avatar name={${q(person)}} />} title={${q(person)}}\n        description="Birthday · 12 June" trailing={<Badge tone="${tone}">People</Badge>} />\n      <Separator />\n      {visible ? <InkRemoval removed={removing} onExitComplete={() => setVisible(false)}><ListRow leading={<Bookmark size={20} />} title={<InkText>A few things to remember</InkText>}\n        description="Home · Saved note" trailing={\n          <Button variant="ghost" size="icon" aria-label="Remove saved note" onClick={() => { restore.current?.focus(); setRemoving(true); }}><Trash2 /></Button>\n        } /></InkRemoval> : null}\n      <Button ref={restore} variant="secondary" onClick={() => { setRemoving(false); setVisible(true); }}>Restore saved note</Button>\n    </${surface ? "Surface" : "div"}>\n  );`,
   );
   return (
     <Documentation
@@ -1539,6 +1548,7 @@ function ListsDoc() {
             setTone("coral");
             setSurface(false);
             setVisible(true);
+            setRemoving(false);
           }}
           hint="Edit the name to change the initials. Remove and restore the saved note."
           controls={
