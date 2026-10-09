@@ -15,10 +15,15 @@
 @layer polli-base {
  :root { --polli-green:#016630; --polli-coral:#F3A6A0; --polli-yellow:#F8D978; --polli-blue:#A8D5F2; --polli-white:#FAFBF6; --polli-mint:#D9EEDD; --polli-ink:#21352D; --background:var(--polli-white); --foreground:var(--polli-ink); --primary:var(--polli-green); --primary-foreground:var(--polli-white); --muted:#EDF2EA; --muted-foreground:#52665A; --accent:var(--polli-mint); --border:#C1CEC0; --ring:var(--polli-green); --destructive:#A02B28; --radius:1rem; }
  .dark { --background:#17251E; --foreground:#FAFBF6; --primary:#A5D5AD; --primary-foreground:#17251E; --muted:#26392D; --muted-foreground:#B3C5B8; --accent:#314C39; --border:#587060; --ring:#A5D5AD; --destructive:#FFA6A0; }
- .polli-root { color:var(--foreground); background:var(--background); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.5; }
+ .polli-root { color:var(--foreground); background:var(--background); font-family:var(--polli-font-body,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif); line-height:1.5; }
+ .polli-root :is(h1,h2,h3,h4) { font-family:var(--polli-font-heading,Georgia,serif); }
  [data-polli] { box-sizing:border-box; font-family:inherit; }
  button[data-polli],input[data-polli],textarea[data-polli],select[data-polli] { font:inherit; }
+ [data-polli="label"] { font-family:var(--polli-font-heading,Georgia,serif); }
+ :is(input,textarea,select)[data-polli] { font-family:var(--polli-font-input,inherit); font-size:1.25rem; line-height:1.5; }
  button[data-polli] { cursor:pointer; }
+ [data-polli="button"] { transition:background-color 120ms,color 120ms,filter 120ms,transform 100ms; }
+ [data-polli="button"]:active:not(:disabled) { transform:scale(.97); }
  button[data-polli]:disabled { cursor:not-allowed; }
- @media (prefers-reduced-motion:reduce) { [data-polli] { animation:none!important; transition:none!important; } }
+ @media (prefers-reduced-motion:reduce) { [data-polli] { animation:none!important; transition:none!important; } [data-polli="button"] { transform:none!important; } }
 }
