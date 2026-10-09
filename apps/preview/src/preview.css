@@ -884,11 +884,6 @@ code {
   cursor: default;
   opacity: 0.45;
 }
-.polli-root [data-polli="input"][aria-invalid="true"],
-.polli-root [data-polli="textarea"][aria-invalid="true"],
-.polli-root [data-polli="select"][aria-invalid="true"] {
-  border-bottom-color: #b42318;
-}
 .showcase-meta {
   display: flex;
   flex-wrap: wrap;
@@ -1086,8 +1081,6 @@ code {
   font-size: 20px;
   line-height: 1.5;
   background: transparent;
-  border: 0;
-  border-bottom: 1px solid #c1cec0;
   border-radius: 0;
   padding: 9px 0;
 }
