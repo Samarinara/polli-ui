@@ -14,7 +14,7 @@ Open the Vite URL. The homepage is a working notebook: add notes, mark them comp
 
 The component library has twelve dedicated playgrounds for Button, Fields, Checkbox, Switch, Badge, Tabs, Accordion, Dialog, Dropdown menu, Tooltip, Feedback, and Lists & surfaces. Each has Preview / Code tabs, editable props, reset, usage guidance, and an API table. Controls update the real shared component and its copyable React example. Brand, logo, colour, typography, layout, motion, and writing guides sit alongside the library.
 
-Navigation uses ordinary links, with a searchable index (Cmd/Ctrl K), section anchors, and mobile navigation. `npm run build` prerenders all 22 pages to `apps/preview/dist`. Content and default previews appear before JavaScript loads, with no loading screen or entrance animations. JavaScript adds playground interactions, search, and clipboard actions. Fonts and official logo artwork are hosted locally. Pages work at the domain root or a GitHub Pages subpath through `PREVIEW_BASE`.
+Navigation uses ordinary links, with a searchable index (Cmd/Ctrl K), section anchors, and mobile navigation. `npm run build` prerenders all 22 pages to `apps/preview/dist`. Content and default previews appear before JavaScript loads, with no loading screen or entrance animations. JavaScript adds playground interactions, search, and clipboard actions. Fonts and official logo artwork are hosted locally. Vercel serves the site at the domain root. `PREVIEW_BASE` remains available for other static hosts that need a subpath.
 
 `npm run preview:file` generates an offline `polli-ui-preview/` directory with inlined JavaScript, CSS, and fonts. Open its `index.html` to browse and test the components. Ordinary page links and the registry files remain available in that directory.
 
@@ -80,14 +80,16 @@ Configure GitHub Packages access first and import the package stylesheet in your
 
 ## Publish the showcase
 
-Enable **Settings → Pages → Build and deployment → GitHub Actions**. The included workflow deploys the docs to `https://samarinara.github.io/polli-ui/` on pushes to `main`. This URL becomes live only after Pages is enabled and deployment succeeds. Private repo Pages availability depends on the GitHub plan. If hosting under another path or domain, change `PREVIEW_BASE`. Alternatively deploy `apps/preview/dist` as a static site.
+The docs deploy to Vercel from the connected `Samarinara/polli-ui` repository. Production follows `main`; other branches receive preview deployments. The repository's `vercel.json` uses the workspace root, `npm ci`, `npm run build`, and `apps/preview/dist`. Set the Vercel project's Root Directory to the repository root and Node.js to 22.x.
+
+The site is served at `/`, including all prerendered `.html` pages, local fonts and artwork, and the registry endpoints. No SPA catch-all is needed: component pages are real HTML documents. Build and browser checks use this same root path. GitHub Actions runs checks and publishes the shared package; Vercel handles the website deployment.
 
 ## What's inside
 
 - `packages/ui`: shared components, brand tokens, stylesheet, shadcn configuration.
 - `apps/preview`: static component documentation, configurable playgrounds, local fonts and logos, and registry endpoints.
 - `docs/brand.md`: brand rules, hierarchy, accessibility, and composition.
-- `.github/workflows`: checks, package publishing, and documentation deployment.
+- `.github/workflows`: checks and package publishing.
 - `examples/polli-ui-update.yml`: app enrollment workflow.
 
 ```sh
