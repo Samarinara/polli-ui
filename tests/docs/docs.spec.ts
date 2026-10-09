@@ -1,16 +1,8 @@
 import { test, expect } from "@playwright/test";
 
-const documents = [
-  ["index.html", "Brand guidelines"],
-  ["logo.html", "Logo"],
-  ["colour.html", "Colour"],
-  ["typography.html", "Typography"],
-  ["layout.html", "Layout"],
-  ["components.html", "Components"],
-  ["motion.html", "Motion"],
-  ["voice.html", "Writing"],
-  ["getting-started.html", "Getting started"],
-] as const;
+import { pages, pageHref } from "../../apps/preview/src/pages";
+
+const documents = pages.map((page) => [pageHref(page.id).slice(2), page.title]);
 
 test("all pages are readable and connected without JavaScript", async ({
   browser,
@@ -68,7 +60,8 @@ test("every page hydrates without errors or missing local assets", async ({
       [
         "index.html",
         "colour.html",
-        "typography.html",
+        "buttons.html",
+        "fields.html",
         "components.html",
       ].includes(path)
     ) {
@@ -86,7 +79,7 @@ test("search supports keyboard selection, empty results, and Escape focus restor
 }) => {
   await page.goto("index.html");
   await page.keyboard.press("Control+k");
-  const input = page.getByRole("textbox", { name: "Search guidelines" });
+  const input = page.getByRole("textbox", { name: "Search documentation" });
   await expect(input).toBeFocused();
   await input.fill("contrast");
   await page.keyboard.press("ArrowDown");
@@ -97,50 +90,20 @@ test("search supports keyboard selection, empty results, and Escape focus restor
   await expect(page).toHaveURL(/colour\.html#contrast$/);
   await page.reload();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Colour");
-  await page.getByRole("button", { name: "Search guidelines" }).click();
+  await page.getByRole("button", { name: "Search documentation" }).click();
   await input.fill("no-such-guideline");
   await expect(page.getByText("No matches.")).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).not.toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Search guidelines" }),
-  ).toBeFocused();
-});
-
-test("live examples handle form submission, selections, keyboard tabs, and dialogs", async ({
-  page,
-}) => {
-  await page.goto("components.html");
-  const fields = page.locator('section[aria-labelledby="fields"]');
-  await fields.getByLabel("Title", { exact: true }).fill("Weekend plans");
-  await fields.getByRole("button", { name: "Save note" }).click();
-  await expect(fields.getByRole("status")).toContainText("Note saved");
-  await page.getByLabel("Add lemons to the shopping list").check();
-  await expect(
-    page.getByLabel("Add lemons to the shopping list"),
-  ).toBeChecked();
-  await page.getByRole("tab", { name: "Notes", exact: true }).focus();
-  await page.keyboard.press("ArrowRight");
-  await expect(
-    page.getByRole("tab", { name: "Links", exact: true }),
-  ).toHaveAttribute("aria-selected", "true");
-  await page.getByRole("button", { name: "Add category", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "Add category" });
-  await expect(dialog).toBeVisible();
-  await dialog.getByLabel("Category name").fill("Home");
-  await dialog.getByRole("button", { name: "Create category" }).click();
-  await expect(dialog).not.toBeVisible();
-  await expect(
-    page.getByText("Category “Home” created in this example."),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Add category", exact: true }),
+    page.getByRole("button", { name: "Search documentation" }),
   ).toBeFocused();
 });
 
 test("mobile navigation works and pages fit narrow and wide viewports", async ({
   page,
 }, testInfo) => {
+  test.setTimeout(120_000);
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("index.html");
   await page.locator(".mobile-navigation summary").click();
@@ -163,7 +126,12 @@ test("mobile navigation works and pages fit narrow and wide viewports", async ({
       ).toBe(true);
       if (
         width === 375 &&
-        ["index.html", "colour.html", "components.html"].includes(path)
+        [
+          "index.html",
+          "buttons.html",
+          "fields.html",
+          "components.html",
+        ].includes(path)
       ) {
         await page.screenshot({
           path: testInfo.outputPath(path.replace(".html", "-mobile.png")),

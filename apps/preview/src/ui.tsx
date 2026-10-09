@@ -23,7 +23,7 @@ export function Sidebar({ active }: { active: PageId }) {
                 href={pageHref(page.id)}
                 aria-current={active === page.id ? "page" : undefined}
               >
-                {page.id === "overview" ? "Overview" : page.title}
+                {page.title}
               </a>
             ))}
         </div>
@@ -180,11 +180,11 @@ export function SearchDialog() {
         type="button"
         onClick={open}
         aria-haspopup="dialog"
-        aria-label="Search guidelines"
+        aria-label="Search documentation"
         aria-keyshortcuts="Meta+K Control+K"
       >
         <Search size={16} />
-        <span>Search guidelines</span>
+        <span>Search documentation</span>
         <kbd>⌘ K</kbd>
       </button>
       <dialog
@@ -197,14 +197,14 @@ export function SearchDialog() {
         }}
       >
         <h2 id="search-title" className="sr-only">
-          Search guidelines
+          Search documentation
         </h2>
         <div className="search-input-row">
           <Search size={19} />
           <input
             ref={input}
-            aria-label="Search guidelines"
-            placeholder="Search guidelines…"
+            aria-label="Search documentation"
+            placeholder="Search documentation…"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
