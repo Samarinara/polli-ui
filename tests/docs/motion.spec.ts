@@ -131,7 +131,7 @@ test('icons stay still on hover, replay on actions, and copy waits for success',
 
   const bookmark = page.getByRole('button', { name: 'Bookmark reminder', exact: true });
   await bookmark.click();
-  await expect(bookmark).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: 'Bookmarked', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect.poll(starts).toContain('polli-ribbon-tuck');
   await page.getByRole('button', { name: 'Edit reminder', exact: true }).click();
   await expect(page.getByRole('textbox', { name: 'A little reminder' })).toBeFocused();
@@ -199,7 +199,7 @@ test('removal marks the note before closing the gap and restores under reduced m
   await removal.scrollIntoViewIfNeeded();
   const sample = await removal.evaluate(async element => {
     const before = element.getBoundingClientRect().height;
-    (element.querySelector('button') as HTMLButtonElement).click();
+    (element.querySelector('button[data-polli="button"]') as HTMLButtonElement).click();
     let animation: Animation | undefined;
     for (let frame = 0; frame < 10 && !animation; frame++) {
       await new Promise(requestAnimationFrame);
