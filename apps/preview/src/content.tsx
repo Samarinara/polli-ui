@@ -616,7 +616,7 @@ export function Content({ page }: { page: PageId }) {
                   </tr>
                   <tr>
                     <td>Removal & saved edit</td>
-                    <td>180ms cross out, then 240ms gap closure; 640ms finishing underline</td>
+                    <td>180ms cross out, then 240ms gap closure; 640ms underline beneath the Save label</td>
                   </tr>
                   <tr>
                     <td>Disclosure & overlay</td>
@@ -657,8 +657,9 @@ export function Content({ page }: { page: PageId }) {
               draws that line before closing the space it occupied.
             </p>
             <p>
-              A successful edit leaves a short underline that fades away. Keep
-              marks on personal content; headings and printed rules stay steady.
+              A successful save draws a short underline beneath the Save button
+              label, then lets it fade away. The label keeps the button’s type and
+              colour. Saved content, headings, and printed rules stay steady.
               Move focus to a nearby action before removing its row.
             </p>
             <Code>{`import { useState } from "react";
@@ -668,11 +669,11 @@ function Note({ text, save, remove, focusNext }) {
   const [saved, setSaved] = useState(0);
   const [removing, setRemoving] = useState(false);
   return <InkRemoval removed={removing} onExitComplete={remove}>
-    <InkText underlineKey={saved}>{text}</InkText>
+    <InkText>{text}</InkText>
     <Button onClick={async () => {
       await save();
       setSaved(key => key + 1);
-    }}><AnimatedIcon name="check" animationKey={saved} />Save</Button>
+    }}><AnimatedIcon name="check" animationKey={saved} /><InkText underlineKey={saved}>Save</InkText></Button>
     <Button onClick={() => { focusNext(); setRemoving(true); }}>Remove</Button>
   </InkRemoval>;
 }`}</Code>
@@ -684,7 +685,8 @@ function Note({ text, save, remove, focusNext }) {
             </p>
             <p>
               <code>InkText crossedOut</code> marks completed content;
-              <code> underlineKey</code> changes after a successful edit.
+              <code> underlineKey</code> changes after a successful save. Wrap the
+              Save button’s text with it so the underline stays beneath the label.
               <code> InkRemoval</code> makes its content inert during removal and
               calls <code>onExitComplete</code> after the gap closes. With reduced
               motion, removal completes immediately.

@@ -134,6 +134,9 @@
  [data-polli="ink-text"][data-crossed-out] > [data-polli="ink-words"],
  [data-polli="ink-removal"][data-removed] [data-polli="ink-words"] { background-size:100% 100%; color:var(--muted-foreground); }
  [data-polli="ink-underline"] { position:absolute; pointer-events:none; inset-inline-start:0; bottom:-2px; width:min(100%,3.5rem); height:2px; border-radius:60% 30% 50% 40%; background:var(--primary); opacity:0; transform:scaleX(0) rotate(-1deg); transform-origin:left; }
+ /* Save feedback belongs to the action label and uses the button's own ink. */
+ [data-polli="button"] [data-polli="ink-text"] { font-family:inherit; font-weight:inherit; }
+ [data-polli="button"] [data-polli="ink-underline"] { width:100%; bottom:-1px; background:currentColor; }
  [data-polli="ink-underline"]:dir(rtl) { transform-origin:right; }
  [data-polli="ink-underline"][data-polli-motion="interaction"] { animation:polli-finishing-line var(--polli-motion-underline) var(--polli-ease-pen); }
  [data-polli="ink-removal"] { display:grid; grid-template-rows:1fr; }

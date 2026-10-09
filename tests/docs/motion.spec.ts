@@ -142,14 +142,16 @@ test('icons stay still on hover, replay on actions, and copy waits for success',
   await expect(page.locator('[data-icon="bookmark"] [data-icon-part="ribbon-tip"]')).toHaveCSS('animation-name', 'none');
 });
 
-test('saving draws a finishing underline and the switch stretches within its track', async ({ page }, testInfo) => {
+test('saving underlines the button label and the switch stretches within its track', async ({ page }, testInfo) => {
   await page.goto('motion.html');
   const words = page.locator('.motion-saved-note');
-  await expect(words.locator('[data-polli="ink-underline"]')).toHaveCSS('opacity', '0');
+  const save = page.getByRole('button', { name: 'Save edit', exact: true });
+  await expect(save.locator('[data-polli="ink-underline"]')).toHaveCSS('opacity', '0');
+  await expect(words.locator('[data-polli="ink-underline"]')).toHaveCount(0);
   await page.getByRole('textbox', { name: 'A little reminder' }).fill('Something yellow for the table');
   await expect(words).toHaveText('Pick up flowers on the way home');
-  const ink = await words.evaluate(async element => {
-    (element.closest('.motion-notebook')!.querySelector('button[type="submit"]') as HTMLButtonElement).click();
+  const ink = await save.evaluate(async element => {
+    (element as HTMLButtonElement).click();
     let animation: Animation | undefined;
     let line: Element | null = null;
     for (let frame = 0; frame < 10 && !animation; frame++) {
@@ -163,7 +165,9 @@ test('saving draws a finishing underline and the switch stretches within its tra
     return { opacity: getComputedStyle(line).opacity, duration: animation.effect?.getTiming().duration };
   });
   await expect(words).toHaveText('Something yellow for the table');
-  const underline = words.locator('[data-polli="ink-underline"]');
+  const underline = save.locator('[data-polli="ink-underline"]');
+  await expect(words.locator('[data-polli="ink-underline"]')).toHaveCount(0);
+  await expect(underline).toHaveCSS('background-color', 'rgb(250, 251, 246)');
   expect(Number(ink.opacity)).toBeGreaterThan(0);
   expect(ink.duration).toBe(640);
   await page.screenshot({ path: testInfo.outputPath('notebook-finishing-underline.png'), fullPage: true });

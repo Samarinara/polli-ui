@@ -28,13 +28,13 @@ export function NotebookMotionExample() {
         <Label htmlFor="motion-note">A little reminder</Label>
         <Input ref={input} id="motion-note" value={note} onChange={event => setNote(event.target.value)} required />
         <div className="demo-row motion-note-actions">
-          <Button type="submit" size="sm"><AnimatedIcon name="check" animationKey={saveKey} />Save edit</Button>
+          <Button type="submit" size="sm"><AnimatedIcon name="check" animationKey={saveKey} /><InkText underlineKey={saveKey}>Save edit</InkText></Button>
           <Button variant="ghost" size="sm" onClick={() => { setEditKey(value => value + 1); input.current?.focus(); }}>
             <AnimatedIcon name="pencil" animationKey={editKey} />Edit reminder
           </Button>
         </div>
       </form>
-      <p className="motion-saved-note" role="status"><InkText underlineKey={saveKey}>{savedNote}</InkText></p>
+      <p className="motion-saved-note" role="status"><span className="handwritten">{savedNote}</span></p>
       {visible ? <InkRemoval removed={removed} onExitComplete={() => setVisible(false)}>
         <div className="motion-notebook-row">
           <Checkbox id="motion-finished" checked={finished} onCheckedChange={value => setFinished(value === true)} />
@@ -83,12 +83,13 @@ export function IconMotionExample() {
 
 export function ButtonExample() {
   const [saved, setSaved] = useState(false);
+  const [saveKey, setSaveKey] = useState(0);
   return (
     <>
       <div className="demo-row">
-        <Button onClick={() => setSaved(!saved)}>
-          <AnimatedIcon name="check" animationKey={saved} />
-          {saved ? "Saved" : "Save note"}
+        <Button onClick={() => { setSaved(true); setSaveKey(key => key + 1); }}>
+          <AnimatedIcon name="check" animationKey={saveKey} />
+          <InkText underlineKey={saveKey}>{saved ? "Saved" : "Save note"}</InkText>
         </Button>
         <Button variant="secondary" onClick={() => setSaved(false)}>
           Reset

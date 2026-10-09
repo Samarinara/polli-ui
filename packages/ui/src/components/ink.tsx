@@ -6,7 +6,7 @@ import type { ActionKey } from './animated-icon';
 
 export type InkTextProps = React.ComponentPropsWithoutRef<'span'> & {
   crossedOut?: boolean;
-  /** Increment after a successful edit to leave a brief finishing underline. */
+  /** Change after a successful save; wrap the Save button label to underline it. */
   underlineKey?: ActionKey;
 };
 
