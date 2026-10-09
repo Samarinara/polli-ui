@@ -80,7 +80,7 @@ export function CopyButton({
       type="button"
       className="copy-button"
       onClick={copy}
-      aria-label={`${label}: ${value}`}
+      aria-label={label === "Copy" ? "Copy code" : `${label}: ${value}`}
     >
       {status === "copied" ? <Check size={14} /> : <Copy size={14} />}
       <span aria-live="polite">

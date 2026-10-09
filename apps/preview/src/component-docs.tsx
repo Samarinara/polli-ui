@@ -905,9 +905,16 @@ function AccordionDoc() {
                 onChange={(next) => {
                   setDisabled(next);
                   if (next)
-                    setOpen((current) =>
-                      current.filter((item) => item !== "options"),
-                    );
+                    setOpen((current) => {
+                      const remaining = current.filter(
+                        (item) => item !== "options",
+                      );
+                      return !remaining.length &&
+                        mode === "single" &&
+                        !collapsible
+                        ? ["categories"]
+                        : remaining;
+                    });
                 }}
               />
             </>

@@ -86,7 +86,7 @@ test("button controls update the real component and copy its current React confi
       },
     }),
   );
-  await demo.getByRole("button", { name: /^Copy:/ }).click();
+  await demo.getByRole("button", { name: "Copy code", exact: true }).click();
   await expect(demo.getByText("Copied", { exact: true })).toBeVisible();
   expect(
     await page.evaluate(() => (window as Window & { copied?: string }).copied),

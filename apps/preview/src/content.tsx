@@ -520,9 +520,9 @@ export function Content({ page }: { page: PageId }) {
               </table>
             </div>
             <p>
-              Build on a 4px rhythm. Use round buttons and soft input corners.
-              Reserve shadows for overlays, where they communicate that a
-              surface floats above the page.
+              Build on a 4px rhythm. Use round buttons and quiet underlined
+              fields. Reserve shadows for overlays, where they communicate that
+              a surface floats above the page.
             </p>
             <p>
               Keep reading columns around 60–75 characters wide. On narrow
