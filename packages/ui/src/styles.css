@@ -77,6 +77,12 @@
   box-shadow:0 1px 0 var(--destructive);
  }
 
+ /* Focus follows the printed rules rather than framing the whole component. */
+ [data-polli="tabs-trigger"] { position:relative; }
+ [data-polli="tabs-trigger"]::after { content:""; position:absolute; inset-inline:1rem; bottom:4px; height:2px; border-radius:1px; background:var(--ring); opacity:0; pointer-events:none; }
+ [data-polli="tabs-trigger"]:focus-visible::after { opacity:1; }
+ [data-polli="tabs-content"]:focus-visible { box-shadow:-3px 0 0 var(--ring); }
+
  /* Both strokes stay mounted: initial checked states never animate on load. */
  [data-polli="checkbox-mark"] { display:grid; place-items:center; }
  [data-polli-stroke] {
@@ -197,3 +203,8 @@
 @keyframes polli-check-write { from { stroke-dashoffset:1; } to { stroke-dashoffset:0; } }
 @keyframes polli-finishing-line { 0% { opacity:0; transform:scaleX(0) rotate(-1deg); } 15% { opacity:.7; } 35%,65% { opacity:.7; transform:scaleX(1) rotate(-1deg); } 100% { opacity:0; transform:scaleX(1) rotate(-1deg); } }
 @keyframes polli-close-gap { from { grid-template-rows:1fr; opacity:1; } to { grid-template-rows:0fr; opacity:0; } }
+
+/* System outlines remain visible when forced colours replace custom ink. */
+@media (forced-colors:active) {
+ :is([data-polli="input"],[data-polli="textarea"],[data-polli="select"],[data-polli="tabs-trigger"],[data-polli="tabs-content"]):focus-visible { outline:2px solid Highlight; outline-offset:2px; }
+}

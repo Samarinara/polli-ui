@@ -51,9 +51,9 @@ a {
   color: inherit;
   text-decoration: none;
 }
-button:focus-visible,
+button:not([data-polli]):focus-visible,
 a:focus-visible,
-input:focus-visible,
+input:not([data-polli]):focus-visible,
 summary:focus-visible {
   outline: 2px solid #016630;
   outline-offset: 4px;
@@ -749,9 +749,9 @@ code {
 .playground [role="tabpanel"][hidden] {
   display: none;
 }
+.playground > [role="tabpanel"]:focus { outline: none; }
 .playground > [role="tabpanel"]:focus-visible {
-  outline: 2px solid #016630;
-  outline-offset: -3px;
+  box-shadow: inset 2px 0 0 #016630;
 }
 .playground-hint {
   margin: 0 !important;
@@ -871,8 +871,7 @@ code {
   margin: 22px 0 12px;
 }
 .variant-strip [aria-pressed="true"] {
-  outline: 1px solid #016630;
-  outline-offset: 3px;
+  box-shadow: inset 0 -2px 0 #016630;
 }
 .api-import {
   font-size: 12px;
@@ -1403,3 +1402,23 @@ code {
 .motion-saved-note { margin: 0; font-size: 20px; }
 .motion-notebook-row label { flex: 1; }
 .motion-notebook [data-polli="ink-removal-content"] > .motion-notebook-row { padding-block: 3px; }
+
+.playground-tabs button:focus { outline: none; }
+.playground-tabs button:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.property-control :is(select, input:not([type="checkbox"])):focus {
+  outline: none;
+  border-bottom-color: #016630;
+  box-shadow: 0 1px 0 #016630;
+}
+@media (forced-colors: active) {
+  .playground-tabs button:focus-visible,
+  .playground > [role="tabpanel"]:focus-visible,
+  .property-control :is(select, input:not([type="checkbox"])):focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}

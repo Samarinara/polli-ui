@@ -641,6 +641,12 @@ export function Content({ page }: { page: PageId }) {
               and the corresponding keyboard behaviour.
             </p>
             <p>
+              Focus follows the notebook’s rules: fields darken their baseline,
+              keyboard-focused tabs gain a small underline, and focused panels
+              receive a single edge mark. Forced-colour mode uses the system’s
+              focus outline so the indicator remains visible.
+            </p>
+            <p>
               An Alert or EmptyState revealed by an action can opt in with
               <code> data-polli-motion="interaction"</code>. Leave this off
               initial content. Tune shared timing through

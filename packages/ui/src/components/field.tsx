@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cn } from '../lib/utils';
-const inputClass='w-full rounded-none border-0 border-b border-border bg-transparent px-0 py-3 text-base text-foreground placeholder:text-muted-foreground focus:border-primary focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 disabled:opacity-50 aria-invalid:border-destructive';
+const inputClass='w-full rounded-none border-0 border-b border-border bg-transparent px-0 py-3 text-base text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none disabled:opacity-50 aria-invalid:border-destructive';
 export const Input=React.forwardRef<HTMLInputElement,React.ComponentPropsWithoutRef<'input'>>(({className,...props},ref)=><input data-polli="input" ref={ref} className={cn(inputClass,className)} {...props}/>); Input.displayName='Input';
 export const Textarea=React.forwardRef<HTMLTextAreaElement,React.ComponentPropsWithoutRef<'textarea'>>(({className,...props},ref)=><textarea data-polli="textarea" ref={ref} className={cn(inputClass,'min-h-28 resize-y',className)} {...props}/>); Textarea.displayName='Textarea';
 export const NativeSelect=React.forwardRef<HTMLSelectElement,React.ComponentPropsWithoutRef<'select'>>(({className,...props},ref)=><select data-polli="select" ref={ref} className={cn(inputClass,className)} {...props}/>); NativeSelect.displayName='NativeSelect';

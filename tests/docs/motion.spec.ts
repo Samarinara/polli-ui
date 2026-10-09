@@ -79,6 +79,7 @@ test('pressing gives inset pressure without resizing, while fields take ink', as
   const inputBefore = await input.boundingBox();
   await input.focus();
   await expect(input).toHaveCSS('border-bottom-color', 'rgb(1, 102, 48)');
+  await expect(input).toHaveCSS('outline-style', 'none');
   expect(await input.boundingBox()).toEqual(inputBefore);
 });
 

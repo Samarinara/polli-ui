@@ -202,10 +202,19 @@ test("tabs and accordions support keyboard activation and multiple disclosure", 
   await expect(
     demo.getByRole("tab", { name: "Links", exact: true }),
   ).toHaveAttribute("aria-selected", "true");
+  const focusedTab = demo.getByRole("tab", { name: "Notes", exact: true });
+  await expect(focusedTab).toHaveCSS("outline-style", "none");
+  expect(await focusedTab.evaluate(element => getComputedStyle(element, "::after").opacity)).toBe("1");
   await page.keyboard.press("Enter");
-  await expect(
-    demo.getByRole("tab", { name: "Notes", exact: true }),
-  ).toHaveAttribute("aria-selected", "true");
+  await expect(focusedTab).toHaveAttribute("aria-selected", "true");
+  await page.keyboard.press("Tab");
+  const panel = demo.locator('[data-polli="tabs-content"][data-state="active"]');
+  await expect(panel).toBeFocused();
+  await expect(panel).toHaveCSS("outline-style", "none");
+  await expect(panel).toHaveCSS("box-shadow", "rgb(1, 102, 48) -3px 0px 0px 0px");
+  await page.emulateMedia({ forcedColors: "active" });
+  await expect(panel).toHaveCSS("outline-style", "solid");
+  await page.emulateMedia({ forcedColors: "none" });
   await demo.getByLabel("Disable Recipes").check();
   await expect(
     demo.getByRole("tab", { name: "Recipes", exact: true }),
