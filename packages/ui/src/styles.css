@@ -19,11 +19,121 @@
  .polli-root :is(h1,h2,h3,h4) { font-family:var(--polli-font-heading,Georgia,serif); }
  [data-polli] { box-sizing:border-box; font-family:inherit; }
  button[data-polli],input[data-polli],textarea[data-polli],select[data-polli] { font:inherit; }
- [data-polli="label"] { font-family:var(--polli-font-heading,Georgia,serif); }
+ :is([data-polli="label"],[data-polli="alert-title"]) { font-family:var(--polli-font-heading,Georgia,serif); }
  :is(input,textarea,select)[data-polli] { font-family:var(--polli-font-input,inherit); font-size:1.25rem; line-height:1.5; }
  button[data-polli] { cursor:pointer; }
- [data-polli="button"] { transition:background-color 120ms,color 120ms,filter 120ms,transform 100ms; }
- [data-polli="button"]:active:not(:disabled) { transform:scale(.97); }
  button[data-polli]:disabled { cursor:not-allowed; }
- @media (prefers-reduced-motion:reduce) { [data-polli] { animation:none!important; transition:none!important; } [data-polli="button"] { transform:none!important; } }
 }
+
+@layer polli-base {
+ :root {
+  --polli-motion-press:90ms;
+  --polli-motion-state:160ms;
+  --polli-motion-ink:180ms;
+  --polli-motion-reveal:220ms;
+  --polli-motion-settle:240ms;
+  --polli-ease:cubic-bezier(.2,.75,.25,1);
+  --polli-ease-settle:cubic-bezier(.2,.8,.3,1.06);
+  --polli-pressure:color-mix(in srgb,var(--foreground) 12%,transparent);
+ }
+
+ /* Bones hold the page together; personal content supplies the handwriting. */
+ .polli-handwritten,[data-polli="list-title"] {
+  font-family:var(--polli-font-input,var(--polli-font-body,inherit));
+  font-weight:400;
+ }
+
+ /* Pressure stays inside the control. Nothing lifts or changes overall size. */
+ :is([data-polli="button"],[data-polli="dialog-close"],[data-polli="tabs-trigger"],[data-polli="accordion-trigger"],[data-polli="menu-item"],[data-polli="checkbox"],[data-polli="switch"]) {
+  transition:background-color var(--polli-motion-state) var(--polli-ease),color var(--polli-motion-state) var(--polli-ease),border-color var(--polli-motion-state) var(--polli-ease),filter var(--polli-motion-state) var(--polli-ease),box-shadow var(--polli-motion-state) var(--polli-ease);
+ }
+ :is([data-polli="button"],[data-polli="dialog-close"],[data-polli="tabs-trigger"],[data-polli="accordion-trigger"],[data-polli="menu-item"],[data-polli="checkbox"],[data-polli="switch"]):active:not(:disabled):not([aria-disabled="true"]):not([data-disabled]) {
+  box-shadow:inset 0 1px 3px var(--polli-pressure);
+  transition-duration:var(--polli-motion-press);
+ }
+ :is([data-polli="button"],[data-polli="dialog-close"]) > svg {
+  transition:transform var(--polli-motion-state) var(--polli-ease);
+ }
+ :is([data-polli="button"],[data-polli="dialog-close"]):active:not(:disabled):not([aria-disabled="true"]) > svg {
+  transform:translateY(1px);
+  transition-duration:var(--polli-motion-press);
+ }
+
+ /* A focused baseline takes ink without moving the field or its label. */
+ :is([data-polli="input"],[data-polli="textarea"],[data-polli="select"]) {
+  transition:border-color var(--polli-motion-ink) var(--polli-ease),box-shadow var(--polli-motion-ink) var(--polli-ease);
+ }
+ :is([data-polli="input"],[data-polli="textarea"],[data-polli="select"]):focus:not(:disabled) {
+  border-color:var(--primary);
+  box-shadow:0 1px 0 var(--primary);
+ }
+ :is([data-polli="input"],[data-polli="textarea"],[data-polli="select"])[aria-invalid="true"] {
+  border-color:var(--destructive);
+ }
+ :is([data-polli="input"],[data-polli="textarea"],[data-polli="select"])[aria-invalid="true"]:focus {
+  box-shadow:0 1px 0 var(--destructive);
+ }
+
+ /* Both strokes stay mounted: initial checked states never animate on load. */
+ [data-polli="checkbox-mark"] { display:grid; place-items:center; }
+ [data-polli-stroke] {
+  stroke-dasharray:1;
+  stroke-dashoffset:1;
+  opacity:0;
+  transition:stroke-dashoffset var(--polli-motion-ink) var(--polli-ease),opacity var(--polli-motion-press) linear;
+ }
+ [data-polli="checkbox"][data-state="checked"] [data-polli-stroke="check"],
+ [data-polli="checkbox"][data-state="indeterminate"] [data-polli-stroke="minus"] {
+  stroke-dashoffset:0;
+  opacity:1;
+ }
+ [data-polli="switch-thumb"] {
+  transform:translateX(0);
+  transition:transform var(--polli-motion-settle) var(--polli-ease-settle),box-shadow var(--polli-motion-state) var(--polli-ease);
+ }
+ [data-polli="switch-thumb"][data-state="checked"] { transform:translateX(1.25rem); }
+ [data-polli="switch-thumb"]:dir(rtl)[data-state="checked"] { transform:translateX(-1.25rem); }
+ [data-polli="switch"]:active:not(:disabled) [data-polli="switch-thumb"] { box-shadow:inset 0 1px 2px var(--polli-pressure); }
+ [data-polli="accordion-chevron"] { flex-shrink:0; transition:transform var(--polli-motion-reveal) var(--polli-ease); }
+ [data-polli="accordion-trigger"][data-state="open"] [data-polli="accordion-chevron"] { transform:rotate(180deg); }
+
+ /* Roots arm reveals after a state change, never for default or hydrated content. */
+ [data-polli="accordion-content"][data-polli-motion="interaction"][data-state="open"] { animation:polli-unfold var(--polli-motion-reveal) var(--polli-ease); }
+ [data-polli="accordion-content"][data-polli-motion="interaction"][data-state="closed"] { animation:polli-fold var(--polli-motion-reveal) var(--polli-ease); }
+ [data-polli="tabs-content"][data-polli-motion="interaction"][data-state="active"] { animation:polli-ink-in var(--polli-motion-state) var(--polli-ease); }
+ [data-polli="dialog"][data-polli-motion="interaction"][data-state="open"],
+ [data-polli="menu"][data-polli-motion="interaction"][data-state="open"] { animation:polli-reveal var(--polli-motion-reveal) var(--polli-ease); }
+ [data-polli="dialog"][data-polli-motion="interaction"][data-state="closed"],
+ [data-polli="menu"][data-polli-motion="interaction"][data-state="closed"] { animation:polli-dismiss var(--polli-motion-state) var(--polli-ease); }
+ [data-polli="dialog"] { --polli-reveal-y:3px; }
+ [data-polli="menu"][data-side="bottom"] { --polli-reveal-y:-3px; }
+ [data-polli="menu"][data-side="top"] { --polli-reveal-y:3px; }
+ [data-polli="menu"][data-side="right"] { --polli-reveal-x:-3px; }
+ [data-polli="menu"][data-side="left"] { --polli-reveal-x:3px; }
+ [data-polli="dialog-overlay"][data-polli-motion="interaction"][data-state="open"],
+ [data-polli="tooltip"][data-polli-motion="interaction"]:is([data-state="delayed-open"],[data-state="instant-open"]) { animation:polli-fade-in var(--polli-motion-state) var(--polli-ease); }
+ [data-polli="dialog-overlay"][data-polli-motion="interaction"][data-state="closed"],
+ [data-polli="tooltip"][data-polli-motion="interaction"][data-state="closed"] { animation:polli-fade-out var(--polli-motion-state) var(--polli-ease); }
+
+ /* Static content stays still. Opt in only when the element is an actual action. */
+ :is([data-polli="badge"],[data-polli="avatar"],[data-polli="surface"],[data-polli="list-row"]):is([role="button"],[role="link"]) {
+  transition:background-color var(--polli-motion-state) var(--polli-ease),box-shadow var(--polli-motion-state) var(--polli-ease);
+ }
+ :is([data-polli="badge"],[data-polli="avatar"],[data-polli="surface"],[data-polli="list-row"]):is([role="button"],[role="link"]):focus-visible { outline:2px solid var(--ring); outline-offset:4px; }
+ :is([data-polli="badge"],[data-polli="avatar"],[data-polli="surface"],[data-polli="list-row"]):is([role="button"],[role="link"]):active:not([aria-disabled="true"]) { box-shadow:inset 0 1px 3px var(--polli-pressure); }
+ [data-polli="alert"][data-polli-motion="interaction"],
+ [data-polli="empty-state"][data-polli-motion="interaction"] { animation:polli-ink-in var(--polli-motion-state) var(--polli-ease); }
+
+ @media (prefers-reduced-motion:reduce) {
+  [data-polli],[data-polli]::before,[data-polli]::after,[data-polli] *,[data-polli] *::before,[data-polli] *::after { animation:none!important; transition:none!important; }
+  :is([data-polli="button"],[data-polli="dialog-close"]) > svg { transform:none!important; }
+ }
+}
+
+@keyframes polli-unfold { from { height:0; } to { height:var(--radix-accordion-content-height); } }
+@keyframes polli-fold { from { height:var(--radix-accordion-content-height); } to { height:0; } }
+@keyframes polli-ink-in { from { opacity:.65; } to { opacity:1; } }
+@keyframes polli-reveal { from { opacity:0; transform:translate(var(--polli-reveal-x,0),var(--polli-reveal-y,0)); } to { opacity:1; transform:translate(0,0); } }
+@keyframes polli-dismiss { from { opacity:1; } to { opacity:0; } }
+@keyframes polli-fade-in { from { opacity:0; } to { opacity:1; } }
+@keyframes polli-fade-out { from { opacity:1; } to { opacity:0; } }

@@ -205,7 +205,7 @@ function ButtonDoc() {
           </div>
           <p className="api-note">
             Click a variant above to load it in the playground. Hover changes
-            colour; pressing gently compresses the button.
+            colour; pressing adds subtle inset pressure.
           </p>
         </>
       }
@@ -1306,12 +1306,13 @@ function FeedbackDoc() {
     "Your shopping list is up to date.",
   );
   const [visible, setVisible] = useState(true);
+  const [revealed, setRevealed] = useState(false);
   const [items, setItems] = useState(0);
   const code =
     kind === "alert"
       ? example(
           `import { useState } from "react";\nimport { Alert } from "@samarinara/polli-ui/components/layout";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
-          `  const [visible, setVisible] = useState(true);\n  return (\n    <div>\n      {visible ? <Alert title={${q(title || "Changes saved")}}>{${q(description)}}<Button variant="ghost" size="sm" onClick={() => setVisible(false)}>Dismiss message</Button></Alert> : <p role="status">Message dismissed.</p>}\n      <Button onClick={() => setVisible(true)}>Save changes</Button>\n    </div>\n  );`,
+          `  const [visible, setVisible] = useState(true);\n  const [revealed, setRevealed] = useState(false);\n  return (\n    <div>\n      {visible ? <Alert data-polli-motion={revealed ? "interaction" : undefined} title={${q(title || "Changes saved")}}>{${q(description)}}<Button variant="ghost" size="sm" onClick={() => setVisible(false)}>Dismiss message</Button></Alert> : <p role="status">Message dismissed.</p>}\n      <Button onClick={() => { setRevealed(true); setVisible(true); }}>Save changes</Button>\n    </div>\n  );`,
         )
       : example(
           `import { useState } from "react";\nimport { EmptyState, ListRow } from "@samarinara/polli-ui/components/layout";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
@@ -1356,6 +1357,7 @@ function FeedbackDoc() {
             setTitle("Changes saved");
             setDescription("Your shopping list is up to date.");
             setVisible(true);
+            setRevealed(false);
             setItems(0);
           }}
           hint="Dismiss and restore the alert, or switch to an empty state and add a note."
@@ -1396,7 +1398,7 @@ function FeedbackDoc() {
             {kind === "alert" ? (
               <>
                 {visible ? (
-                  <Alert title={title || "Changes saved"}>
+                  <Alert data-polli-motion={revealed ? "interaction" : undefined} title={title || "Changes saved"}>
                     <p>{description}</p>
                     <Button
                       variant="ghost"
@@ -1411,7 +1413,7 @@ function FeedbackDoc() {
                     Message dismissed.
                   </p>
                 )}
-                <Button onClick={() => setVisible(true)}>Save changes</Button>
+                <Button onClick={() => { setRevealed(true); setVisible(true); }}>Save changes</Button>
               </>
             ) : items === 0 ? (
               <EmptyState

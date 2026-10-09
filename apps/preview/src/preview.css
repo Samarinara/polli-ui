@@ -1402,3 +1402,7 @@ code {
     scroll-behavior: auto !important;
   }
 }
+
+.motion-notebook { display: grid; gap: 20px; width: 100%; max-width: 440px; margin-inline: auto; }
+.motion-notebook-row { display: flex; align-items: center; gap: 14px; }
+.motion-notebook-row label { cursor: pointer; }

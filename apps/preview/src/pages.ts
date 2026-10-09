@@ -498,7 +498,7 @@ export const pages = [
       {
         id: "interaction",
         title: "Interaction",
-        keywords: "click press hover no lift animation",
+        keywords: "click press hover no lift animation bones meat notebook ink",
       },
       {
         id: "timing",

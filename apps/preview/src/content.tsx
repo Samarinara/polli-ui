@@ -2,7 +2,7 @@ import { ArrowDownToLine } from "lucide-react";
 import { palette } from "@samarinara/polli-ui/tokens";
 import { Section, Code, Preview, CopyButton, RelatedLink } from "./ui";
 import { type PageId, pageHref } from "./pages";
-import { ButtonExample } from "./examples";
+import { ButtonExample, NotebookMotionExample } from "./examples";
 import { Showcase, ComponentCatalogue } from "./showcase";
 import { ComponentContent } from "./component-docs";
 
@@ -106,6 +106,13 @@ export function Content({ page }: { page: PageId }) {
               notebook: a stable printed structure, personal handwritten
               content, and soft colour accents. People keep control of their
               data through open standards and portable formats.
+            </p>
+            <p>
+              Every Polli app has bones and meat. The bones are serif headings,
+              permanent labels, and clean rules: the printed structure of a
+              notebook. The meat is what people put into it—handwritten notes,
+              checkmarks, and choices. Keep the structure steady; let the parts
+              people touch respond.
             </p>
           </Section>
           <Section id="principles" title="Design principles">
@@ -357,6 +364,11 @@ export function Content({ page }: { page: PageId }) {
       return (
         <>
           <Section id="type-roles" title="Type roles">
+            <p>
+              Serif headings and clean lines are the bones. Handwritten content
+              and the controls that act on it are the meat. Keep permanent
+              structure distinct from a person’s entries.
+            </p>
             <div className="type-role">
               <span className="type-caption">Lora · Structure</span>
               <p className="type-serif">A place for your ideas.</p>
@@ -552,17 +564,21 @@ export function Content({ page }: { page: PageId }) {
         <>
           <Section id="interaction" title="Interaction">
             <p>
-              Let the user’s action start the movement. A button can compress
-              slightly on press, a selection can change state, and an overlay
-              can appear in response to its trigger.
+              The bones stay steady. The meat responds to a person’s touch: a
+              checkmark takes ink, a switch settles into place, and a field’s
+              baseline gains emphasis. Movement starts with an action.
             </p>
             <Preview label="Press response">
               <ButtonExample />
             </Preview>
+            <Preview label="Notebook interactions">
+              <NotebookMotionExample />
+            </Preview>
             <p>
               Hover should change colour or emphasis. Avoid vertical lift on
-              buttons. Reading content, headings, and navigation should appear
-              in their final position immediately.
+              buttons. Pressing adds inset pressure without resizing the
+              control. Pages, headings, and default component states appear
+              immediately. There are no scroll reveals or idle animations.
             </p>
           </Section>
           <Section id="timing" title="Timing">
@@ -581,11 +597,19 @@ export function Content({ page }: { page: PageId }) {
                   </tr>
                   <tr>
                     <td>Button press</td>
-                    <td>100ms; scale to 0.97</td>
+                    <td>90ms inset pressure; 160ms release</td>
                   </tr>
                   <tr>
-                    <td>State change</td>
-                    <td>150–200ms when movement adds meaning</td>
+                    <td>Checkmark & field baseline</td>
+                    <td>180ms pen stroke or ink emphasis</td>
+                  </tr>
+                  <tr>
+                    <td>Switch</td>
+                    <td>240ms glide with a gentle settling overshoot</td>
+                  </tr>
+                  <tr>
+                    <td>Disclosure & overlay</td>
+                    <td>220ms open; no scale or popping</td>
                   </tr>
                   <tr>
                     <td>Page content</td>
@@ -595,8 +619,23 @@ export function Content({ page }: { page: PageId }) {
               </table>
             </div>
             <p>
-              A response should settle quickly. Repeated bouncing, idle
-              movement, and staggered reveals make the interface harder to read.
+              A small overshoot can add weight to a switch thumb. Keep it
+              contained; never make a whole control pop or bounce. Hover uses
+              colour or emphasis. Tabs change ink emphasis without moving text.
+            </p>
+            <p>
+              Surfaces, separators, avatars, badges, and empty states stay still
+              when they are simply content. Interactive badges and rows receive
+              pressure feedback when given an accessible button or link role
+              and the corresponding keyboard behaviour.
+            </p>
+            <p>
+              An Alert or EmptyState revealed by an action can opt in with
+              <code> data-polli-motion="interaction"</code>. Leave this off
+              initial content. Tune shared timing through
+              <code> --polli-motion-ink</code>,
+              <code> --polli-motion-settle</code>, and
+              <code> --polli-motion-reveal</code>.
             </p>
           </Section>
           <Section id="reduced-motion" title="Reduced motion">
@@ -606,13 +645,14 @@ export function Content({ page }: { page: PageId }) {
             </p>
             <Code label="CSS">
               {
-                "@media (prefers-reduced-motion: reduce) {\n  [data-polli] {\n    animation: none !important;\n    transition: none !important;\n    transform: none !important;\n  }\n}"
+                "@media (prefers-reduced-motion: reduce) {\n  [data-polli], [data-polli] * {\n    animation: none !important;\n    transition: none !important;\n  }\n}\n/* Preserve state transforms: a checked switch still moves to its on position. */"
               }
             </Code>
             <p>
-              Use a loading indicator only while something is actually loading.
-              These docs render every page as static HTML, with no skeleton
-              screen or artificial loading delay.
+              Skeletons remain still while content loads. These docs render
+              every page as static HTML, with no skeleton screen or artificial
+              loading delay. Reduced motion also covers SVG strokes and switch
+              thumbs; state remains clear and changes immediately.
             </p>
           </Section>
         </>

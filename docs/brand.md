@@ -20,6 +20,12 @@ Use one clear primary action per local task. Buttons are round, inputs connect t
 
 Keep advanced settings in accordions, menus, and dialogs. Reveal detail when needed; keep essential options discoverable. Never hide validation messages or required fields behind collapsed UI.
 
+### Bones and meat
+
+Every Polli app is a notebook with a printed structure and a personal life inside it. **Bones** are serif headings, permanent labels, clean rules, alignment, and spacing. They hold their position. **Meat** is handwritten content and the choices that matter: checkboxes, switches, editable fields, saved notes, and actions. These respond to touch without disturbing the structure.
+
+Use `.polli-handwritten` for personal content outside fields. ListRow titles use the input font; descriptions remain guidance. Buttons and navigation use the body font, and field labels and status headings use the heading font. A component's role determines its response: a badge used as a label stays still; a badge used as a real action receives pressure feedback. Supply accessible semantics, focus, and keyboard handling for custom actions.
+
 ## Accessibility
 
 Ink text belongs on pastels; Cloud White belongs on Polli Green. Pastels should not carry white text. Do not communicate state with colour alone. Every icon-only control needs an accessible name. Fields need associated labels and error descriptions. Preserve Radix focus handling and keyboard behaviour. The default button target is 44px tall; small controls need sufficient surrounding space. Motion respects reduced-motion preferences.
@@ -30,7 +36,24 @@ The documentation uses original Polli wordmark and mascot SVGs from polli.page. 
 
 ## Motion and documentation
 
-Hover changes colour or emphasis. A button compresses to 0.97 scale while pressed; it never lifts. Reduced-motion preferences remove the press transform and transitions. Pages, headings, and navigation remain still, with no entrance sequence or artificial loading state.
+Motion begins with an interaction or its resulting state change. Hover changes colour or emphasis. Pressing adds inset pressure and a 1px icon displacement; a button never lifts or scales. Avoid popping and whole-element bounce. A switch thumb may overshoot very slightly before settling; larger reveals use smooth easing.
+
+| Interaction | Response | Shared token |
+| --- | --- | --- |
+| Press | Inset pressure, 90ms | `--polli-motion-press` |
+| Release, selection, tooltip | Colour or opacity, 160ms | `--polli-motion-state` |
+| Checkbox | Draw the checkmark or mixed-state stroke, 180ms | `--polli-motion-ink` |
+| Field focus | Baseline takes ink, 180ms; preserve focus outline | `--polli-motion-ink` |
+| Switch | Thumb glides with a small settling overshoot, 240ms | `--polli-motion-settle` |
+| Accordion | Height unfolds and chevron turns, 220ms | `--polli-motion-reveal` |
+| Dialog and menu | Fade and move 3px on open, 220ms; fade out, 160ms | `--polli-motion-reveal` |
+| Tabs | Newly selected content gains ink emphasis, 160ms | `--polli-motion-state` |
+
+Initial checked controls, default tabs, default open disclosures, server-rendered content, and hydration do not play entrance animations. Root wrappers retain Radix controlled/uncontrolled props, callbacks, refs, focus handling, and keyboard behaviour. Root state changes arm subsequent reveals, including controlled changes from an external action.
+
+Surfaces, separators, avatars, badges, alerts, empty states, and skeletons remain still when they are reading content. Badges, avatars, rows, or surfaces with `role="button"` or `role="link"` receive focus and pressure styling; the consuming app provides the corresponding activation behaviour. An Alert or EmptyState mounted as a result of a user action may use `data-polli-motion="interaction"` for a short ink fade. Do not set this attribute on initial content. Skeletons do not pulse.
+
+Reduced-motion preferences remove animations and transitions from controls and their descendants, including SVG strokes and switch thumbs. Preserve state transforms: a checked switch must still occupy its on position and an open chevron must still point up. Pages, headings, and navigation remain still, with no entrance sequence, scroll reveal, or artificial loading state.
 
 The guideline site renders nine static HTML documents at build time, then hydrates the interactive controls. Ordinary links, headings, section anchors, and mobile navigation work without JavaScript. Search and live examples are enhancements. The site is deliberately light; the shared package still supports opt-in dark tokens for consuming apps.
 
