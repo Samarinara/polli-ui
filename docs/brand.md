@@ -16,7 +16,7 @@ Polli makes everyday software feel approachable and connected. Use minimal layou
 
 Start with a single canvas. Group with margins, alignment, and typography. Use ListRow for related items; use Surface for a genuinely meaningful group. Reserve shadows for floating menus and dialogs. Avoid cards around every item.
 
-Use one clear primary action per local task. Buttons are round, inputs connect to the canvas with a quiet baseline, and labels stay visible. Serif headings and labels establish permanent structure; sans-serif text handles guidance and navigation; readable handwriting identifies personal content. The documentation uses locally hosted Lora, Inter, and Patrick Hand. Consuming apps load their fonts and set `--polli-font-heading`, `--polli-font-body`, and `--polli-font-input`. Use a 4px spacing rhythm, 16–24px within groups and 32–48px between them.
+Use one clear primary action per local task. Buttons are round, inputs connect to the canvas with a quiet baseline, and labels stay visible. The Essential canvas is the paper itself: do not wrap every collection in a card. Use the same linear, unboxed navigation in apps and documentation. Serif headings and labels establish permanent structure; sans-serif text handles guidance and navigation; readable handwriting identifies personal content. The documentation uses locally hosted Lora, Inter, and Patrick Hand. Consuming apps load their fonts and set `--polli-font-heading`, `--polli-font-body`, and `--polli-font-input`. Use a 4px spacing rhythm, 16–24px within groups and 32–48px between them.
 
 Keep advanced settings in accordions, menus, and dialogs. Reveal detail when needed; keep essential options discoverable. Never hide validation messages or required fields behind collapsed UI.
 
@@ -25,6 +25,10 @@ Keep advanced settings in accordions, menus, and dialogs. Reveal detail when nee
 Every Polli app is a notebook with a printed structure and a personal life inside it. **Bones** are serif headings, permanent labels, clean rules, alignment, and spacing. They hold their position. **Meat** is handwritten content and the choices that matter: checkboxes, switches, editable fields, saved notes, and actions. These respond to touch without disturbing the structure.
 
 Use `.polli-handwritten` for personal content outside fields. ListRow titles use the input font; descriptions remain guidance. Buttons and navigation use the body font, and field labels and status headings use the heading font. A component's role determines its response: a badge used as a label stays still; a badge used as a real action receives pressure feedback. Supply accessible semantics, focus, and keyboard handling for custom actions.
+
+## Essential Organic Ink direction
+
+Use the supplied minimum-deformation single-contour prototype as the visual direction. Tabs keep the conventional printed-label layout with a thin pastel ink underline, not filled pills. The ink moves only when selection changes and its shape remains restrained (0% extra deformation). Colour belongs to navigation and functional states, not background panels. Keep headings upright rather than italic; avoid eyebrow copy when it is not required for comprehension. Use an open, unbordered page with clear row spacing and the existing Lora / Inter / Patrick Hand roles. Checkboxes use a small organic fill under the 180ms drawn check stroke, not a large expanding blob. In temporary dialogs and menus, a slightly physical surface is acceptable, but never nest a decorative sheet inside the page.
 
 ## Accessibility
 

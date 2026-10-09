@@ -208,3 +208,31 @@
 @media (forced-colors:active) {
  :is([data-polli="input"],[data-polli="textarea"],[data-polli="select"],[data-polli="tabs-trigger"],[data-polli="tabs-content"]):focus-visible { outline:2px solid Highlight; outline-offset:2px; }
 }
+
+
+/* Essential / Organic Ink: the viewport is the page, not a pile of surfaces. */
+@layer components {
+ [data-polli="tabs-list"] {
+  isolation:isolate;
+  background:transparent;
+  border-color:color-mix(in srgb,var(--foreground) 12%,transparent);
+  border-radius:0;
+  padding:0;
+  gap:1.625rem;
+  scrollbar-width:none;
+ }
+ [data-polli="tabs-list"]::-webkit-scrollbar { display:none; }
+ [data-polli="tabs-trigger"] { z-index:1; background:transparent; border-radius:0; padding-inline:0; white-space:nowrap; }
+ [data-polli="tabs-trigger"][data-state="active"] { color:var(--primary); background:transparent; }
+ [data-polli="tabs-trigger"]::after { display:none; }
+ [data-polli="tabs-trigger"]:focus-visible { outline:2px solid var(--ring); outline-offset:-2px; }
+ [data-polli="liquid-tabs-ink"] { position:absolute; inset:0; z-index:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+ [data-polli="tabs-list"]:not([data-polli-liquid-ready]) [data-polli="tabs-trigger"][data-state="active"] { box-shadow:inset 0 -3px 0 var(--polli-yellow); }
+ [data-polli="checkbox"] { position:relative; isolation:isolate; overflow:hidden; border-radius:7px; width:1.375rem; height:1.375rem; transition:border-radius var(--polli-motion-settle) var(--polli-ease),border-color var(--polli-motion-state) var(--polli-ease); }
+ [data-polli="checkbox"][data-state="checked"] { border-radius:50%; }
+ [data-polli="checkbox"][data-state="indeterminate"] { border-radius:7px; }
+ [data-polli="checkbox-fill"] { position:absolute; inset:-1px; z-index:-1; pointer-events:none; background:var(--primary); border-radius:45% 55% 49% 51%; transform:scale(0); transition:transform var(--polli-motion-ink) var(--polli-ease-pen); }
+ [data-polli="checkbox"]:is([data-state="checked"],[data-state="indeterminate"]) [data-polli="checkbox-fill"] { transform:scale(1); }
+ [data-polli="checkbox-mark"] { position:relative; z-index:1; }
+ [data-polli="list-row"] { border-color:color-mix(in srgb,var(--foreground) 12%,transparent); }
+}

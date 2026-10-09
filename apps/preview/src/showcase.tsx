@@ -266,15 +266,14 @@ function Notebook() {
       <div className="notebook-demo">
         <div className="notebook-heading">
           <div>
-            <p className="notebook-eyebrow">Small things, kept together</p>
             <h3>A little notebook</h3>
           </div>
           <Badge tone="neutral">{notes.length} notes</Badge>
         </div>
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList aria-label="Notebook views">
-            <TabsTrigger value="notes">Notes</TabsTrigger>
-            <TabsTrigger value="links">Saved links</TabsTrigger>
+            <TabsTrigger value="notes" inkTone="butter">Notes</TabsTrigger>
+            <TabsTrigger value="links" inkTone="sky">Saved links</TabsTrigger>
           </TabsList>
           <TabsContent value="notes">
             <form
@@ -440,13 +439,6 @@ function Notebook() {
 export function Showcase() {
   return (
     <>
-      <div className="showcase-meta">
-        <span>React components</span>
-        <span>Keyboard ready</span>
-        <a href={pageHref("getting-started")}>
-          Get started <ArrowUpRight size={12} />
-        </a>
-      </div>
       <Section id="try-it" title="Try it together">
         <Notebook />
       </Section>
