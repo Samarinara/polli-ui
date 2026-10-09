@@ -25,17 +25,30 @@ test('checkbox draws a real 180ms stroke, reverses, and snaps under reduced moti
   const checkbox = page.locator('#motion-finished');
   const stroke = checkbox.locator('[data-polli-stroke="check"]');
   await expect(stroke).toHaveCSS('stroke-dashoffset', '1px');
+  await checkbox.scrollIntoViewIfNeeded();
   const sample = await checkbox.evaluate(async element => {
-    (element as HTMLElement).click();
-    await new Promise(requestAnimationFrame);
-    await new Promise(requestAnimationFrame);
     const path = element.querySelector('[data-polli-stroke="check"]')!;
-    const style = getComputedStyle(path);
-    return { offset: parseFloat(style.strokeDashoffset), transitions: path.getAnimations().map(animation => animation.effect?.getTiming().duration) };
+    // Flush the starting style before the interaction, then seek the actual
+    // CSS transition. Frame scheduling varies under CI load.
+    getComputedStyle(path).strokeDashoffset;
+    (element as HTMLElement).click();
+    let transition: Animation | undefined;
+    for (let frame = 0; frame < 10 && !transition; frame++) {
+      await new Promise(requestAnimationFrame);
+      getComputedStyle(path).strokeDashoffset;
+      transition = path.getAnimations().find(animation => animation instanceof CSSTransition && animation.transitionProperty === 'stroke-dashoffset');
+    }
+    if (!transition) throw new Error('The checkbox did not create a stroke transition');
+    const duration = transition.effect?.getTiming().duration;
+    transition.pause();
+    transition.currentTime = 90;
+    const offset = parseFloat(getComputedStyle(path).strokeDashoffset);
+    transition.finish();
+    return { offset, duration };
   });
   expect(sample.offset).toBeGreaterThan(0);
   expect(sample.offset).toBeLessThan(1);
-  expect(sample.transitions).toContain(180);
+  expect(sample.duration).toBe(180);
   await expect(stroke).toHaveCSS('stroke-dashoffset', '0px');
   await page.screenshot({ path: testInfo.outputPath('notebook-checked.png'), fullPage: true });
   await checkbox.click();
