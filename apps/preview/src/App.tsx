@@ -11,6 +11,12 @@ import { Content } from "./content";
 
 export function App({ initialPage = "overview" }: { initialPage?: PageId }) {
   const page = resolvePage(initialPage);
+  const source =
+    page.id === "overview" || page.id === "components"
+      ? "showcase.tsx"
+      : page.group === "Components"
+        ? "component-docs.tsx"
+        : "content.tsx";
   const index = pages.findIndex((item) => item.id === page.id);
   const previous = pages[index - 1];
   const next = pages[index + 1];
@@ -23,7 +29,7 @@ export function App({ initialPage = "overview" }: { initialPage?: PageId }) {
         <a
           className="brand"
           href={pageHref("overview")}
-          aria-label="Polli guidelines home"
+          aria-label="Polli UI home"
         >
           <img
             src="./brand/polli-wordmark.svg"
@@ -32,7 +38,7 @@ export function App({ initialPage = "overview" }: { initialPage?: PageId }) {
             alt="Polli"
           />
           <span className="brand-divider" />
-          <span>Guidelines</span>
+          <span>UI</span>
         </a>
         <SearchDialog />
         <div className="header-links">
@@ -107,8 +113,8 @@ export function App({ initialPage = "overview" }: { initialPage?: PageId }) {
             )}
           </nav>
           <footer className="page-footer">
-            <span>Polli brand guidelines</span>
-            <a href={`${repoUrl}/blob/main/apps/preview/src/content.tsx`}>
+            <span>Polli UI · Components & guidelines</span>
+            <a href={`${repoUrl}/blob/main/apps/preview/src/${source}`}>
               Edit this page
               <ArrowUpRight size={12} />
             </a>

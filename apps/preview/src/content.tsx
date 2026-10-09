@@ -2,14 +2,9 @@ import { ArrowDownToLine } from "lucide-react";
 import { palette } from "@samarinara/polli-ui/tokens";
 import { Section, Code, Preview, CopyButton, RelatedLink } from "./ui";
 import { type PageId, pageHref } from "./pages";
-import {
-  ButtonExample,
-  FieldExample,
-  SelectionExample,
-  NavigationExample,
-  OverlayExample,
-  FeedbackExample,
-} from "./examples";
+import { ButtonExample } from "./examples";
+import { Showcase, ComponentCatalogue } from "./showcase";
+import { ComponentContent } from "./component-docs";
 
 const colours = [
   {
@@ -59,6 +54,27 @@ const colours = [
 export function Content({ page }: { page: PageId }) {
   switch (page) {
     case "overview":
+      return <Showcase />;
+    case "components":
+      return (
+        <Section id="catalogue" title="Component library">
+          <ComponentCatalogue />
+        </Section>
+      );
+    case "buttons":
+    case "fields":
+    case "checkbox":
+    case "switch":
+    case "badge":
+    case "tabs":
+    case "accordion":
+    case "dialog":
+    case "menu":
+    case "tooltip":
+    case "feedback":
+    case "lists":
+      return <ComponentContent page={page} />;
+    case "brand":
       return (
         <>
           <div
@@ -504,9 +520,9 @@ export function Content({ page }: { page: PageId }) {
               </table>
             </div>
             <p>
-              Build on a 4px rhythm. Use round buttons and soft input corners.
-              Reserve shadows for overlays, where they communicate that a
-              surface floats above the page.
+              Build on a 4px rhythm. Use round buttons and quiet underlined
+              fields. Reserve shadows for overlays, where they communicate that
+              a surface floats above the page.
             </p>
             <p>
               Keep reading columns around 60–75 characters wide. On narrow
@@ -528,124 +544,6 @@ export function Content({ page }: { page: PageId }) {
             <RelatedLink id="components">
               See navigation and overlay examples
             </RelatedLink>
-          </Section>
-        </>
-      );
-    case "components":
-      return (
-        <>
-          <Section id="buttons" title="Buttons">
-            <p>
-              Use one primary action per task. Secondary actions use Mint;
-              low-priority actions can be text buttons. Hover changes colour,
-              and a press compresses the control slightly without lifting it.
-            </p>
-            <Preview>
-              <ButtonExample />
-            </Preview>
-            <Code>
-              {
-                'import { Button } from "@samarinara/polli-ui/components/button";\n\n<Button onClick={saveNote}>Save note</Button>\n<Button variant="secondary">Cancel</Button>'
-              }
-            </Code>
-            <p className="api-note">
-              <code>variant</code>: default, secondary, coral, butter, sky,
-              ghost, destructive.
-              <br />
-              <code>size</code>: sm, default, lg, icon. Use <code>asChild</code>{" "}
-              for links and name icon-only actions.
-            </p>
-          </Section>
-          <Section id="fields" title="Fields">
-            <p>
-              Keep labels above the value, use concise help text, and put errors
-              next to the field. Inputs stay visually connected to the canvas.
-            </p>
-            <Preview>
-              <FieldExample />
-            </Preview>
-            <Code>
-              {
-                'import { Field, Input, Label } from "@samarinara/polli-ui/components/field";\n\n<Field label={<Label htmlFor="title">Title</Label>}>\n  <Input id="title" name="title" required />\n</Field>'
-              }
-            </Code>
-            <p className="api-note">
-              <code>Field</code> accepts <code>label</code>, <code>hint</code>,
-              and <code>error</code>. Connect help or errors with{" "}
-              <code>aria-describedby</code> and set <code>aria-invalid</code>{" "}
-              when a value is invalid. Use <code>Textarea</code> for longer
-              content and <code>NativeSelect</code> for a short list of options.
-            </p>
-          </Section>
-          <Section id="selection" title="Selection">
-            <p>
-              A checkbox selects an item. A switch turns a preference on or off.
-              Badges describe categories or state; they are not controls.
-            </p>
-            <Preview>
-              <SelectionExample />
-            </Preview>
-            <Code>
-              {
-                'import { Checkbox, Switch } from "@samarinara/polli-ui/components/selection";\n\n<Checkbox id="done" checked={done} onCheckedChange={setDone} />\n<Label htmlFor="done">Add lemons</Label>\n<Switch aria-label="Shared categories" defaultChecked />'
-              }
-            </Code>
-          </Section>
-          <Section id="navigation" title="Navigation">
-            <p>
-              Use tabs for closely related views and accordions for secondary
-              detail. Both support keyboard navigation through the shared Radix
-              primitives.
-            </p>
-            <Preview>
-              <NavigationExample />
-            </Preview>
-            <Code>
-              {
-                'import { Tabs, TabsList, TabsTrigger, TabsContent }\n  from "@samarinara/polli-ui/components/tabs";\n\n<Tabs defaultValue="notes">\n  <TabsList aria-label="Saved content">\n    <TabsTrigger value="notes">Notes</TabsTrigger>\n  </TabsList>\n  <TabsContent value="notes">Your notes</TabsContent>\n</Tabs>'
-              }
-            </Code>
-          </Section>
-          <Section id="overlays" title="Overlays">
-            <p>
-              Use a dialog for a focused task, a menu for nearby actions, and a
-              tooltip for a short clarification. Dialogs need a title and a
-              description; Escape closes them and restores focus.
-            </p>
-            <Preview>
-              <OverlayExample />
-            </Preview>
-            <Code>
-              {
-                'import { Dialog, DialogTrigger, DialogContent, DialogTitle,\n  DialogDescription } from "@samarinara/polli-ui/components/dialog";\n\n<Dialog>\n  <DialogTrigger asChild><Button>Add category</Button></DialogTrigger>\n  <DialogContent>\n    <DialogTitle>Add category</DialogTitle>\n    <DialogDescription>Choose a name for your category.</DialogDescription>\n  </DialogContent>\n</Dialog>'
-              }
-            </Code>
-            <p className="api-note">
-              Menus are exported from <code>/components/menu</code>; tooltips
-              from <code>/components/tooltip</code>. Wrap tooltip examples in{" "}
-              <code>TooltipProvider</code>.
-            </p>
-          </Section>
-          <Section id="feedback" title="Feedback & lists">
-            <p>
-              Confirm the result in plain language. Use open list rows for
-              related content and a short, useful message when a collection is
-              empty.
-            </p>
-            <Preview>
-              <FeedbackExample />
-            </Preview>
-            <Code>
-              {
-                'import { Alert, Avatar, ListRow }\n  from "@samarinara/polli-ui/components/layout";\n\n<Alert title="Changes saved">Your shopping list is up to date.</Alert>\n<ListRow leading={<Avatar name="Alex Chen" />}\n  title="Alex Chen" description="Birthday · 12 June" />'
-              }
-            </Code>
-            <p className="api-note">
-              <code>Surface</code> groups meaningful content.{" "}
-              <code>Separator</code> marks a change in context.{" "}
-              <code>EmptyState</code> accepts a title, description, optional
-              icon, and an optional action.
-            </p>
           </Section>
         </>
       );
