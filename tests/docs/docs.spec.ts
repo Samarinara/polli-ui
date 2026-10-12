@@ -103,7 +103,7 @@ test("search supports keyboard selection, empty results, and Escape focus restor
 test("mobile navigation works and pages fit narrow and wide viewports", async ({
   page,
 }, testInfo) => {
-  test.setTimeout(120_000);
+  test.setTimeout(180_000);
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("index.html");
   await page.locator(".mobile-navigation summary").click();

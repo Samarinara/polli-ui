@@ -34,7 +34,7 @@ Tabs use compact printed labels with a short, two-pixel colour mark beneath the 
 
 Ink text belongs on pastels; Cloud White belongs on Polli Green. Pastels should not carry white text. Do not communicate state with colour alone. Every icon-only control needs an accessible name. Fields need associated labels and error descriptions. Preserve Radix focus handling and keyboard behaviour. The default button target is 44px tall; small controls need sufficient surrounding space. Motion respects reduced-motion preferences.
 
-Dark mode is opt-in with a `.dark` class at the document root so portalled content inherits the same tokens. Import the stylesheet once. Use `.polli-root` on the app shell to apply Polli typography and canvas styling; the package avoids a global CSS reset to reduce impact on existing apps.
+Dark mode is opt-in with a `.dark` class on `<html>` (never just the app shell) so portalled content inherits the same tokens. Import the stylesheet once. Use `.polli-root` on the app shell to apply Polli typography and canvas styling; the package avoids a global CSS reset to reduce impact on existing apps.
 
 The documentation uses original Polli wordmark and mascot SVGs from polli.page. Preserve proportions and original colours. Keep the wordmark on a quiet background with clear space around it; never replace it with a decorative flower glyph.
 
@@ -59,10 +59,17 @@ Surfaces, separators, avatars, badges, alerts, empty states, and skeletons remai
 
 Reduced-motion preferences remove animations and transitions from controls and their descendants, including SVG strokes and switch thumbs. Preserve state transforms: a checked switch must still occupy its on position and an open chevron must still point up. Pages, headings, and navigation remain still, with no entrance sequence, scroll reveal, or artificial loading state.
 
-The guideline site renders nine static HTML documents at build time, then hydrates the interactive controls. Ordinary links, headings, section anchors, and mobile navigation work without JavaScript. Search and live examples are enhancements. The site is deliberately light; the shared package still supports opt-in dark tokens for consuming apps.
+The guideline site renders nine static HTML documents at build time, then hydrates the interactive controls. Ordinary links, headings, section anchors, and mobile navigation work without JavaScript. Search and live examples are enhancements. The site follows `prefers-color-scheme` by default and offers persistent Light, Dark, and System choices. Playground toggles change the whole document so portals stay in sync. An early head script applies the preference before paint; unavailable storage falls back to the system theme.
 
 ## Component API
 
 All primitives accept className and native/Radix props. Interactive primitives forward refs where focus integration matters. Dialog always needs DialogTitle and DialogDescription (or an intentional accessible description alternative). Button `asChild` supports links; disabled link behaviour remains the app's responsibility. NativeSelect uses the browser's accessible selection behaviour. Avatar accepts a name and optional image URL; apps should supply a fallback for failed remote images. Field arranges content; the caller connects Label, id, aria-describedby, and aria-invalid.
 
 This is the initial component set, not the full upstream shadcn catalogue. New primitives should be added here with a live documentation example, keyboard checks for meaningful interactions, and the same public prop conventions.
+
+
+## Theme customization and contrast
+
+Use `--mint-foreground`, `--coral-foreground`, `--butter-foreground`, and `--sky-foreground` for text on decorative surfaces. Their Tailwind utilities are `text-mint-foreground`, `text-coral-foreground`, `text-butter-foreground`, and `text-sky-foreground`. All default to `--polli-ink` in both themes because pastel surfaces remain light. Override each pair independently of `--foreground`.
+
+The stylesheet sets `color-scheme: light` at `:root` and `color-scheme: dark` at `html.dark`, including native selects and portalled controls. Selected and keyboard-focused tab marks mix their pastel with the page foreground to remain visible in both modes. Control borders use `--border` with at least 3:1 against the canvas; decorative documentation rules use a quieter separate token. Browser tests check foreground, muted, primary, destructive, pastel text, focus, and border pairings in both themes against [WCAG text contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) and [non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html). Custom palettes require their own contrast check.
