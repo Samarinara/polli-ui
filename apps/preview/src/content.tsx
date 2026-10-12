@@ -642,7 +642,7 @@ export function Content({ page }: { page: PageId }) {
             </p>
             <p>
               Focus follows the notebook’s rules: fields darken their baseline,
-              keyboard-focused tabs gain a small underline, and focused panels
+              keyboard-focused tabs gain a slim outline, and focused panels
               receive a single edge mark. Forced-colour mode uses the system’s
               focus outline so the indicator remains visible.
             </p>

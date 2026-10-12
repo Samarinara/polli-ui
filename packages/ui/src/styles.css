@@ -78,9 +78,6 @@
  }
 
  /* Focus follows the printed rules rather than framing the whole component. */
- [data-polli="tabs-trigger"] { position:relative; }
- [data-polli="tabs-trigger"]::after { content:""; position:absolute; inset-inline:1rem; bottom:4px; height:2px; border-radius:1px; background:var(--ring); opacity:0; pointer-events:none; }
- [data-polli="tabs-trigger"]:focus-visible::after { opacity:1; }
  [data-polli="tabs-content"]:focus-visible { box-shadow:-3px 0 0 var(--ring); }
 
  /* Both strokes stay mounted: initial checked states never animate on load. */
@@ -212,22 +209,46 @@
 
 /* Essential / Organic Ink: the viewport is the page, not a pile of surfaces. */
 @layer components {
+ /* Compact printed labels with a quiet, coloured selection mark. */
  [data-polli="tabs-list"] {
-  isolation:isolate;
   background:transparent;
-  border-color:color-mix(in srgb,var(--foreground) 12%,transparent);
+  border:0;
   border-radius:0;
   padding:0;
-  gap:1.625rem;
+  gap:1rem;
   scrollbar-width:none;
  }
  [data-polli="tabs-list"]::-webkit-scrollbar { display:none; }
- [data-polli="tabs-trigger"] { z-index:1; background:transparent; border-radius:0; padding-inline:0; white-space:nowrap; }
- [data-polli="tabs-trigger"][data-state="active"] { color:var(--primary); background:transparent; }
- [data-polli="tabs-trigger"]::after { display:none; }
+ [data-polli="tabs-trigger"] {
+  --polli-tab-ink:var(--polli-yellow);
+  min-height:2rem;
+  background:transparent;
+  border-radius:3px;
+  white-space:nowrap;
+ }
+ [data-polli="tabs-trigger"][data-polli-ink-tone="green"] { --polli-tab-ink:var(--primary); }
+ [data-polli="tabs-trigger"][data-polli-ink-tone="coral"] { --polli-tab-ink:var(--polli-coral); }
+ [data-polli="tabs-trigger"][data-polli-ink-tone="sky"] { --polli-tab-ink:var(--polli-blue); }
+ [data-polli="tabs-trigger"][data-polli-ink-tone="mint"] { --polli-tab-ink:var(--polli-mint); }
+ [data-polli="tabs-trigger"]:hover:not(:disabled) { color:var(--primary); }
+ [data-polli="tabs-trigger"][data-state="active"] { color:var(--primary); }
+ [data-polli="tabs-trigger"]::after {
+  content:"";
+  position:absolute;
+  inset-inline:0;
+  margin-inline:auto;
+  bottom:1px;
+  width:1.5rem;
+  max-width:calc(100% - .5rem);
+  height:2px;
+  border-radius:1px;
+  background:var(--polli-tab-ink);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity var(--polli-motion-state) var(--polli-ease);
+ }
+ [data-polli="tabs-trigger"][data-state="active"]::after { opacity:1; }
  [data-polli="tabs-trigger"]:focus-visible { outline:2px solid var(--ring); outline-offset:-2px; }
- [data-polli="liquid-tabs-ink"] { position:absolute; inset:0; z-index:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
- [data-polli="tabs-list"]:not([data-polli-liquid-ready]) [data-polli="tabs-trigger"][data-state="active"] { box-shadow:inset 0 -3px 0 var(--polli-yellow); }
  [data-polli="checkbox"] { position:relative; isolation:isolate; overflow:hidden; border-radius:7px; width:1.375rem; height:1.375rem; transition:border-radius var(--polli-motion-settle) var(--polli-ease),border-color var(--polli-motion-state) var(--polli-ease); }
  [data-polli="checkbox"][data-state="checked"] { border-radius:50%; }
  [data-polli="checkbox"][data-state="indeterminate"] { border-radius:7px; }
@@ -235,4 +256,9 @@
  [data-polli="checkbox"]:is([data-state="checked"],[data-state="indeterminate"]) [data-polli="checkbox-fill"] { transform:scale(1); }
  [data-polli="checkbox-mark"] { position:relative; z-index:1; }
  [data-polli="list-row"] { border-color:color-mix(in srgb,var(--foreground) 12%,transparent); }
+}
+
+@media (forced-colors:active) {
+ [data-polli="tabs-trigger"][data-state="active"]::after { background:Highlight; forced-color-adjust:none; }
+ [data-polli="tabs-trigger"]:focus-visible { outline-color:Highlight; }
 }

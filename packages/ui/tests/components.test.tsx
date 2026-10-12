@@ -9,13 +9,13 @@ import {Checkbox,Switch} from '../src/components/selection';
 import {Input,Label} from '../src/components/field';
 import {Accordion,AccordionItem,AccordionTrigger,AccordionContent} from '../src/components/accordion';
 describe('shared component contracts',()=>{
- it('renders one single-contour underline and pastel tone on accessible tabs',async()=>{
+ it('preserves tab colours and accessible selection',async()=>{
   const user=userEvent.setup();
-  const {container}=render(<Tabs defaultValue="notes"><TabsList><TabsTrigger value="notes" inkTone="butter">Notes</TabsTrigger><TabsTrigger value="links" inkTone="sky">Links</TabsTrigger></TabsList><TabsContent value="notes">Notebook</TabsContent><TabsContent value="links">Bookmarks</TabsContent></Tabs>);
-  expect(container.querySelectorAll('[data-polli="liquid-tabs-ink"] path')).toHaveLength(1);
+  render(<Tabs defaultValue="notes"><TabsList><TabsTrigger value="notes" inkTone="butter">Notes</TabsTrigger><TabsTrigger value="links" inkTone="sky">Links</TabsTrigger></TabsList><TabsContent value="notes">Notebook</TabsContent><TabsContent value="links">Bookmarks</TabsContent></Tabs>);
   expect(screen.getByRole('tab',{name:'Notes'})).toHaveAttribute('data-polli-ink-tone','butter');
   await user.click(screen.getByRole('tab',{name:'Links'}));
   expect(screen.getByRole('tab',{name:'Links'})).toHaveAttribute('aria-selected','true');
+  expect(screen.getByRole('tab',{name:'Links'})).toHaveAttribute('data-polli-ink-tone','sky');
   expect(screen.getByRole('tabpanel')).toHaveTextContent('Bookmarks');
  });
  it('keeps the checkbox mark above its restrained ink fill',async()=>{

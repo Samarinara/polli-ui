@@ -28,7 +28,7 @@ Use `.polli-handwritten` for personal content outside fields. ListRow titles use
 
 ## Essential Organic Ink direction
 
-Use the supplied minimum-deformation single-contour prototype as the visual direction. Tabs keep the conventional printed-label layout with a thin pastel ink underline, not filled pills. The ink moves only when selection changes and its shape remains restrained (0% extra deformation). Colour belongs to navigation and functional states, not background panels. Keep headings upright rather than italic; avoid eyebrow copy when it is not required for comprehension. Use an open, unbordered page with clear row spacing and the existing Lora / Inter / Patrick Hand roles. Checkboxes use a small organic fill under the 180ms drawn check stroke, not a large expanding blob. In temporary dialogs and menus, a slightly physical surface is acceptable, but never nest a decorative sheet inside the page.
+Tabs use compact printed labels with a short, two-pixel colour mark beneath the selected label. Selection marks fade in over 160ms; labels keep a consistent weight and position. Colour belongs to navigation and functional states, not background panels. Keep headings upright rather than italic; avoid eyebrow copy when it is not required for comprehension. Use an open, unbordered page with clear row spacing and the existing Lora / Inter / Patrick Hand roles. Checkboxes use a small organic fill under the 180ms drawn check stroke, not a large expanding blob. In temporary dialogs and menus, a slightly physical surface is acceptable, but never nest a decorative sheet inside the page.
 
 ## Accessibility
 

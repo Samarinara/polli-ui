@@ -703,7 +703,7 @@ function TabsDoc() {
   const [disabled, setDisabled] = useState(false);
   const code = example(
     `import { useState } from "react";\nimport { Tabs, TabsList, TabsTrigger, TabsContent } from "@samarinara/polli-ui/components/tabs";`,
-    `  const [view, setView] = useState(${q(value)});\n  return (\n    <Tabs value={view} onValueChange={setView} activationMode="${activation}">\n      <TabsList aria-label="Saved content">\n        <TabsTrigger value="notes">Notes</TabsTrigger>\n        <TabsTrigger value="links">Links</TabsTrigger>\n        <TabsTrigger value="recipes"${disabled ? " disabled" : ""}>Recipes</TabsTrigger>\n      </TabsList>\n      <TabsContent value="notes">Things to make this weekend</TabsContent>\n      <TabsContent value="links">A little inspiration</TabsContent>\n      <TabsContent value="recipes">Grandma's lemon cake</TabsContent>\n    </Tabs>\n  );`,
+    `  const [view, setView] = useState(${q(value)});\n  return (\n    <Tabs value={view} onValueChange={setView} activationMode="${activation}">\n      <TabsList aria-label="Saved content">\n        <TabsTrigger value="notes">Notes</TabsTrigger>\n        <TabsTrigger value="links" inkTone="sky">Links</TabsTrigger>\n        <TabsTrigger value="recipes" inkTone="coral"${disabled ? " disabled" : ""}>Recipes</TabsTrigger>\n      </TabsList>\n      <TabsContent value="notes">Things to make this weekend</TabsContent>\n      <TabsContent value="links">A little inspiration</TabsContent>\n      <TabsContent value="recipes">Grandma's lemon cake</TabsContent>\n    </Tabs>\n  );`,
   );
   return (
     <Documentation
@@ -713,6 +713,7 @@ function TabsDoc() {
         ["onValueChange", "Callback with the selected value", "—"],
         ["activationMode", "automatic · manual", "automatic"],
         ["TabsTrigger: disabled", "Skip an unavailable tab", "false"],
+        ["TabsTrigger: inkTone", "butter · green · coral · sky · mint", "butter"],
       ]}
       usage={
         <>
@@ -765,8 +766,8 @@ function TabsDoc() {
             >
               <TabsList aria-label="Saved content">
                 <TabsTrigger value="notes">Notes</TabsTrigger>
-                <TabsTrigger value="links">Links</TabsTrigger>
-                <TabsTrigger value="recipes" disabled={disabled}>
+                <TabsTrigger value="links" inkTone="sky">Links</TabsTrigger>
+                <TabsTrigger value="recipes" inkTone="coral" disabled={disabled}>
                   Recipes
                 </TabsTrigger>
               </TabsList>
