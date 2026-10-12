@@ -204,7 +204,7 @@ test("tabs and accordions support keyboard activation and multiple disclosure", 
   ).toHaveAttribute("aria-selected", "true");
   const focusedTab = demo.getByRole("tab", { name: "Notes", exact: true });
   await expect(focusedTab).toHaveCSS("outline-style", "none");
-  expect(await focusedTab.evaluate(element => getComputedStyle(element, "::after").opacity)).toBe("1");
+  await expect.poll(() => focusedTab.evaluate(element => getComputedStyle(element, "::after").opacity)).toBe("1");
   await page.keyboard.press("Enter");
   await expect(focusedTab).toHaveAttribute("aria-selected", "true");
   await page.keyboard.press("Tab");

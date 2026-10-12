@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { pages, pageHref, repoUrl, resolvePage, type PageId } from "./pages";
 import { Sidebar, SearchDialog } from "./ui";
+import { ThemeProvider, ThemeControl } from "./theme";
 import { Content } from "./content";
 
 export function App({ initialPage = "overview" }: { initialPage?: PageId }) {
@@ -21,6 +22,7 @@ export function App({ initialPage = "overview" }: { initialPage?: PageId }) {
   const previous = pages[index - 1];
   const next = pages[index + 1];
   return (
+    <ThemeProvider>
     <div className="polli-root docs-root">
       <a className="skip-link" href="#main-content">
         Skip to content
@@ -41,6 +43,7 @@ export function App({ initialPage = "overview" }: { initialPage?: PageId }) {
           <span>UI</span>
         </a>
         <SearchDialog />
+        <ThemeControl />
         <div className="header-links">
           <a href="https://polli.page">
             polli.page
@@ -136,5 +139,6 @@ export function App({ initialPage = "overview" }: { initialPage?: PageId }) {
         </aside>
       </div>
     </div>
+    </ThemeProvider>
   );
 }

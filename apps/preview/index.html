@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#FAFBF6" />
+    <script>
+      (() => {
+        let theme = "system";
+        try { const stored = localStorage.getItem("polli-theme"); if (["light", "dark", "system"].includes(stored)) theme = stored; } catch {}
+        const dark = theme === "dark" || (theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content = dark ? "#17251E" : "#FAFBF6";
+      })();
+    </script>
     <meta
       name="description"
       content="Interactive components and brand guidelines for Polli."

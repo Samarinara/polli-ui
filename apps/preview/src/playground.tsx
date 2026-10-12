@@ -1,5 +1,6 @@
 import { useId, useRef, useState, type ReactNode } from "react";
 import { RotateCcw, Code2, Eye } from "lucide-react";
+import { ThemeToggle } from "./theme";
 import { Code } from "./ui";
 
 export function Playground({
@@ -72,6 +73,7 @@ export function Playground({
           <span />
           Live
         </span>
+        <ThemeToggle />
         <button
           type="button"
           className="playground-reset"

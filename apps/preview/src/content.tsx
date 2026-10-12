@@ -327,9 +327,22 @@ export function Content({ page }: { page: PageId }) {
                 </tbody>
               </table>
             </div>
+            <p>
+              Apply <code>dark</code> to <code>&lt;html&gt;</code> so dialogs,
+              menus, tooltips, and native controls share the same theme. The
+              preview follows your system theme by default; use the header or
+              playground controls to choose a persistent override.
+            </p>
+            <p>
+              Decorative surfaces keep their pastel colors in both modes. Customize
+              their paired text with <code>--mint-foreground</code>,
+              <code>--coral-foreground</code>, <code>--butter-foreground</code>, or
+              <code>--sky-foreground</code>. These default to Ink independently of
+              the page foreground. Recheck contrast when changing either color.
+            </p>
             <Code label="CSS">
               {
-                ".app-highlight {\n  background: var(--polli-yellow);\n  color: var(--polli-ink);\n}"
+                ".app-highlight {\n  background: var(--polli-yellow);\n  color: var(--butter-foreground);\n}"
               }
             </Code>
           </Section>

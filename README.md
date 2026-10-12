@@ -104,3 +104,12 @@ npm pack -w @samarinara/polli-ui --dry-run
 ```
 
 MIT licensed. The Polli name and brand identity belong to their owner. See `THIRD_PARTY_NOTICES.md` for shadcn/ui and upstream attribution.
+
+
+## Dark mode
+
+Set `document.documentElement.classList.toggle("dark", isDark)` to switch themes. Place `.dark` on `<html>` so Radix portals and native controls inherit the same tokens; `.polli-root` remains the typography and canvas wrapper. The preview follows the OS by default, persists Light/Dark/System choices, and includes a dark-mode toggle in each playground.
+
+Decorative foreground tokens (`--mint-foreground`, `--coral-foreground`, `--butter-foreground`, `--sky-foreground`) let you customize pastel text independently of page text. See [theme customization](docs/brand.md#theme-customization-and-contrast).
+
+`npm run test:docs` includes light/dark screenshot comparisons and theme/portal/contrast checks. To update reviewed baselines after an intentional design change, run `npm run build` then `npm run test:docs -- tests/docs/theme.spec.ts --update-snapshots`. Commit the updated PNGs with the change; CI compares against them and uploads failures.
