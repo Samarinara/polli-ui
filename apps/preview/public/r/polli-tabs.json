@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-tabs.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { Tabs, TabsList, TabsTrigger, TabsContent } from '@samarinara/polli-ui/components/tabs';\n"
+      "content": "\"use client\";\nexport { Tabs, TabsList, TabsTrigger, TabsContent } from '@samarinara/polli-ui/components/tabs';\nexport type { TabsTriggerProps } from '@samarinara/polli-ui/components/tabs';\n"
     }
   ]
 }

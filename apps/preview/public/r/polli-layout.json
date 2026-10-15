@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-layout.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { Surface, Separator, Skeleton, Avatar, EmptyState, ListRow, Alert } from '@samarinara/polli-ui/components/layout';\n"
+      "content": "\"use client\";\nexport { Surface, Separator, Skeleton, Avatar, EmptyState, ListRow, Alert } from '@samarinara/polli-ui/components/layout';\nexport type { SurfaceProps, AvatarProps, EmptyStateProps, ListRowProps, AlertProps } from '@samarinara/polli-ui/components/layout';\n"
     }
   ]
 }

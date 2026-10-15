@@ -6,6 +6,8 @@ Official Polli artwork was obtained from `https://www.polli.page/PolliLogo.svg` 
 
 Polli's source uses the composition patterns of shadcn/ui: Radix primitives, class-variance-authority, clsx, and tailwind-merge. Polli-specific source and styling are authored for this project. Dependencies retain their own licences.
 
+Menu keyboard navigation uses [tabbable](https://github.com/focus-trap/tabbable), distributed under the MIT License. Its licence is included with the dependency.
+
 shadcn/ui — Copyright (c) 2023 shadcn — MIT License.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:

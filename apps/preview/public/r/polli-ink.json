@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-ink.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { InkText, InkRemoval } from '@samarinara/polli-ui/components/ink';\n"
+      "content": "\"use client\";\nexport { InkText, InkRemoval } from '@samarinara/polli-ui/components/ink';\nexport type { InkTextProps, InkRemovalProps } from '@samarinara/polli-ui/components/ink';\n"
     }
   ]
 }

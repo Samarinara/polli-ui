@@ -34,7 +34,7 @@ export function NotebookMotionExample() {
           </Button>
         </div>
       </form>
-      <p className="motion-saved-note" role="status"><span className="handwritten">{savedNote}</span></p>
+      <p className="motion-saved-note" role="status"><span className="polli-handwritten">{savedNote}</span></p>
       {visible ? <InkRemoval removed={removed} onExitComplete={() => setVisible(false)}>
         <div className="motion-notebook-row">
           <Checkbox id="motion-finished" checked={finished} onCheckedChange={value => setFinished(value === true)} />
@@ -53,7 +53,7 @@ export function NotebookMotionExample() {
       <Accordion type="single" collapsible>
         <AccordionItem value="details">
           <AccordionTrigger>More details</AccordionTrigger>
-          <AccordionContent><span className="handwritten">Something yellow for the kitchen table.</span></AccordionContent>
+          <AccordionContent><span className="polli-handwritten">Something yellow for the kitchen table.</span></AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>

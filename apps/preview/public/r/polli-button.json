@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-button.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { Button, buttonVariants } from '@samarinara/polli-ui/components/button';\n"
+      "content": "\"use client\";\nexport { Button, buttonVariants } from '@samarinara/polli-ui/components/button';\nexport type { ButtonProps } from '@samarinara/polli-ui/components/button';\n"
     }
   ]
 }

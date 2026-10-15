@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-menu.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@samarinara/polli-ui/components/menu';\n"
+      "content": "\"use client\";\nexport { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@samarinara/polli-ui/components/menu';\nexport type { DropdownMenuContentProps } from '@samarinara/polli-ui/components/menu';\n"
     }
   ]
 }

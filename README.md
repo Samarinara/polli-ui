@@ -39,13 +39,14 @@ npm install @samarinara/polli-ui@latest
 // App entry point; for Next.js, app/layout.tsx.
 import "@samarinara/polli-ui/styles.css";
 import { Button } from "@samarinara/polli-ui/components/button";
-import { Input, Label } from "@samarinara/polli-ui/components/field";
+import { Field, Input } from "@samarinara/polli-ui/components/field";
 
 export function AddIdea() {
   return (
     <div className="polli-root">
-      <Label htmlFor="idea">A little idea</Label>
-      <Input id="idea" placeholder="Something worth remembering" />
+      <Field label="A little idea" hint="Something worth remembering.">
+        <Input name="idea" placeholder="Weekend plans" />
+      </Field>
       <Button>Save idea</Button>
     </div>
   );
@@ -53,6 +54,20 @@ export function AddIdea() {
 ```
 
 The package ships compiled CSS, ESM JavaScript, and TypeScript declarations. Consuming apps do not need to scan node_modules with Tailwind. React and React DOM are peer dependencies. Compatible with React 18.3 and 19.
+
+`Field` connects its label, hint, and error to one `Input`, `Textarea`, `NativeSelect`, `Checkbox`, or `Switch`. An error also sets `aria-invalid`. IDs are unique across repeated instances. Existing explicit labels and descriptions still work; use `htmlFor` on `Field` for custom controls or explicitly named nested controls.
+
+Use `asChild` to compose native elements without extra wrappers. `Button` supports disabled links, and `Badge`, `Surface`, and `ListRow` can adopt a button, link, or section. For example:
+
+```tsx
+<ListRow asChild title="Weekend plans" description="Read the saved note">
+  <a href="/notes/weekend" />
+</ListRow>
+```
+
+Keep separate row actions outside a linked row to avoid nesting interactive elements. Menus and dialogs are modal by default, with background isolation. Tab and Shift Tab dismiss a menu and continue from its trigger; Escape restores the trigger. Use `modal={false}` for a menu that permits interaction with the surrounding page. Dialog, menu, and tooltip content accept a portal `container`; dialogs also accept `showCloseButton` and a localized `closeLabel`.
+
+Copyable playground examples include the stylesheet and `.polli-root` wrapper. Avatars fall back to initials if an image fails, and long labels and floating content wrap within small viewports. See [the UI audit](docs/ui-audit.md) for coverage and remaining validation limits.
 
 ## Keep every app connected
 

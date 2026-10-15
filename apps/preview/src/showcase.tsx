@@ -151,7 +151,10 @@ const initialNotes = [
 const notebookCode = (
   category: string,
   showCompleted: boolean,
-) => `import { useState } from "react";
+) => `"use client";
+
+import "@samarinara/polli-ui/styles.css";
+import { useId, useRef, useState } from "react";
 import { MoreHorizontal, Trash2 } from "lucide-react";
 import { Button } from "@samarinara/polli-ui/components/button";
 import { Input, Label } from "@samarinara/polli-ui/components/field";
@@ -162,6 +165,8 @@ import { InkText, InkRemoval } from "@samarinara/polli-ui/components/ink";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@samarinara/polli-ui/components/menu";
 
 export function Notebook() {
+  const id = useId();
+  const input = useRef<HTMLInputElement>(null);
   const [notes, setNotes] = useState(${JSON.stringify(initialNotes, null, 2).replaceAll("\n", "\n  ")});
   const [title, setTitle] = useState("");
   const [nextId, setNextId] = useState(3);
@@ -179,8 +184,8 @@ export function Notebook() {
         setTitle("");
         setNotice("Note added in this example.");
       }}>
-        <Label htmlFor="new-note">A new note</Label>
-        <Input id="new-note" placeholder="Something worth remembering" value={title} onChange={(event) => setTitle(event.target.value)} />
+        <Label htmlFor={id}>A new note</Label>
+        <Input id={id} ref={input} placeholder="Something worth remembering" value={title} onChange={(event) => setTitle(event.target.value)} />
         <Button type="submit">Add note</Button>
       </form>
       {visible.map((note) => (
@@ -196,9 +201,9 @@ export function Notebook() {
           trailing={<DropdownMenu>
             <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label={\`Actions for \${note.title}\`}><MoreHorizontal /></Button></DropdownMenuTrigger>
             <DropdownMenuContent align="end" onCloseAutoFocus={(event) => {
-              if (removing.includes(note.id)) { event.preventDefault(); document.getElementById("new-note")?.focus(); }
+              if (removing.includes(note.id)) { event.preventDefault(); input.current?.focus(); }
             }}><DropdownMenuItem onSelect={() => {
-              document.getElementById("new-note")?.focus();
+              input.current?.focus();
               setRemoving((items) => [...items, note.id]);
             }}><Trash2 size={16} />Delete note</DropdownMenuItem></DropdownMenuContent>
           </DropdownMenu>} />
@@ -405,7 +410,7 @@ function Notebook() {
           <TabsContent value="links">
             <ListRow
               leading={<Bookmark size={20} />}
-              title={<span className="handwritten">A little inspiration</span>}
+              title={<span className="polli-handwritten">A little inspiration</span>}
               description="Ideas · Saved link"
               trailing={
                 <Button

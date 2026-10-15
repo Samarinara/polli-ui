@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { AnimatedIcon } from '../src/components/animated-icon';
 import { InkText, InkRemoval } from '../src/components/ink';
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); vi.restoreAllMocks(); });
 
 function finishGap(element: Element) {
   // JSDOM does not provide AnimationEvent, so supply the native event field.
@@ -71,6 +71,35 @@ describe('notebook gesture contracts', () => {
     expect(complete).not.toHaveBeenCalled();
     media.matches = true;
     listener?.();
+    expect(complete).toHaveBeenCalledTimes(1);
+  });
+
+  it('finishes removal without CSS animation events and cancels pending removals', () => {
+    vi.useFakeTimers();
+    vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener() {}, removeEventListener() {} }));
+    const complete = vi.fn();
+    const { rerender } = render(<InkRemoval removed={false} onExitComplete={complete}>A note</InkRemoval>);
+    rerender(<InkRemoval removed onExitComplete={complete}>A note</InkRemoval>);
+    rerender(<InkRemoval removed={false} onExitComplete={complete}>A note</InkRemoval>);
+    vi.runAllTimers();
+    expect(complete).not.toHaveBeenCalled();
+    rerender(<InkRemoval removed onExitComplete={complete}>A note</InkRemoval>);
+    vi.runAllTimers();
+    expect(complete).toHaveBeenCalledTimes(1);
+  });
+
+  it('honors a paused removal and completes a finished animation without an event', () => {
+    vi.useFakeTimers();
+    vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener() {}, removeEventListener() {} }));
+    const complete = vi.fn();
+    const animation = { animationName: 'polli-close-gap', playState: 'paused' };
+    const { container, rerender } = render(<InkRemoval removed={false} onExitComplete={complete}>A note</InkRemoval>);
+    Object.defineProperty(container.firstElementChild!, 'getAnimations', { value: () => [animation] });
+    rerender(<InkRemoval removed onExitComplete={complete}>A note</InkRemoval>);
+    vi.advanceTimersByTime(100);
+    expect(complete).not.toHaveBeenCalled();
+    animation.playState = 'finished';
+    vi.advanceTimersByTime(50);
     expect(complete).toHaveBeenCalledTimes(1);
   });
 });
