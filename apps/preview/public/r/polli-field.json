@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-field.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { Input, Textarea, NativeSelect, Label, Field } from '@samarinara/polli-ui/components/field';\n"
+      "content": "\"use client\";\nexport { Input, Textarea, NativeSelect, Label, Field } from '@samarinara/polli-ui/components/field';\nexport type { FieldProps } from '@samarinara/polli-ui/components/field';\n"
     }
   ]
 }

@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-tooltip.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@samarinara/polli-ui/components/tooltip';\n"
+      "content": "\"use client\";\nexport { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@samarinara/polli-ui/components/tooltip';\nexport type { TooltipContentProps } from '@samarinara/polli-ui/components/tooltip';\n"
     }
   ]
 }

@@ -96,7 +96,7 @@ const selectionProperties: readonly Property[] = [
 ];
 const q = JSON.stringify;
 function example(imports: string, body: string) {
-  return `${imports}\n\nexport function Example() {\n${body}\n}`;
+  return `"use client";\n\nimport "@samarinara/polli-ui/styles.css";\n${imports}\n\nfunction ExampleContent() {\n${body}\n}\n\nexport function Example() {\n  return <div className="polli-root"><ExampleContent /></div>;\n}`;
 }
 function Documentation({
   playground,
@@ -121,7 +121,7 @@ function Documentation({
         <p className="api-import">
           <code>@samarinara/polli-ui/components/{path}</code>
         </p>
-        <div className="table-scroll">
+        <div className="table-scroll" tabIndex={0} role="region" aria-label="Component API">
           <table>
             <thead>
               <tr>
@@ -182,7 +182,7 @@ function ButtonDoc() {
         ["variant", variants.join(" · "), "default"],
         ["size", "sm · default · lg · icon", "default"],
         ["disabled", "boolean", "false"],
-        ["asChild", "Render as a child element, such as a link", "false"],
+        ["asChild", "Render as a child element, such as a link; disabled blocks activation", "false"],
         ["onClick", "Native button click handler", "—"],
       ]}
       usage={
@@ -304,7 +304,6 @@ function FieldsDoc() {
     disabled: state === "disabled",
     required,
     "aria-invalid": invalid,
-    "aria-describedby": `${id}-message`,
   };
   const element =
     kind === "input"
@@ -313,8 +312,8 @@ function FieldsDoc() {
         ? "Textarea"
         : "NativeSelect";
   const code = example(
-    `import { useState } from "react";\nimport { Field, ${element}, Label } from "@samarinara/polli-ui/components/field";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
-    `  const [value, setValue] = useState(${q(kind === "select" ? category : value)});\n  const [submitted, setSubmitted] = useState(false);\n  const [saved, setSaved] = useState("");\n  const invalid = ${state === "invalid" ? "true" : required && kind !== "select" ? "submitted && !value.trim()" : "false"};\n  return (\n    <form noValidate onSubmit={(event) => {\n      event.preventDefault();\n      setSubmitted(true);\n      if (${state === "invalid" ? "false" : required && kind !== "select" ? "value.trim()" : "true"}) setSaved(value || "Untitled entry");\n    }}>\n      <Field label={<Label htmlFor="entry">${kind === "select" ? "Category" : "Title"}</Label>}\n        error={invalid ? <span id="entry-message">${error}</span> : undefined}\n        hint={<span id="entry-message">${kind === "select" ? "Choose where to keep this entry." : "Something worth remembering."}</span>}>\n        <${element} id="entry" value={value} onChange={(event) => { setValue(event.target.value); setSaved(""); }}\n          aria-invalid={invalid} aria-describedby="entry-message"${required ? " required" : ""}${state === "disabled" ? " disabled" : ""}${kind !== "select" ? ' placeholder="Weekend plans"' : ""}${kind === "select" ? ">\n          <option>Recipes</option><option>Home</option><option>Ideas</option>\n        </NativeSelect>" : " />"}\n      </Field>\n      <Button type="submit"${state === "disabled" ? " disabled" : ""}>Save entry</Button>\n      <p role="status">{saved ? \`Saved: \${saved}\` : "Nothing saved yet."}</p>\n    </form>\n  );`,
+    `import { useState } from "react";\nimport { Field, ${element} } from "@samarinara/polli-ui/components/field";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
+    `  const [value, setValue] = useState(${q(kind === "select" ? category : value)});\n  const [submitted, setSubmitted] = useState(false);\n  const [saved, setSaved] = useState("");\n  const invalid = ${state === "invalid" ? "true" : required && kind !== "select" ? "submitted && !value.trim()" : "false"};\n  return (\n    <form noValidate onSubmit={(event) => {\n      event.preventDefault();\n      setSubmitted(true);\n      if (${state === "invalid" ? "false" : required && kind !== "select" ? "value.trim()" : "true"}) setSaved(value || "Untitled entry");\n    }}>\n      <Field label="${kind === "select" ? "Category" : "Title"}"\n        error={invalid ? "${error}" : undefined}\n        hint="${kind === "select" ? "Choose where to keep this entry." : "Something worth remembering."}">\n        <${element} value={value} onChange={(event) => { setValue(event.target.value); setSaved(""); }}\n          aria-invalid={invalid}${required ? " required" : ""}${state === "disabled" ? " disabled" : ""}${kind !== "select" ? ' placeholder="Weekend plans"' : ""}${kind === "select" ? ">\n          <option>Recipes</option><option>Home</option><option>Ideas</option>\n        </NativeSelect>" : " />"}\n      </Field>\n      <Button type="submit"${state === "disabled" ? " disabled" : ""}>Save entry</Button>\n      <p role="status">{saved ? \`Saved: \${saved}\` : "Nothing saved yet."}</p>\n    </form>\n  );`,
   );
   return (
     <Documentation
@@ -322,9 +321,10 @@ function FieldsDoc() {
       properties={[
         [
           "Field: label / hint / error",
-          "ReactNode · error replaces the hint",
+          "ReactNode · labels and descriptions connect automatically; error replaces hint",
           "—",
         ],
+        ["Field: htmlFor", "Control ID for custom or explicitly named nested controls", "generated"],
         ["value / onChange", "Native controlled field props", "—"],
         ["required / disabled", "boolean", "false"],
         [
@@ -337,8 +337,8 @@ function FieldsDoc() {
       usage={
         <>
           <p>
-            Keep the printed label above the handwritten value. Connect the hint
-            or error to the control with <code>aria-describedby</code>. Errors
+            Keep the printed label above the handwritten value. <code>Field</code>
+            connects the label, hint, and error to one shared control automatically. Errors
             belong beside the field and should explain how to continue.
           </p>
           <p>
@@ -405,16 +405,8 @@ function FieldsDoc() {
                   {kind === "select" ? "Category" : "Title"}
                 </Label>
               }
-              error={
-                invalid ? <span id={`${id}-message`}>{error}</span> : undefined
-              }
-              hint={
-                <span id={`${id}-message`}>
-                  {kind === "select"
-                    ? "Choose where to keep this entry."
-                    : "Something worth remembering."}
-                </span>
-              }
+              error={invalid ? error : undefined}
+              hint={kind === "select" ? "Choose where to keep this entry." : "Something worth remembering."}
             >
               {kind === "select" ? (
                 <NativeSelect
@@ -476,8 +468,8 @@ function CheckboxDoc() {
         ? "checked"
         : "unchecked";
   const code = example(
-    `import { useState } from "react";\nimport { Checkbox } from "@samarinara/polli-ui/components/selection";\nimport { Label } from "@samarinara/polli-ui/components/field";`,
-    `  const [checked, setChecked] = useState<boolean | "indeterminate">(${q(checked)});\n  return (\n    <div>\n      <Checkbox id="lemons" checked={checked} onCheckedChange={setChecked}${disabled ? " disabled" : ""} />\n      <Label htmlFor="lemons">{${q(label || "Add lemons")}}</Label>\n    </div>\n  );`,
+    `import { useId, useState } from "react";\nimport { Checkbox } from "@samarinara/polli-ui/components/selection";\nimport { Label } from "@samarinara/polli-ui/components/field";`,
+    `  const id = useId();\n  const [checked, setChecked] = useState<boolean | "indeterminate">(${q(checked)});\n  return (\n    <div>\n      <Checkbox id={id} checked={checked} onCheckedChange={setChecked}${disabled ? " disabled" : ""} />\n      <Label htmlFor={id}>{${q(label || "Add lemons")}}</Label>\n    </div>\n  );`,
   );
   return (
     <Documentation
@@ -561,8 +553,8 @@ function SwitchDoc() {
   const [label, setLabel] = useState("Shared categories");
   const id = useId();
   const code = example(
-    `import { useState } from "react";\nimport { Switch } from "@samarinara/polli-ui/components/selection";\nimport { Label } from "@samarinara/polli-ui/components/field";`,
-    `  const [enabled, setEnabled] = useState(${checked});\n  return (\n    <div>\n      <Label htmlFor="shared">{${q(label || "Shared categories")}}</Label>\n      <Switch id="shared" checked={enabled} onCheckedChange={setEnabled}${disabled ? " disabled" : ""} />\n      <p role="status">{enabled ? "Sharing is on." : "Sharing is off."}</p>\n    </div>\n  );`,
+    `import { useId, useState } from "react";\nimport { Switch } from "@samarinara/polli-ui/components/selection";\nimport { Label } from "@samarinara/polli-ui/components/field";`,
+    `  const id = useId();\n  const [enabled, setEnabled] = useState(${checked});\n  return (\n    <div>\n      <Label htmlFor={id}>{${q(label || "Shared categories")}}</Label>\n      <Switch id={id} checked={enabled} onCheckedChange={setEnabled}${disabled ? " disabled" : ""} />\n      <p role="status">{enabled ? "Sharing is on." : "Sharing is off."}</p>\n    </div>\n  );`,
   );
   return (
     <Documentation
@@ -664,7 +656,7 @@ function BadgeDoc() {
       playground={
         <Playground
           name="Badge"
-          code={`import { Badge } from "@samarinara/polli-ui/components/badge";\n\n<Badge tone="${tone}">{${q(label || "Recipes")}}</Badge>`}
+          code={example(`import { Badge } from "@samarinara/polli-ui/components/badge";`, `  return <Badge tone="${tone}">{${q(label || "Recipes")}}</Badge>;`)}
           onReset={() => {
             setTone("mint");
             setLabel("Recipes");
@@ -774,7 +766,7 @@ function TabsDoc() {
               <TabsContent value="notes">
                 <ListRow
                   title={
-                    <span className="handwritten">
+                    <span className="polli-handwritten">
                       Things to make this weekend
                     </span>
                   }
@@ -785,7 +777,7 @@ function TabsDoc() {
                 <ListRow
                   leading={<Bookmark size={18} />}
                   title={
-                    <span className="handwritten">A little inspiration</span>
+                    <span className="polli-handwritten">A little inspiration</span>
                   }
                   description="Ideas · 3 saved links"
                 />
@@ -793,7 +785,7 @@ function TabsDoc() {
               <TabsContent value="recipes">
                 <ListRow
                   title={
-                    <span className="handwritten">Grandma's lemon cake</span>
+                    <span className="polli-handwritten">Grandma's lemon cake</span>
                   }
                   description="Recipes · A family favourite"
                 />
@@ -843,7 +835,7 @@ function AccordionDoc() {
   ));
   const code = example(
     `import { useState } from "react";\nimport { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@samarinara/polli-ui/components/accordion";`,
-    `  const [open, setOpen] = useState(${q(mode === "single" ? open[0] || "" : open)});\n  return (\n    <Accordion type="${mode}" value={open} onValueChange={setOpen}${mode === "single" ? ` collapsible={${collapsible}}` : ""}>\n${items.map((item) => `      <AccordionItem value="${item.value}"${item.value === "options" && disabled ? " disabled" : ""}>\n        <AccordionTrigger>${item.title}</AccordionTrigger>\n        <AccordionContent>${item.text}</AccordionContent>\n      </AccordionItem>`).join("\n")}\n    </Accordion>\n  );`,
+    `  const [open, setOpen] = useState<${mode === "single" ? "string" : "string[]"}>(${q(mode === "single" ? open[0] || "" : open)});\n  return (\n    <Accordion type="${mode}" value={open} onValueChange={setOpen}${mode === "single" ? ` collapsible={${collapsible}}` : ""}>\n${items.map((item) => `      <AccordionItem value="${item.value}"${item.value === "options" && disabled ? " disabled" : ""}>\n        <AccordionTrigger>${item.title}</AccordionTrigger>\n        <AccordionContent>${item.text}</AccordionContent>\n      </AccordionItem>`).join("\n")}\n    </Accordion>\n  );`,
   );
   return (
     <Documentation
@@ -958,8 +950,8 @@ function DialogDoc() {
   const [notice, setNotice] = useState("No category created yet.");
   const id = useId();
   const code = example(
-    `import { useState } from "react";\nimport { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@samarinara/polli-ui/components/dialog";\nimport { Input, Label } from "@samarinara/polli-ui/components/field";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
-    `  const [open, setOpen] = useState(false);\n  const [name, setName] = useState("");\n  const [notice, setNotice] = useState("No category created yet.");\n  return (\n    <>\n      <Dialog open={open} onOpenChange={setOpen}>\n        <DialogTrigger asChild><Button${disabled ? " disabled" : ""}>Add category</Button></DialogTrigger>\n        <DialogContent>\n          <DialogTitle>{${q(title || "Add category")}}</DialogTitle>\n          <DialogDescription>Categories are available across your Polli apps.</DialogDescription>\n          <form onSubmit={(event) => {\n            event.preventDefault();\n            if (!name.trim()) return;\n            setNotice(\`Category “\${name.trim()}” created in this example.\`);\n            setName("");\n            setOpen(false);\n          }}>\n            <Label htmlFor="category-name">Category name</Label>\n            <Input id="category-name" required value={name} onChange={(event) => setName(event.target.value)} />\n            <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>\n            <Button type="submit">Create category</Button>\n          </form>\n        </DialogContent>\n      </Dialog>\n      <p role="status">{notice}</p>\n    </>\n  );`,
+    `import { useState } from "react";\nimport { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@samarinara/polli-ui/components/dialog";\nimport { Field, Input } from "@samarinara/polli-ui/components/field";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
+    `  const [open, setOpen] = useState(false);\n  const [name, setName] = useState("");\n  const [notice, setNotice] = useState("No category created yet.");\n  return (\n    <>\n      <Dialog open={open} onOpenChange={setOpen}>\n        <DialogTrigger asChild><Button${disabled ? " disabled" : ""}>Add category</Button></DialogTrigger>\n        <DialogContent>\n          <DialogTitle>{${q(title || "Add category")}}</DialogTitle>\n          <DialogDescription>Categories are available across your Polli apps.</DialogDescription>\n          <form onSubmit={(event) => {\n            event.preventDefault();\n            if (!name.trim()) return;\n            setNotice(\`Category “\${name.trim()}” created in this example.\`);\n            setName("");\n            setOpen(false);\n          }}>\n            <Field label="Category name">\n              <Input required value={name} onChange={(event) => setName(event.target.value)} />\n            </Field>\n            <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>\n            <Button type="submit">Create category</Button>\n          </form>\n        </DialogContent>\n      </Dialog>\n      <p role="status">{notice}</p>\n    </>\n  );`,
   );
   return (
     <Documentation
@@ -968,6 +960,8 @@ function DialogDoc() {
         ["Dialog: open / defaultOpen", "boolean", "false"],
         ["Dialog: onOpenChange", "Callback with the next open state", "—"],
         ["Dialog: modal", "Trap focus and make the background inert", "true"],
+        ["DialogContent: showCloseButton / closeLabel", "Show the close action and customize its accessible label", "true / Close dialog"],
+        ["DialogContent: container", "Optional portal host element", "document.body"],
         [
           "DialogTrigger / DialogClose: asChild",
           "Use a Button as the trigger or close control",
@@ -1096,6 +1090,7 @@ function MenuDoc() {
           "Controlled open state and callback",
           "—",
         ],
+        ["DropdownMenu: modal", "Isolate the background while open; Tab dismisses and continues", "true"],
         ["DropdownMenuContent: align", "start · center · end", "center"],
         [
           "DropdownMenuContent: sideOffset",
@@ -1159,7 +1154,7 @@ function MenuDoc() {
             <ListRow
               leading={<Bookmark size={20} />}
               title={
-                <span className="handwritten">Things to make this weekend</span>
+                <span className="polli-handwritten">Things to make this weekend</span>
               }
               description="Home · Saved just now"
               trailing={
@@ -1335,7 +1330,7 @@ function FeedbackDoc() {
           "Explain the empty collection and the next step",
           "required",
         ],
-        ["EmptyState: action / icon", "Optional ReactNode", "—"],
+        ["EmptyState: action / icon", "Optional ReactNode · decorative icon is hidden from assistive technology", "—"],
       ]}
       usage={
         <>
@@ -1433,7 +1428,7 @@ function FeedbackDoc() {
             ) : (
               <>
                 <ListRow
-                  title={<span className="handwritten">My first note</span>}
+                  title={<span className="polli-handwritten">My first note</span>}
                   description="Added in this example"
                   trailing={<Badge>New</Badge>}
                 />
@@ -1507,7 +1502,7 @@ function ListsDoc() {
       properties={[
         [
           "Avatar: name / src",
-          "Accessible name; initials when src is omitted",
+          "Accessible name; initials when src is omitted or fails",
           "name required",
         ],
         [
@@ -1520,6 +1515,7 @@ function ListsDoc() {
           "Optional icon, avatar, badge, or action",
           "—",
         ],
+        ["ListRow / Surface: asChild", "Use a native link, button, or section as the root", "false"],
         [
           "Surface / Separator",
           "Native div / hr props, including className",
@@ -1534,7 +1530,7 @@ function ListsDoc() {
             together.
           </p>
           <p>
-            Avatars use initials when no image is supplied. Name row actions
+            Avatars use initials when no image is supplied or an image fails to load. Name row actions
             explicitly so keyboard and screen-reader users know which item they
             affect.
           </p>

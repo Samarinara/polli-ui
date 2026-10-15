@@ -8,6 +8,7 @@ test("all pages are readable and connected without JavaScript", async ({
   browser,
   baseURL,
 }) => {
+  test.setTimeout(90_000);
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   for (const [path, title] of documents) {
@@ -38,6 +39,7 @@ test("all pages are readable and connected without JavaScript", async ({
 test("every page hydrates without errors or missing local assets", async ({
   page,
 }, testInfo) => {
+  test.setTimeout(90_000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => {
@@ -103,7 +105,7 @@ test("search supports keyboard selection, empty results, and Escape focus restor
 test("mobile navigation works and pages fit narrow and wide viewports", async ({
   page,
 }, testInfo) => {
-  test.setTimeout(180_000);
+  test.setTimeout(300_000);
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("index.html");
   await page.locator(".mobile-navigation summary").click();

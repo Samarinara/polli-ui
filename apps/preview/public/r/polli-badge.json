@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-badge.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { Badge } from '@samarinara/polli-ui/components/badge';\n"
+      "content": "\"use client\";\nexport { Badge } from '@samarinara/polli-ui/components/badge';\nexport type { BadgeProps } from '@samarinara/polli-ui/components/badge';\n"
     }
   ]
 }

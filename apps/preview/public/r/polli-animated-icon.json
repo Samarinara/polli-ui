@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-animated-icon.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { AnimatedIcon } from '@samarinara/polli-ui/components/animated-icon';\n"
+      "content": "\"use client\";\nexport { AnimatedIcon } from '@samarinara/polli-ui/components/animated-icon';\nexport type { AnimatedIconName, ActionKey, AnimatedIconProps } from '@samarinara/polli-ui/components/animated-icon';\n"
     }
   ]
 }

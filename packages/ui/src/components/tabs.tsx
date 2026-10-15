@@ -29,7 +29,7 @@ export type TabsTriggerProps = React.ComponentPropsWithoutRef<typeof T.Trigger> 
 export const TabsTrigger = React.forwardRef<React.ElementRef<typeof T.Trigger>, TabsTriggerProps>(
   ({ className, inkTone = 'butter', ...props }, ref) =>
     <T.Trigger data-polli="tabs-trigger" data-polli-ink-tone={inkTone} ref={ref}
-      className={cn('relative shrink-0 border-0 bg-transparent px-1 py-2 text-sm font-medium text-muted-foreground data-[state=active]:text-primary focus:outline-none disabled:opacity-50', className)}
+      className={cn('relative shrink-0 border-0 bg-transparent px-1 py-2 text-sm font-medium text-muted-foreground data-[state=active]:text-primary focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring disabled:opacity-50', className)}
       {...props} />,
 );
 TabsTrigger.displayName = 'TabsTrigger';

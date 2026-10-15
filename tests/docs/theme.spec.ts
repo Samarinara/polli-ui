@@ -3,6 +3,9 @@ import { test, expect, type Page } from "@playwright/test";
 const visualExpect = expect.configure({ timeout: 15_000 });
 const html = (page: Page) => page.locator("html");
 async function setTheme(page: Page, theme: "light" | "dark" | "system") {
+  // Native select text can retain its initial fallback font after a web font
+  // loads. Select only once the document fonts are ready for stable rendering.
+  await page.evaluate(() => document.fonts.ready);
   await page.getByLabel("Color theme").selectOption(theme);
   await expect(html(page)).toHaveAttribute("data-theme", theme);
 }
@@ -81,6 +84,9 @@ for (const mode of ["light", "dark"] as const) {
       await setTheme(page, mode);
       await expect(html(page)).toHaveCSS("color-scheme", mode);
       await expect(page.getByLabel("Control", { exact: true })).toHaveCSS("color-scheme", mode);
+      const input = page.getByRole('textbox', { name: 'Title', exact: true });
+      await expect(input).toHaveCSS('font-size', '20px');
+      expect(await input.evaluate(element => getComputedStyle(element).fontFamily)).toContain('Patrick Hand');
       const ratios = await page.evaluate(() => {
         const probe = document.createElement("span");
         document.body.append(probe);

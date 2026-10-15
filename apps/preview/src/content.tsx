@@ -279,7 +279,7 @@ export function Content({ page }: { page: PageId }) {
               Polli Green for the brand, a primary action, and focus. Pastels
               work best in small, purposeful areas.
             </p>
-            <div className="table-scroll">
+            <div className="table-scroll" tabIndex={0} role="region" aria-label="Colour roles">
               <table>
                 <thead>
                   <tr>
@@ -415,7 +415,7 @@ export function Content({ page }: { page: PageId }) {
             </p>
           </Section>
           <Section id="hierarchy" title="Hierarchy">
-            <div className="table-scroll">
+            <div className="table-scroll" tabIndex={0} role="region" aria-label="Type hierarchy">
               <table>
                 <thead>
                   <tr>
@@ -462,7 +462,7 @@ export function Content({ page }: { page: PageId }) {
             <Preview label="Printed label, personal value">
               <div className="notebook-field">
                 <span>Recipe title</span>
-                <p className="handwritten">Grandma’s lemon cake</p>
+                <p className="polli-handwritten">Grandma’s lemon cake</p>
               </div>
             </Preview>
             <p>
@@ -492,15 +492,15 @@ export function Content({ page }: { page: PageId }) {
               <div className="layout-example">
                 <h3>This weekend</h3>
                 <div>
-                  <span className="handwritten">Bake a lemon cake</span>
+                  <span className="polli-handwritten">Bake a lemon cake</span>
                   <small>Recipes</small>
                 </div>
                 <div>
-                  <span className="handwritten">Pick up flowers</span>
+                  <span className="polli-handwritten">Pick up flowers</span>
                   <small>Home</small>
                 </div>
                 <div>
-                  <span className="handwritten">Call Alex</span>
+                  <span className="polli-handwritten">Call Alex</span>
                   <small>People</small>
                 </div>
               </div>
@@ -512,7 +512,7 @@ export function Content({ page }: { page: PageId }) {
             </p>
           </Section>
           <Section id="spacing" title="Spacing & shape">
-            <div className="table-scroll">
+            <div className="table-scroll" tabIndex={0} role="region" aria-label="Spacing and shape">
               <table>
                 <thead>
                   <tr>
@@ -598,7 +598,7 @@ export function Content({ page }: { page: PageId }) {
             </p>
           </Section>
           <Section id="timing" title="Timing">
-            <div className="table-scroll">
+            <div className="table-scroll" tabIndex={0} role="region" aria-label="Motion timing">
               <table>
                 <thead>
                   <tr>
@@ -754,7 +754,7 @@ function Note({ text, save, remove, focusNext }) {
             </ul>
           </Section>
           <Section id="interface-copy" title="Interface copy">
-            <div className="table-scroll">
+            <div className="table-scroll" tabIndex={0} role="region" aria-label="Interface copy">
               <table>
                 <thead>
                   <tr>
@@ -836,7 +836,27 @@ function Note({ text, save, remove, focusNext }) {
             </p>
             <Code>
               {
-                'import "@samarinara/polli-ui/styles.css";\nimport { Button } from "@samarinara/polli-ui/components/button";\nimport { Input, Label } from "@samarinara/polli-ui/components/field";\n\nexport function AddNote() {\n  return <form className="polli-root" onSubmit={saveNote}>\n    <Label htmlFor="title">Title</Label>\n    <Input id="title" name="title" required />\n    <Button type="submit">Save note</Button>\n  </form>;\n}'
+                `"use client";
+
+import { useState } from "react";
+import "@samarinara/polli-ui/styles.css";
+import { Button } from "@samarinara/polli-ui/components/button";
+import { Field, Input } from "@samarinara/polli-ui/components/field";
+
+export function AddNote() {
+  const [saved, setSaved] = useState("");
+  return <form className="polli-root" onSubmit={(event) => {
+    event.preventDefault();
+    const title = String(new FormData(event.currentTarget).get("title") || "").trim();
+    if (title) setSaved(title);
+  }}>
+    <Field label="Title" hint="Something worth remembering.">
+      <Input name="title" required />
+    </Field>
+    <Button type="submit">Save note</Button>
+    <p role="status">{saved ? "Saved: " + saved : "Nothing saved yet."}</p>
+  </form>;
+}`
               }
             </Code>
             <p>

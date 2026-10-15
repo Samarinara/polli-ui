@@ -1,26 +1,33 @@
 # Validation
 
-Verified in this workspace:
+Audit date: 2026-10-13. Findings and integration guidance are in [ui-audit.md](ui-audit.md).
 
-- Shared ESM / TypeScript declaration build and compiled stylesheet.
-- Production Vite build and 22 prerendered documentation pages.
-- TypeScript strict type checking.
-- All 13 default playground React snippets parse and pass strict TypeScript checks.
-- All 1,412 relative page links and anchors resolve in the static build.
-- Thirteen component and gesture tests: button semantics and links, labelled fields and refs, dialog naming/Escape/focus restoration, keyboard tabs, keyboard checkboxes and switches, uncontrolled multiple accordions with refs and callbacks, externally opened controlled dialogs.
-- Package contents inspected with npm pack --dry-run.
-- Twelve generated registry items use thin shared-package re-exports.
+## Build and package
 
-The offline documentation exporter inlines the scripts, styles, and fonts while preserving ordinary page links. All 22 exported pages retain the early theme script before the body. Vercel builds from the workspace root and serves `apps/preview/dist` at `/`.
+- `npm run build` passed: shared ESM, TypeScript declarations, compiled CSS, 12 registry items, and the production documentation with 22 prerendered pages.
+- `npm run typecheck` passed with strict TypeScript settings.
+- `npm test` passed all 26 component and gesture tests.
+- `npm pack --dry-run --json -w @samarinara/polli-ui` includes 83 files, including all component exports, token declarations, the shared stylesheet, and third-party notices.
+- `npm audit --omit=dev` reports zero production advisories. Five development dependency advisories remain documented in the audit.
 
-`npm run test:docs` runs thirty-two browser checks for static content without JavaScript, hydration and local assets, keyboard search and focus, the editable notebook, all twelve component playgrounds, generated code and copy, validation, modal focus, menu and tooltip behaviour, mobile navigation and overflow at five widths, clipboard feedback, reduced motion, and interaction motion. The eight motion checks cover still default content and scrolling, real 180ms checkmark strokes, inset pressure without resizing, switch state with reduced motion, and disclosure/tab/portal entrance and exit behaviour. The check workflow runs these against the production root path and uploads desktop/mobile screenshots. Browser verification runs locally and in GitHub Actions. The 13 browser checks passed in [run 37869532057](https://github.com/Samarinara/polli-ui/actions/runs/37869532057); desktop, mobile, configured-code, and open-dialog screenshots were reviewed.
+## Browser coverage
 
-Vercel handles website deployment from `main`; package publishing and app notifications retain their existing GitHub workflows. App enrollment still requires the settings described in README. No consuming application is modified by this component showcase refactor.
+The full audit browser run passed all 88 checks. Automated axe scans found no violations of the selected WCAG 2 A/AA, 2.1 A/AA, and 2.2 AA rules across all 22 pages in both themes at desktop and 320px widths. Interactive scans also cover invalid fields, textareas, native selects, open dialogs, menus and tooltips, search results, and mobile navigation.
 
+Two additional menu regressions bring the suite to 90 tests. Final keyboard and custom-root changes passed all 37 affected browser checks across follow-up runs. Both interactive accessibility scans passed again. The four visual matrix/portal checks passed with snapshot updates disabled after font loading was awaited before setting the native theme selector.
 
-Dark-mode checks cover the document-root class, system preferences and live OS changes, persisted overrides across pages, invalid or blocked storage, synchronization across tabs, and startup theming without the application bundle. Both themes check semantic text contrast, native control `color-scheme`, focus and control borders, and all five selected-tab ink tones. Dialog, menu, and tooltip portals must inherit the document colors and page body font, and update while open.
+The checks cover static HTML without JavaScript, hydration and local assets, keyboard search, mobile navigation, all playgrounds, native form submission/reset, disabled actions, disclosure navigation, focus restoration, portal theming, semantic contrast, reduced motion, cancellable removal, and clipboard feedback. Responsive overflow checks cover every page at five widths.
 
-`tests/docs/theme.spec.ts-snapshots/` contains 36 PNG baselines: ten playgrounds, the colour viewport and accessible pairings, mobile button viewport and playground, three portals, and native search in each theme. Fixed viewports and focused sections keep comparisons independent of full-document capture-height fluctuations. These are real screenshot comparisons; CI fails on differences and uploads the browser artifacts. See README for the intentional baseline update command. The local component test retry used a longer worker startup allowance on a heavily loaded machine; the repository's Vitest settings remain unchanged.
+A separate integration fixture imports the compiled package with its own stylesheet and no showcase CSS. It exercises repeated Field instances, long content at 320px/768px/1440px, custom native roots, vertical tabs, nested modal isolation, overlay scrolling and bounds, a close button that stays reachable while scrolling, RTL switches, forced colors, and suppressed host animations.
 
+The copyable-example browser check compiles 21 snippets using strict TypeScript: 13 default examples, seven configured states, and the getting-started example. Configurations include disabled icon buttons, multiline labels, textarea/select fields, mixed checkboxes, an empty multiple accordion, empty feedback, and surfaced lists.
 
-Final verification: production build and type checking passed; all 13 component tests passed. The full browser run passed 28 checks. After fixing keyboard tab focus and stabilizing visual capture boundaries, all four affected checks passed on rerun, covering all 32 checks. Both visual matrices then passed again with snapshot updating disabled. Responsive checks cover all 22 pages at five widths, including 320px.
+## Visual review
+
+The 36 PNG baselines in `tests/docs/theme.spec.ts-snapshots/` cover component playgrounds, mobile buttons, colour tokens, search, and open portals in light and dark mode. Baselines were updated for the reviewed shared styling changes. Inputs and list titles use consistent 20px handwritten typography, button labels retain their 14px body type, and the dark Alert has readable actions on its pastel surface.
+
+Screenshot comparison runs use fixed viewports and focused sections. CI compares against committed baselines and uploads browser artifacts; intentionally updating baselines requires the command documented in README.
+
+## Limits
+
+These results cover Chromium browser behavior and automated accessibility rules. They do not constitute assistive-technology certification; consuming applications still need meaningful labels, appropriate content, and screen-reader review of their workflows. React 18.3.1 also received a browser smoke check for dialog isolation, native form reset, and removal without console errors. The normal test suite uses React 19.

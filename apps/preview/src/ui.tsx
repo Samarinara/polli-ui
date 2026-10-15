@@ -87,8 +87,8 @@ export function CopyButton({
       <span aria-live="polite">
         {status === "copied"
           ? "Copied"
-          : status === "failed" && label === "Copy"
-            ? "Select to copy"
+          : status === "failed"
+            ? "Copy unavailable"
             : label}
       </span>
     </button>
@@ -108,7 +108,7 @@ export function Code({
         <span>{label}</span>
         <CopyButton value={children} />
       </div>
-      <pre>
+      <pre tabIndex={0} role="region" aria-label={`${label} code`}>
         <code>{children}</code>
       </pre>
     </div>

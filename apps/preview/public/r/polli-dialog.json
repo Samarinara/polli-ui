@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-dialog.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription, DialogContent } from '@samarinara/polli-ui/components/dialog';\n"
+      "content": "\"use client\";\nexport { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription, DialogContent } from '@samarinara/polli-ui/components/dialog';\nexport type { DialogContentProps } from '@samarinara/polli-ui/components/dialog';\n"
     }
   ]
 }
