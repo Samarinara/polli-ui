@@ -8,7 +8,7 @@
       "name": "polli-animated-icon",
       "type": "registry:ui",
       "title": "Polli animated-icon",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -16,7 +16,7 @@
         {
           "path": "ui/polli-animated-icon.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { AnimatedIcon } from '@samarinara/polli-ui/components/animated-icon';\nexport type { AnimatedIconName, ActionKey, AnimatedIconProps } from '@samarinara/polli-ui/components/animated-icon';\n"
+          "content": "\"use client\";\nexport { AnimatedIcon } from '@samarinara/polli-ui/web/components/animated-icon';\nexport type { AnimatedIconName, ActionKey, AnimatedIconProps } from '@samarinara/polli-ui/web/components/animated-icon';\n"
         }
       ]
     },
@@ -25,7 +25,7 @@
       "name": "polli-ink",
       "type": "registry:ui",
       "title": "Polli ink",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -33,7 +33,7 @@
         {
           "path": "ui/polli-ink.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { InkText, InkRemoval } from '@samarinara/polli-ui/components/ink';\nexport type { InkTextProps, InkRemovalProps } from '@samarinara/polli-ui/components/ink';\n"
+          "content": "\"use client\";\nexport { InkText, InkRemoval } from '@samarinara/polli-ui/web/components/ink';\nexport type { InkTextProps, InkRemovalProps } from '@samarinara/polli-ui/web/components/ink';\n"
         }
       ]
     },
@@ -42,7 +42,7 @@
       "name": "polli-button",
       "type": "registry:ui",
       "title": "Polli button",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -50,7 +50,7 @@
         {
           "path": "ui/polli-button.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { Button, buttonVariants } from '@samarinara/polli-ui/components/button';\nexport type { ButtonProps } from '@samarinara/polli-ui/components/button';\n"
+          "content": "\"use client\";\nexport { Button, buttonVariants } from '@samarinara/polli-ui/web/components/button';\nexport type { ButtonProps } from '@samarinara/polli-ui/web/components/button';\n"
         }
       ]
     },
@@ -59,7 +59,7 @@
       "name": "polli-field",
       "type": "registry:ui",
       "title": "Polli field",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -67,7 +67,7 @@
         {
           "path": "ui/polli-field.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { Input, Textarea, NativeSelect, Label, Field } from '@samarinara/polli-ui/components/field';\nexport type { FieldProps } from '@samarinara/polli-ui/components/field';\n"
+          "content": "\"use client\";\nexport { Input, Textarea, NativeSelect, Label, Field } from '@samarinara/polli-ui/web/components/field';\nexport type { FieldProps } from '@samarinara/polli-ui/web/components/field';\n"
         }
       ]
     },
@@ -76,7 +76,7 @@
       "name": "polli-badge",
       "type": "registry:ui",
       "title": "Polli badge",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -84,7 +84,7 @@
         {
           "path": "ui/polli-badge.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { Badge } from '@samarinara/polli-ui/components/badge';\nexport type { BadgeProps } from '@samarinara/polli-ui/components/badge';\n"
+          "content": "\"use client\";\nexport { Badge } from '@samarinara/polli-ui/web/components/badge';\nexport type { BadgeProps } from '@samarinara/polli-ui/web/components/badge';\n"
         }
       ]
     },
@@ -93,7 +93,7 @@
       "name": "polli-selection",
       "type": "registry:ui",
       "title": "Polli selection",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -101,7 +101,7 @@
         {
           "path": "ui/polli-selection.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { Checkbox, Switch } from '@samarinara/polli-ui/components/selection';\n"
+          "content": "\"use client\";\nexport { Checkbox, Switch } from '@samarinara/polli-ui/web/components/selection';\n"
         }
       ]
     },
@@ -110,7 +110,7 @@
       "name": "polli-dialog",
       "type": "registry:ui",
       "title": "Polli dialog",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -118,7 +118,7 @@
         {
           "path": "ui/polli-dialog.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription, DialogContent } from '@samarinara/polli-ui/components/dialog';\nexport type { DialogContentProps } from '@samarinara/polli-ui/components/dialog';\n"
+          "content": "\"use client\";\nexport { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription, DialogContent } from '@samarinara/polli-ui/web/components/dialog';\nexport type { DialogContentProps } from '@samarinara/polli-ui/web/components/dialog';\n"
         }
       ]
     },
@@ -127,7 +127,7 @@
       "name": "polli-tabs",
       "type": "registry:ui",
       "title": "Polli tabs",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -135,7 +135,7 @@
         {
           "path": "ui/polli-tabs.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { Tabs, TabsList, TabsTrigger, TabsContent } from '@samarinara/polli-ui/components/tabs';\nexport type { TabsTriggerProps } from '@samarinara/polli-ui/components/tabs';\n"
+          "content": "\"use client\";\nexport { Tabs, TabsList, TabsTrigger, TabsContent } from '@samarinara/polli-ui/web/components/tabs';\nexport type { TabsTriggerProps } from '@samarinara/polli-ui/web/components/tabs';\n"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "name": "polli-accordion",
       "type": "registry:ui",
       "title": "Polli accordion",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -152,7 +152,7 @@
         {
           "path": "ui/polli-accordion.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@samarinara/polli-ui/components/accordion';\n"
+          "content": "\"use client\";\nexport { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@samarinara/polli-ui/web/components/accordion';\n"
         }
       ]
     },
@@ -161,7 +161,7 @@
       "name": "polli-menu",
       "type": "registry:ui",
       "title": "Polli menu",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -169,7 +169,7 @@
         {
           "path": "ui/polli-menu.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@samarinara/polli-ui/components/menu';\nexport type { DropdownMenuContentProps } from '@samarinara/polli-ui/components/menu';\n"
+          "content": "\"use client\";\nexport { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@samarinara/polli-ui/web/components/menu';\nexport type { DropdownMenuContentProps } from '@samarinara/polli-ui/web/components/menu';\n"
         }
       ]
     },
@@ -178,7 +178,7 @@
       "name": "polli-tooltip",
       "type": "registry:ui",
       "title": "Polli tooltip",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -186,7 +186,7 @@
         {
           "path": "ui/polli-tooltip.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@samarinara/polli-ui/components/tooltip';\nexport type { TooltipContentProps } from '@samarinara/polli-ui/components/tooltip';\n"
+          "content": "\"use client\";\nexport { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@samarinara/polli-ui/web/components/tooltip';\nexport type { TooltipContentProps } from '@samarinara/polli-ui/web/components/tooltip';\n"
         }
       ]
     },
@@ -195,7 +195,7 @@
       "name": "polli-layout",
       "type": "registry:ui",
       "title": "Polli layout",
-      "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+      "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
       "dependencies": [
         "@samarinara/polli-ui@latest"
       ],
@@ -203,7 +203,7 @@
         {
           "path": "ui/polli-layout.tsx",
           "type": "registry:ui",
-          "content": "\"use client\";\nexport { Surface, Separator, Skeleton, Avatar, EmptyState, ListRow, Alert } from '@samarinara/polli-ui/components/layout';\nexport type { SurfaceProps, AvatarProps, EmptyStateProps, ListRowProps, AlertProps } from '@samarinara/polli-ui/components/layout';\n"
+          "content": "\"use client\";\nexport { Surface, Separator, Skeleton, Avatar, EmptyState, ListRow, Alert } from '@samarinara/polli-ui/web/components/layout';\nexport type { SurfaceProps, AvatarProps, EmptyStateProps, ListRowProps, AlertProps } from '@samarinara/polli-ui/web/components/layout';\n"
         }
       ]
     }

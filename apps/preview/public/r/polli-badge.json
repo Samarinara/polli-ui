@@ -3,7 +3,7 @@
   "name": "polli-badge",
   "type": "registry:ui",
   "title": "Polli badge",
-  "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+  "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
   "dependencies": [
     "@samarinara/polli-ui@latest"
   ],
@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-badge.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { Badge } from '@samarinara/polli-ui/components/badge';\nexport type { BadgeProps } from '@samarinara/polli-ui/components/badge';\n"
+      "content": "\"use client\";\nexport { Badge } from '@samarinara/polli-ui/web/components/badge';\nexport type { BadgeProps } from '@samarinara/polli-ui/web/components/badge';\n"
     }
   ]
 }

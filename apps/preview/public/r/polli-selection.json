@@ -3,7 +3,7 @@
   "name": "polli-selection",
   "type": "registry:ui",
   "title": "Polli selection",
-  "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+  "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
   "dependencies": [
     "@samarinara/polli-ui@latest"
   ],
@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-selection.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { Checkbox, Switch } from '@samarinara/polli-ui/components/selection';\n"
+      "content": "\"use client\";\nexport { Checkbox, Switch } from '@samarinara/polli-ui/web/components/selection';\n"
     }
   ]
 }

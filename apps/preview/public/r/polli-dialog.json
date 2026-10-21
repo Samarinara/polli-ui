@@ -3,7 +3,7 @@
   "name": "polli-dialog",
   "type": "registry:ui",
   "title": "Polli dialog",
-  "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+  "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
   "dependencies": [
     "@samarinara/polli-ui@latest"
   ],
@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-dialog.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription, DialogContent } from '@samarinara/polli-ui/components/dialog';\nexport type { DialogContentProps } from '@samarinara/polli-ui/components/dialog';\n"
+      "content": "\"use client\";\nexport { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription, DialogContent } from '@samarinara/polli-ui/web/components/dialog';\nexport type { DialogContentProps } from '@samarinara/polli-ui/web/components/dialog';\n"
     }
   ]
 }

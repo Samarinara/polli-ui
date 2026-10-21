@@ -682,7 +682,7 @@ export function Content({ page }: { page: PageId }) {
               Move focus to a nearby action before removing its row.
             </p>
             <Code>{`import { useState } from "react";
-import { Button, AnimatedIcon, InkText, InkRemoval } from "@samarinara/polli-ui";
+import { Button, AnimatedIcon, InkText, InkRemoval } from "@samarinara/polli-ui/web";
 
 function Note({ text, save, remove, focusNext }) {
   const [saved, setSaved] = useState(0);
@@ -840,8 +840,8 @@ function Note({ text, save, remove, focusNext }) {
 
 import { useState } from "react";
 import "@samarinara/polli-ui/styles.css";
-import { Button } from "@samarinara/polli-ui/components/button";
-import { Field, Input } from "@samarinara/polli-ui/components/field";
+import { Button } from "@samarinara/polli-ui/web/components/button";
+import { Field, Input } from "@samarinara/polli-ui/web/components/field";
 
 export function AddNote() {
   const [saved, setSaved] = useState("");

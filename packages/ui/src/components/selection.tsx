@@ -1,33 +1,129 @@
-'use client';
-import * as React from 'react';
-import * as Check from '@radix-ui/react-checkbox';
-import * as Toggle from '@radix-ui/react-switch';
-import { Slottable } from '@radix-ui/react-slot';
-import { cn } from '../lib/utils';
-import { useMotionState } from '../lib/motion';
-import { useFieldControl } from '../lib/field-context';
-export const Checkbox=React.forwardRef<React.ElementRef<typeof Check.Root>,React.ComponentPropsWithoutRef<typeof Check.Root>>(({className,children,asChild=false,...props},ref)=><Check.Root data-polli="checkbox" asChild={asChild} ref={ref} className={cn('inline-flex size-6 shrink-0 items-center justify-center border border-border bg-transparent text-primary-foreground data-[state=checked]:border-primary data-[state=indeterminate]:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring disabled:opacity-50',className)} {...useFieldControl(props)}>
-  <Slottable>{asChild ? children : null}</Slottable>
-  <span data-polli="checkbox-fill" aria-hidden="true" />
-  <Check.Indicator forceMount data-polli="checkbox-mark">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path data-polli-stroke="check" pathLength="1" d="m5 12 4 4L19 6" />
-      <path data-polli-stroke="minus" pathLength="1" d="M5 12h14" />
-    </svg>
-  </Check.Indicator>
-</Check.Root>); Checkbox.displayName='Checkbox';
-export const Switch = React.forwardRef<React.ElementRef<typeof Toggle.Root>, React.ComponentPropsWithoutRef<typeof Toggle.Root>>(
-  ({ className, checked, defaultChecked = false, onCheckedChange, children, asChild = false, ...props }, ref) => {
-    const [current, change, motion] = useMotionState(checked, defaultChecked);
-    return <Toggle.Root data-polli="switch" asChild={asChild} ref={ref} checked={current}
-      onCheckedChange={next => { change(next); onCheckedChange?.(next); }}
-      className={cn('inline-flex h-7 w-12 shrink-0 items-center rounded-full border-0 bg-border p-1 data-[state=checked]:bg-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring disabled:opacity-50', className)} {...useFieldControl(props)}>
-      <Slottable>{asChild ? children : null}</Slottable>
-      <Toggle.Thumb data-polli="switch-thumb" className="block size-5 rounded-full">
-        <span data-polli="switch-material" data-state={current ? 'checked' : 'unchecked'}
-          data-polli-motion={motion ? 'interaction' : undefined} className="block size-5 rounded-full bg-background" />
-      </Toggle.Thumb>
-    </Toggle.Root>;
+import type { StaticProps } from "../lib/types";
+import * as React from "react";
+import * as Check from "@rn-primitives/checkbox";
+import * as Toggle from "@rn-primitives/switch";
+import { Check as CheckIcon } from "lucide-react-native";
+import { useControllable } from "../lib/state";
+import { usePolliTheme } from "../theme";
+export type CheckboxProps = Omit<
+  StaticProps<Check.RootProps>,
+  "checked" | "onCheckedChange"
+> & {
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+};
+export const Checkbox: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<CheckboxProps> & React.RefAttributes<Check.RootRef>
+> = React.forwardRef<Check.RootRef, CheckboxProps>(
+  (
+    {
+      checked: value,
+      defaultChecked = false,
+      onCheckedChange,
+      style,
+      disabled,
+      ...props
+    },
+    ref,
+  ) => {
+    const [checked, change] = useControllable(
+      value,
+      defaultChecked,
+      onCheckedChange,
+    );
+    const { colors } = usePolliTheme();
+    return (
+      <Check.Root
+        ref={ref}
+        checked={checked}
+        onCheckedChange={change}
+        disabled={disabled}
+        hitSlop={10}
+        style={[
+          {
+            width: 26,
+            height: 26,
+            borderWidth: 1,
+            borderRadius: 6,
+            alignItems: "center",
+            justifyContent: "center",
+            borderColor: colors.border,
+            backgroundColor: checked ? colors.primary : colors.background,
+            opacity: disabled ? 0.45 : 1,
+          },
+          style,
+        ]}
+        {...props}
+      >
+        <Check.Indicator>
+          <CheckIcon size={20} color={colors.primaryForeground} />
+        </Check.Indicator>
+      </Check.Root>
+    );
   },
 );
-Switch.displayName = 'Switch';
+Checkbox.displayName = "Checkbox";
+export type SwitchProps = Omit<
+  StaticProps<Toggle.RootProps>,
+  "checked" | "onCheckedChange"
+> & {
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+};
+export const Switch: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<SwitchProps> & React.RefAttributes<Toggle.RootRef>
+> = React.forwardRef<Toggle.RootRef, SwitchProps>(
+  (
+    {
+      checked: value,
+      defaultChecked = false,
+      onCheckedChange,
+      style,
+      disabled,
+      ...props
+    },
+    ref,
+  ) => {
+    const [checked, change] = useControllable(
+      value,
+      defaultChecked,
+      onCheckedChange,
+    );
+    const { colors } = usePolliTheme();
+    return (
+      <Toggle.Root
+        ref={ref}
+        checked={checked}
+        onCheckedChange={change}
+        disabled={disabled}
+        hitSlop={8}
+        style={[
+          {
+            width: 48,
+            height: 28,
+            padding: 3,
+            borderRadius: 20,
+            justifyContent: "center",
+            backgroundColor: checked ? colors.primary : colors.border,
+            opacity: disabled ? 0.45 : 1,
+          },
+          style,
+        ]}
+        {...props}
+      >
+        <Toggle.Thumb
+          style={{
+            width: 22,
+            height: 22,
+            borderRadius: 12,
+            backgroundColor: colors.background,
+            transform: [{ translateX: checked ? 20 : 0 }],
+          }}
+        />
+      </Toggle.Root>
+    );
+  },
+);
+Switch.displayName = "Switch";

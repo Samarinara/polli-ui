@@ -1,3 +1,9 @@
+# Polli UI for Expo and React Native
+
+The main package now contains shared components for iOS, Android, and web. Start with the [Expo setup and migration guide](docs/expo.md). Run `npm run expo` for the universal gallery or `npm run expo:web` for its web version after `npm ci && npm run build`.
+
+The existing DOM components and their documentation remain under `@samarinara/polli-ui/web`. The documentation below describes that compatibility API. Its CSS and shadcn registry are web only.
+
 # Polli UI
 
 An interactive component documentation site and shared component package for **polli.page**. Editorial layouts, serif headings, readable handwritten content, and purposeful pastel accents.
@@ -38,8 +44,8 @@ npm install @samarinara/polli-ui@latest
 ```tsx
 // App entry point; for Next.js, app/layout.tsx.
 import "@samarinara/polli-ui/styles.css";
-import { Button } from "@samarinara/polli-ui/components/button";
-import { Field, Input } from "@samarinara/polli-ui/components/field";
+import { Button } from "@samarinara/polli-ui/web/components/button";
+import { Field, Input } from "@samarinara/polli-ui/web/components/field";
 
 export function AddIdea() {
   return (

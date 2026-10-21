@@ -2,12 +2,12 @@ import * as React from 'react';
 import {describe,it,expect} from 'vitest';
 import {render,screen,waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {Button} from '../src/components/button';
-import {Dialog,DialogTrigger,DialogContent,DialogTitle,DialogDescription} from '../src/components/dialog';
-import {Tabs,TabsList,TabsTrigger,TabsContent} from '../src/components/tabs';
-import {Checkbox,Switch} from '../src/components/selection';
-import {Input,Label} from '../src/components/field';
-import {Accordion,AccordionItem,AccordionTrigger,AccordionContent} from '../src/components/accordion';
+import {Button} from '../src/web/components/button';
+import {Dialog,DialogTrigger,DialogContent,DialogTitle,DialogDescription} from '../src/web/components/dialog';
+import {Tabs,TabsList,TabsTrigger,TabsContent} from '../src/web/components/tabs';
+import {Checkbox,Switch} from '../src/web/components/selection';
+import {Input,Label} from '../src/web/components/field';
+import {Accordion,AccordionItem,AccordionTrigger,AccordionContent} from '../src/web/components/accordion';
 describe('shared component contracts',()=>{
  it('preserves tab colours and accessible selection',async()=>{
   const user=userEvent.setup();

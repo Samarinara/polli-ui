@@ -1,17 +1,52 @@
-'use client';
-import * as React from 'react';
-import * as A from '@radix-ui/react-accordion';
-import { Slottable } from '@radix-ui/react-slot';
-import { ChevronDown } from 'lucide-react';
-import { cn } from '../lib/utils';
-import { MotionProvider, useMotionState, useMotionAttribute } from '../lib/motion';
-export const Accordion=React.forwardRef<React.ElementRef<typeof A.Root>,React.ComponentPropsWithoutRef<typeof A.Root>>((props,ref)=>{
-  const [value,change,motion]=useMotionState<string | string[]>(props.value,props.defaultValue ?? (props.type==='single' ? '' : []));
-  return <MotionProvider value={motion}>{props.type==='single'
-    ? <A.Root {...props} ref={ref} value={value as string} onValueChange={(next:string)=>{change(next);props.onValueChange?.(next)}}/>
-    : <A.Root {...props} ref={ref} value={value as string[]} onValueChange={(next:string[])=>{change(next);props.onValueChange?.(next)}}/>
-  }</MotionProvider>;
-}); Accordion.displayName='Accordion';
-export const AccordionItem=A.Item;
-export const AccordionTrigger=React.forwardRef<React.ElementRef<typeof A.Trigger>,React.ComponentPropsWithoutRef<typeof A.Trigger>>(({className,children,...props},ref)=><A.Header className="m-0"><A.Trigger data-polli="accordion-trigger" ref={ref} className={cn('group flex w-full items-center justify-between gap-4 rounded-lg border-0 bg-transparent py-4 text-left text-sm font-medium text-foreground enabled:hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring disabled:opacity-45',className)} {...props}><Slottable>{children}</Slottable><ChevronDown size={16} data-polli="accordion-chevron" aria-hidden="true"/></A.Trigger></A.Header>); AccordionTrigger.displayName='AccordionTrigger';
-export const AccordionContent=React.forwardRef<React.ElementRef<typeof A.Content>,React.ComponentPropsWithoutRef<typeof A.Content>>(({className,children,...props},ref)=><A.Content data-polli="accordion-content" data-polli-motion={useMotionAttribute()} ref={ref} className={cn('overflow-hidden text-sm text-muted-foreground',props.asChild && 'pb-4',className)} {...props}>{props.asChild ? children : <div className="pb-4">{children}</div>}</A.Content>); AccordionContent.displayName='AccordionContent';
+import type { StaticProps } from "../lib/types";
+import * as React from "react";
+import * as A from "@rn-primitives/accordion";
+import { ChevronDown, ChevronUp } from "lucide-react-native";
+import { textChildren, ui, usePolliTheme } from "../theme";
+export const Accordion: typeof A.Root = A.Root;
+export const AccordionItem: typeof A.Item = A.Item;
+export const AccordionTrigger: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<StaticProps<A.TriggerProps>> &
+    React.RefAttributes<A.TriggerRef>
+> = React.forwardRef<A.TriggerRef, StaticProps<A.TriggerProps>>(
+  ({ style, children, ...props }, ref) => {
+    const { colors } = usePolliTheme();
+    const { isExpanded } = A.useItemContext();
+    const Icon = isExpanded ? ChevronUp : ChevronDown;
+    return (
+      <A.Header>
+        <A.Trigger
+          ref={ref}
+          style={[
+            ui.row,
+            {
+              minHeight: 44,
+              paddingVertical: 14,
+              justifyContent: "space-between",
+            },
+            style,
+          ]}
+          {...props}
+        >
+          {textChildren(children)}
+          <Icon size={18} color={colors.foreground} />
+        </A.Trigger>
+      </A.Header>
+    );
+  },
+);
+AccordionTrigger.displayName = "AccordionTrigger";
+export const AccordionContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<A.ContentProps> & React.RefAttributes<A.ContentRef>
+> = React.forwardRef<A.ContentRef, A.ContentProps>(
+  ({ style, children, ...props }, ref) => (
+    <A.Content
+      ref={ref}
+      style={[{ paddingBottom: 16, gap: 8 }, style]}
+      {...props}
+    >
+      {textChildren(children)}
+    </A.Content>
+  ),
+);
+AccordionContent.displayName = "AccordionContent";

@@ -1,25 +1,126 @@
-'use client';
-import * as React from 'react';
-import * as D from '@radix-ui/react-dialog';
-import { Slottable } from '@radix-ui/react-slot';
-import { X } from 'lucide-react';
-import { cn } from '../lib/utils';
-import { MotionProvider, useMotionState, useMotionAttribute } from '../lib/motion';
-import { ModalIsolationProvider, useModalIsolation } from '../lib/isolation';
-export function Dialog({onOpenChange,modal=true,...props}:React.ComponentProps<typeof D.Root>){
-  const [open,change,motion]=useMotionState(props.open,props.defaultOpen ?? false);
-  return <MotionProvider value={motion}><ModalIsolationProvider value={open && modal}><D.Root {...props} modal={modal} open={open} onOpenChange={next=>{change(next);onOpenChange?.(next)}}/></ModalIsolationProvider></MotionProvider>;
-}
-export const DialogTrigger=D.Trigger,DialogClose=D.Close;
-export const DialogTitle=React.forwardRef<React.ElementRef<typeof D.Title>,React.ComponentPropsWithoutRef<typeof D.Title>>(({className,...props},ref)=><D.Title ref={ref} className={cn('m-0 text-2xl font-semibold tracking-tight',className)} {...props}/>); DialogTitle.displayName='DialogTitle';
-export const DialogDescription=React.forwardRef<React.ElementRef<typeof D.Description>,React.ComponentPropsWithoutRef<typeof D.Description>>(({className,...props},ref)=><D.Description ref={ref} className={cn('text-sm text-muted-foreground',className)} {...props}/>); DialogDescription.displayName='DialogDescription';
-export type DialogContentProps = React.ComponentPropsWithoutRef<typeof D.Content> & {
+import * as React from "react";
+import * as D from "@rn-primitives/dialog";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { X } from "lucide-react-native";
+import { textChildren, ui, usePolliTheme } from "../theme";
+export const Dialog: typeof D.Root = D.Root;
+export const DialogTrigger: typeof D.Trigger = D.Trigger;
+export const DialogClose: typeof D.Close = D.Close;
+export const DialogTitle: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<D.TitleProps> & React.RefAttributes<D.TitleRef>
+> = React.forwardRef<D.TitleRef, D.TitleProps>(({ style, ...props }, ref) => {
+  const { colors, fonts } = usePolliTheme();
+  return (
+    <D.Title
+      ref={ref}
+      style={[
+        {
+          color: colors.foreground,
+          fontFamily: fonts.heading,
+          fontSize: 24,
+          fontWeight: "600",
+        },
+        style,
+      ]}
+      {...props}
+    />
+  );
+});
+DialogTitle.displayName = "DialogTitle";
+export const DialogDescription: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<D.DescriptionProps> &
+    React.RefAttributes<D.DescriptionRef>
+> = React.forwardRef<D.DescriptionRef, D.DescriptionProps>(
+  ({ style, ...props }, ref) => {
+    const { colors, fonts } = usePolliTheme();
+    return (
+      <D.Description
+        ref={ref}
+        style={[
+          {
+            color: colors.mutedForeground,
+            fontFamily: fonts.body,
+            fontSize: 16,
+          },
+          style,
+        ]}
+        {...props}
+      />
+    );
+  },
+);
+DialogDescription.displayName = "DialogDescription";
+export type DialogContentProps = D.ContentProps & {
   showCloseButton?: boolean;
   closeLabel?: string;
-  container?: React.ComponentProps<typeof D.Portal>['container'];
 };
-export const DialogContent=React.forwardRef<React.ElementRef<typeof D.Content>,DialogContentProps>(({className,children,showCloseButton=true,closeLabel='Close dialog',container,forceMount,...props},ref)=>{
-  const motion=useMotionAttribute();
-  const contentRef=useModalIsolation(ref);
-  return <D.Portal container={container} forceMount={forceMount}><D.Overlay forceMount={forceMount} data-polli="dialog-overlay" data-polli-motion={motion} className="fixed inset-0 z-40 bg-black/30"/><D.Content data-polli="dialog" data-polli-motion={motion} data-polli-close-button={showCloseButton || undefined} forceMount={forceMount} ref={contentRef} className={cn('polli-root fixed left-1/2 top-1/2 z-50 flex flex-col max-h-[85dvh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 overflow-auto rounded-xl border border-border bg-background p-8 text-foreground shadow-xl',className)} {...props}><Slottable>{children}</Slottable>{showCloseButton ? <D.Close data-polli="dialog-close" aria-label={closeLabel} className="sticky -top-5 order-first -mt-5 -me-5 -mb-10 self-end shrink-0 z-10 inline-flex size-11 items-center justify-center rounded-full border-0 bg-background p-2 text-muted-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"><X size={18} aria-hidden="true"/></D.Close> : null}</D.Content></D.Portal>;
-}); DialogContent.displayName='DialogContent';
+export const DialogContent: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<DialogContentProps> & React.RefAttributes<D.ContentRef>
+> = React.forwardRef<D.ContentRef, DialogContentProps>(
+  (
+    {
+      style,
+      children,
+      showCloseButton = true,
+      closeLabel = "Close dialog",
+      ...props
+    },
+    ref,
+  ) => {
+    const { colors } = usePolliTheme();
+    const { onOpenChange } = D.useRootContext();
+    return (
+      <D.Portal>
+        <View
+          pointerEvents="box-none"
+          style={[
+            StyleSheet.absoluteFill,
+            { justifyContent: "center", alignItems: "center", padding: 24 },
+          ]}
+        >
+          <D.Overlay
+            style={[StyleSheet.absoluteFill, { backgroundColor: "#00000066" }]}
+            onPress={() => onOpenChange(false)}
+          />
+          <D.Content
+            ref={ref}
+            style={[
+              ui.panel,
+              {
+                width: "100%",
+                maxWidth: 520,
+                maxHeight: "90%",
+                backgroundColor: colors.background,
+                borderColor: colors.border,
+              },
+              style,
+            ]}
+            {...props}
+          >
+            <ScrollView
+              contentContainerStyle={{ gap: 12 }}
+              keyboardShouldPersistTaps="handled"
+            >
+              {textChildren(children)}
+            </ScrollView>
+            {showCloseButton ? (
+              <D.Close
+                accessibilityLabel={closeLabel}
+                style={{
+                  minWidth: 44,
+                  minHeight: 44,
+                  alignSelf: "flex-end",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <X size={20} color={colors.foreground} />
+              </D.Close>
+            ) : null}
+          </D.Content>
+        </View>
+      </D.Portal>
+    );
+  },
+);
+DialogContent.displayName = "DialogContent";

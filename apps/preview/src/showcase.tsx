@@ -19,25 +19,25 @@ import {
   CheckCheck,
   Rows3,
 } from "lucide-react";
-import { Button } from "@samarinara/polli-ui/components/button";
-import { Badge } from "@samarinara/polli-ui/components/badge";
-import { Input, Label } from "@samarinara/polli-ui/components/field";
-import { Checkbox } from "@samarinara/polli-ui/components/selection";
+import { Button } from "@samarinara/polli-ui/web/components/button";
+import { Badge } from "@samarinara/polli-ui/web/components/badge";
+import { Input, Label } from "@samarinara/polli-ui/web/components/field";
+import { Checkbox } from "@samarinara/polli-ui/web/components/selection";
 import {
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
-} from "@samarinara/polli-ui/components/tabs";
+} from "@samarinara/polli-ui/web/components/tabs";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@samarinara/polli-ui/components/menu";
-import { AnimatedIcon } from "@samarinara/polli-ui/components/animated-icon";
-import { InkText, InkRemoval } from "@samarinara/polli-ui/components/ink";
-import { ListRow, EmptyState } from "@samarinara/polli-ui/components/layout";
+} from "@samarinara/polli-ui/web/components/menu";
+import { AnimatedIcon } from "@samarinara/polli-ui/web/components/animated-icon";
+import { InkText, InkRemoval } from "@samarinara/polli-ui/web/components/ink";
+import { ListRow, EmptyState } from "@samarinara/polli-ui/web/components/layout";
 import { Section, RelatedLink } from "./ui";
 import { Playground, SelectControl, ToggleControl } from "./playground";
 import { pageHref, type PageId } from "./pages";
@@ -156,13 +156,13 @@ const notebookCode = (
 import "@samarinara/polli-ui/styles.css";
 import { useId, useRef, useState } from "react";
 import { MoreHorizontal, Trash2 } from "lucide-react";
-import { Button } from "@samarinara/polli-ui/components/button";
-import { Input, Label } from "@samarinara/polli-ui/components/field";
-import { Checkbox } from "@samarinara/polli-ui/components/selection";
-import { Badge } from "@samarinara/polli-ui/components/badge";
-import { ListRow } from "@samarinara/polli-ui/components/layout";
-import { InkText, InkRemoval } from "@samarinara/polli-ui/components/ink";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@samarinara/polli-ui/components/menu";
+import { Button } from "@samarinara/polli-ui/web/components/button";
+import { Input, Label } from "@samarinara/polli-ui/web/components/field";
+import { Checkbox } from "@samarinara/polli-ui/web/components/selection";
+import { Badge } from "@samarinara/polli-ui/web/components/badge";
+import { ListRow } from "@samarinara/polli-ui/web/components/layout";
+import { InkText, InkRemoval } from "@samarinara/polli-ui/web/components/ink";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@samarinara/polli-ui/web/components/menu";
 
 export function Notebook() {
   const id = useId();

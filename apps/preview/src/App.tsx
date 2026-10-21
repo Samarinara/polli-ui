@@ -74,6 +74,7 @@ export function App({ initialPage = "overview" }: { initialPage?: PageId }) {
         </aside>
         <main id="main-content" className="doc-main" tabIndex={-1}>
           <article>
+            <p className="page-description">These pages document the legacy web API. For Expo, iOS, Android, and universal web components, use the <a href="https://github.com/Samarinara/polli-ui/blob/main/docs/expo.md">Expo migration guide</a>.</p>
             <header className="page-header">
               <p className="breadcrumb">{page.group}</p>
               <h1>{page.title}</h1>

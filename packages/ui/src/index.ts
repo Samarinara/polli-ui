@@ -11,3 +11,5 @@ export * from './components/layout';
 export * from './components/animated-icon';
 export * from './components/ink';
 export * from './tokens';
+export * from './theme';
+export { useReducedMotion } from './lib/motion';

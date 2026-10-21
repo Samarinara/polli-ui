@@ -3,7 +3,7 @@
   "name": "polli-layout",
   "type": "registry:ui",
   "title": "Polli layout",
-  "description": "A thin wrapper around the shared Polli package. Import @samarinara/polli-ui/styles.css once in your app entry point.",
+  "description": "Legacy web wrapper. For Expo, import the universal package directly. Import @samarinara/polli-ui/styles.css once in your app entry point.",
   "dependencies": [
     "@samarinara/polli-ui@latest"
   ],
@@ -11,7 +11,7 @@
     {
       "path": "ui/polli-layout.tsx",
       "type": "registry:ui",
-      "content": "\"use client\";\nexport { Surface, Separator, Skeleton, Avatar, EmptyState, ListRow, Alert } from '@samarinara/polli-ui/components/layout';\nexport type { SurfaceProps, AvatarProps, EmptyStateProps, ListRowProps, AlertProps } from '@samarinara/polli-ui/components/layout';\n"
+      "content": "\"use client\";\nexport { Surface, Separator, Skeleton, Avatar, EmptyState, ListRow, Alert } from '@samarinara/polli-ui/web/components/layout';\nexport type { SurfaceProps, AvatarProps, EmptyStateProps, ListRowProps, AlertProps } from '@samarinara/polli-ui/web/components/layout';\n"
     }
   ]
 }

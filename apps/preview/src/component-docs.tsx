@@ -1,5 +1,5 @@
-import { AnimatedIcon } from "@samarinara/polli-ui/components/animated-icon";
-import { InkText, InkRemoval } from "@samarinara/polli-ui/components/ink";
+import { AnimatedIcon } from "@samarinara/polli-ui/web/components/animated-icon";
+import { InkText, InkRemoval } from "@samarinara/polli-ui/web/components/ink";
 import { useId, useState, type ReactNode } from "react";
 import {
   Plus,
@@ -14,28 +14,28 @@ import {
 import {
   Button,
   type ButtonProps,
-} from "@samarinara/polli-ui/components/button";
-import { Badge } from "@samarinara/polli-ui/components/badge";
+} from "@samarinara/polli-ui/web/components/button";
+import { Badge } from "@samarinara/polli-ui/web/components/badge";
 import {
   Field,
   Input,
   Textarea,
   NativeSelect,
   Label,
-} from "@samarinara/polli-ui/components/field";
-import { Checkbox, Switch } from "@samarinara/polli-ui/components/selection";
+} from "@samarinara/polli-ui/web/components/field";
+import { Checkbox, Switch } from "@samarinara/polli-ui/web/components/selection";
 import {
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
-} from "@samarinara/polli-ui/components/tabs";
+} from "@samarinara/polli-ui/web/components/tabs";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "@samarinara/polli-ui/components/accordion";
+} from "@samarinara/polli-ui/web/components/accordion";
 import {
   Dialog,
   DialogTrigger,
@@ -43,19 +43,19 @@ import {
   DialogTitle,
   DialogDescription,
   DialogClose,
-} from "@samarinara/polli-ui/components/dialog";
+} from "@samarinara/polli-ui/web/components/dialog";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@samarinara/polli-ui/components/menu";
+} from "@samarinara/polli-ui/web/components/menu";
 import {
   TooltipProvider,
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-} from "@samarinara/polli-ui/components/tooltip";
+} from "@samarinara/polli-ui/web/components/tooltip";
 import {
   Alert,
   Avatar,
@@ -63,7 +63,7 @@ import {
   ListRow,
   Separator,
   Surface,
-} from "@samarinara/polli-ui/components/layout";
+} from "@samarinara/polli-ui/web/components/layout";
 import { Section } from "./ui";
 import {
   Playground,
@@ -119,7 +119,7 @@ function Documentation({
       </Section>
       <Section id="api" title="API reference">
         <p className="api-import">
-          <code>@samarinara/polli-ui/components/{path}</code>
+          <code>@samarinara/polli-ui/web/components/{path}</code>
         </p>
         <div className="table-scroll" tabIndex={0} role="region" aria-label="Component API">
           <table>
@@ -172,7 +172,7 @@ function ButtonDoc() {
     setClicks(0);
   };
   const code = example(
-    `import { useState } from "react";\nimport { Plus } from "lucide-react";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
+    `import { useState } from "react";\nimport { Plus } from "lucide-react";\nimport { Button } from "@samarinara/polli-ui/web/components/button";`,
     `  const [clicks, setClicks] = useState(0);\n  return (\n    <div>\n      <Button variant="${variant}" size="${size}"${disabled ? " disabled" : ""}${size === "icon" ? ` aria-label={${q(label || "Save note")}}` : ""}\n        onClick={() => setClicks((count) => count + 1)}>\n        ${icon || size === "icon" ? "<Plus />" : ""}${size !== "icon" ? `{${q(label || "Save note")}}` : ""}\n      </Button>\n      <p role="status">Pressed {clicks} times.</p>\n    </div>\n  );`,
   );
   return (
@@ -312,7 +312,7 @@ function FieldsDoc() {
         ? "Textarea"
         : "NativeSelect";
   const code = example(
-    `import { useState } from "react";\nimport { Field, ${element} } from "@samarinara/polli-ui/components/field";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
+    `import { useState } from "react";\nimport { Field, ${element} } from "@samarinara/polli-ui/web/components/field";\nimport { Button } from "@samarinara/polli-ui/web/components/button";`,
     `  const [value, setValue] = useState(${q(kind === "select" ? category : value)});\n  const [submitted, setSubmitted] = useState(false);\n  const [saved, setSaved] = useState("");\n  const invalid = ${state === "invalid" ? "true" : required && kind !== "select" ? "submitted && !value.trim()" : "false"};\n  return (\n    <form noValidate onSubmit={(event) => {\n      event.preventDefault();\n      setSubmitted(true);\n      if (${state === "invalid" ? "false" : required && kind !== "select" ? "value.trim()" : "true"}) setSaved(value || "Untitled entry");\n    }}>\n      <Field label="${kind === "select" ? "Category" : "Title"}"\n        error={invalid ? "${error}" : undefined}\n        hint="${kind === "select" ? "Choose where to keep this entry." : "Something worth remembering."}">\n        <${element} value={value} onChange={(event) => { setValue(event.target.value); setSaved(""); }}\n          aria-invalid={invalid}${required ? " required" : ""}${state === "disabled" ? " disabled" : ""}${kind !== "select" ? ' placeholder="Weekend plans"' : ""}${kind === "select" ? ">\n          <option>Recipes</option><option>Home</option><option>Ideas</option>\n        </NativeSelect>" : " />"}\n      </Field>\n      <Button type="submit"${state === "disabled" ? " disabled" : ""}>Save entry</Button>\n      <p role="status">{saved ? \`Saved: \${saved}\` : "Nothing saved yet."}</p>\n    </form>\n  );`,
   );
   return (
@@ -468,7 +468,7 @@ function CheckboxDoc() {
         ? "checked"
         : "unchecked";
   const code = example(
-    `import { useId, useState } from "react";\nimport { Checkbox } from "@samarinara/polli-ui/components/selection";\nimport { Label } from "@samarinara/polli-ui/components/field";`,
+    `import { useId, useState } from "react";\nimport { Checkbox } from "@samarinara/polli-ui/web/components/selection";\nimport { Label } from "@samarinara/polli-ui/web/components/field";`,
     `  const id = useId();\n  const [checked, setChecked] = useState<boolean | "indeterminate">(${q(checked)});\n  return (\n    <div>\n      <Checkbox id={id} checked={checked} onCheckedChange={setChecked}${disabled ? " disabled" : ""} />\n      <Label htmlFor={id}>{${q(label || "Add lemons")}}</Label>\n    </div>\n  );`,
   );
   return (
@@ -553,7 +553,7 @@ function SwitchDoc() {
   const [label, setLabel] = useState("Shared categories");
   const id = useId();
   const code = example(
-    `import { useId, useState } from "react";\nimport { Switch } from "@samarinara/polli-ui/components/selection";\nimport { Label } from "@samarinara/polli-ui/components/field";`,
+    `import { useId, useState } from "react";\nimport { Switch } from "@samarinara/polli-ui/web/components/selection";\nimport { Label } from "@samarinara/polli-ui/web/components/field";`,
     `  const id = useId();\n  const [enabled, setEnabled] = useState(${checked});\n  return (\n    <div>\n      <Label htmlFor={id}>{${q(label || "Shared categories")}}</Label>\n      <Switch id={id} checked={enabled} onCheckedChange={setEnabled}${disabled ? " disabled" : ""} />\n      <p role="status">{enabled ? "Sharing is on." : "Sharing is off."}</p>\n    </div>\n  );`,
   );
   return (
@@ -656,7 +656,7 @@ function BadgeDoc() {
       playground={
         <Playground
           name="Badge"
-          code={example(`import { Badge } from "@samarinara/polli-ui/components/badge";`, `  return <Badge tone="${tone}">{${q(label || "Recipes")}}</Badge>;`)}
+          code={example(`import { Badge } from "@samarinara/polli-ui/web/components/badge";`, `  return <Badge tone="${tone}">{${q(label || "Recipes")}}</Badge>;`)}
           onReset={() => {
             setTone("mint");
             setLabel("Recipes");
@@ -694,7 +694,7 @@ function TabsDoc() {
   );
   const [disabled, setDisabled] = useState(false);
   const code = example(
-    `import { useState } from "react";\nimport { Tabs, TabsList, TabsTrigger, TabsContent } from "@samarinara/polli-ui/components/tabs";`,
+    `import { useState } from "react";\nimport { Tabs, TabsList, TabsTrigger, TabsContent } from "@samarinara/polli-ui/web/components/tabs";`,
     `  const [view, setView] = useState(${q(value)});\n  return (\n    <Tabs value={view} onValueChange={setView} activationMode="${activation}">\n      <TabsList aria-label="Saved content">\n        <TabsTrigger value="notes">Notes</TabsTrigger>\n        <TabsTrigger value="links" inkTone="sky">Links</TabsTrigger>\n        <TabsTrigger value="recipes" inkTone="coral"${disabled ? " disabled" : ""}>Recipes</TabsTrigger>\n      </TabsList>\n      <TabsContent value="notes">Things to make this weekend</TabsContent>\n      <TabsContent value="links">A little inspiration</TabsContent>\n      <TabsContent value="recipes">Grandma's lemon cake</TabsContent>\n    </Tabs>\n  );`,
   );
   return (
@@ -834,7 +834,7 @@ function AccordionDoc() {
     </AccordionItem>
   ));
   const code = example(
-    `import { useState } from "react";\nimport { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@samarinara/polli-ui/components/accordion";`,
+    `import { useState } from "react";\nimport { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@samarinara/polli-ui/web/components/accordion";`,
     `  const [open, setOpen] = useState<${mode === "single" ? "string" : "string[]"}>(${q(mode === "single" ? open[0] || "" : open)});\n  return (\n    <Accordion type="${mode}" value={open} onValueChange={setOpen}${mode === "single" ? ` collapsible={${collapsible}}` : ""}>\n${items.map((item) => `      <AccordionItem value="${item.value}"${item.value === "options" && disabled ? " disabled" : ""}>\n        <AccordionTrigger>${item.title}</AccordionTrigger>\n        <AccordionContent>${item.text}</AccordionContent>\n      </AccordionItem>`).join("\n")}\n    </Accordion>\n  );`,
   );
   return (
@@ -950,7 +950,7 @@ function DialogDoc() {
   const [notice, setNotice] = useState("No category created yet.");
   const id = useId();
   const code = example(
-    `import { useState } from "react";\nimport { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@samarinara/polli-ui/components/dialog";\nimport { Field, Input } from "@samarinara/polli-ui/components/field";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
+    `import { useState } from "react";\nimport { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@samarinara/polli-ui/web/components/dialog";\nimport { Field, Input } from "@samarinara/polli-ui/web/components/field";\nimport { Button } from "@samarinara/polli-ui/web/components/button";`,
     `  const [open, setOpen] = useState(false);\n  const [name, setName] = useState("");\n  const [notice, setNotice] = useState("No category created yet.");\n  return (\n    <>\n      <Dialog open={open} onOpenChange={setOpen}>\n        <DialogTrigger asChild><Button${disabled ? " disabled" : ""}>Add category</Button></DialogTrigger>\n        <DialogContent>\n          <DialogTitle>{${q(title || "Add category")}}</DialogTitle>\n          <DialogDescription>Categories are available across your Polli apps.</DialogDescription>\n          <form onSubmit={(event) => {\n            event.preventDefault();\n            if (!name.trim()) return;\n            setNotice(\`Category “\${name.trim()}” created in this example.\`);\n            setName("");\n            setOpen(false);\n          }}>\n            <Field label="Category name">\n              <Input required value={name} onChange={(event) => setName(event.target.value)} />\n            </Field>\n            <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>\n            <Button type="submit">Create category</Button>\n          </form>\n        </DialogContent>\n      </Dialog>\n      <p role="status">{notice}</p>\n    </>\n  );`,
   );
   return (
@@ -1078,7 +1078,7 @@ function MenuDoc() {
     { label: "Delete", icon: Trash2 },
   ];
   const code = example(
-    `import { useState } from "react";\nimport { MoreHorizontal${icons ? ", Archive, Copy, Trash2" : ""} } from "lucide-react";\nimport { Button } from "@samarinara/polli-ui/components/button";\nimport { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@samarinara/polli-ui/components/menu";`,
+    `import { useState } from "react";\nimport { MoreHorizontal${icons ? ", Archive, Copy, Trash2" : ""} } from "lucide-react";\nimport { Button } from "@samarinara/polli-ui/web/components/button";\nimport { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@samarinara/polli-ui/web/components/menu";`,
     `  const [action, setAction] = useState("No action selected yet.");\n  return (\n    <>\n      <DropdownMenu>\n        <DropdownMenuTrigger asChild>\n          <Button variant="ghost" size="icon" aria-label="Note actions"><MoreHorizontal /></Button>\n        </DropdownMenuTrigger>\n        <DropdownMenuContent align="${align}">\n${actions.map((item) => `          <DropdownMenuItem${item.label === "Archive" && disabled ? " disabled" : ""} onSelect={() => setAction("${item.label} selected in this example.")}>${icons ? `<${item.icon === Archive ? "Archive" : item.icon === Copy ? "Copy" : "Trash2"} size={16} />` : ""}${item.label}</DropdownMenuItem>`).join("\n")}\n        </DropdownMenuContent>\n      </DropdownMenu>\n      <p role="status">{action}</p>\n    </>\n  );`,
   );
   return (
@@ -1201,7 +1201,7 @@ function TooltipDoc() {
   const [text, setText] = useState("Keep this note close");
   const [saved, setSaved] = useState(false);
   const code = example(
-    `import { useState } from "react";\nimport { AnimatedIcon } from "@samarinara/polli-ui/components/animated-icon";\nimport { Button } from "@samarinara/polli-ui/components/button";\nimport { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@samarinara/polli-ui/components/tooltip";`,
+    `import { useState } from "react";\nimport { AnimatedIcon } from "@samarinara/polli-ui/web/components/animated-icon";\nimport { Button } from "@samarinara/polli-ui/web/components/button";\nimport { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@samarinara/polli-ui/web/components/tooltip";`,
     `  const [saved, setSaved] = useState(false);\n  return (\n    <TooltipProvider delayDuration={${delay}}>\n      <Tooltip>\n        <TooltipTrigger asChild>\n          <Button variant="secondary" size="icon" aria-label="Bookmark note"\n            aria-pressed={saved} onClick={() => setSaved((value) => !value)}>\n            <AnimatedIcon name="bookmark" animationKey={saved} active={saved} />\n          </Button>\n        </TooltipTrigger>\n        <TooltipContent side="${side}">{${q(text || "Keep this note close")}}</TooltipContent>\n      </Tooltip>\n      <p role="status">{saved ? "Note bookmarked." : "Note is not bookmarked."}</p>\n    </TooltipProvider>\n  );`,
   );
   return (
@@ -1309,11 +1309,11 @@ function FeedbackDoc() {
   const code =
     kind === "alert"
       ? example(
-          `import { useState } from "react";\nimport { Alert } from "@samarinara/polli-ui/components/layout";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
+          `import { useState } from "react";\nimport { Alert } from "@samarinara/polli-ui/web/components/layout";\nimport { Button } from "@samarinara/polli-ui/web/components/button";`,
           `  const [visible, setVisible] = useState(true);\n  const [revealed, setRevealed] = useState(false);\n  return (\n    <div>\n      {visible ? <Alert data-polli-motion={revealed ? "interaction" : undefined} title={${q(title || "Changes saved")}}>{${q(description)}}<Button variant="ghost" size="sm" onClick={() => setVisible(false)}>Dismiss message</Button></Alert> : <p role="status">Message dismissed.</p>}\n      <Button onClick={() => { setRevealed(true); setVisible(true); }}>Save changes</Button>\n    </div>\n  );`,
         )
       : example(
-          `import { useState } from "react";\nimport { EmptyState, ListRow } from "@samarinara/polli-ui/components/layout";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
+          `import { useState } from "react";\nimport { EmptyState, ListRow } from "@samarinara/polli-ui/web/components/layout";\nimport { Button } from "@samarinara/polli-ui/web/components/button";`,
           `  const [items, setItems] = useState(0);\n  return items === 0 ? (\n    <EmptyState title={${q(title || "Nothing here yet")}} description={${q(description)}}\n      action={<Button onClick={() => setItems(1)}>Add a note</Button>} />\n  ) : (\n    <div>\n      <ListRow title="My first note" description="Added in this example" />\n      <Button variant="ghost" onClick={() => setItems(0)}>Remove note</Button>\n    </div>\n  );`,
         );
   return (
@@ -1493,7 +1493,7 @@ function ListsDoc() {
     </>
   );
   const code = example(
-    `import { useRef, useState } from "react";\nimport { InkText, InkRemoval } from "@samarinara/polli-ui/components/ink";\nimport { Bookmark, Trash2 } from "lucide-react";\nimport { Avatar, ListRow, Separator${surface ? ", Surface" : ""} } from "@samarinara/polli-ui/components/layout";\nimport { Badge } from "@samarinara/polli-ui/components/badge";\nimport { Button } from "@samarinara/polli-ui/components/button";`,
+    `import { useRef, useState } from "react";\nimport { InkText, InkRemoval } from "@samarinara/polli-ui/web/components/ink";\nimport { Bookmark, Trash2 } from "lucide-react";\nimport { Avatar, ListRow, Separator${surface ? ", Surface" : ""} } from "@samarinara/polli-ui/web/components/layout";\nimport { Badge } from "@samarinara/polli-ui/web/components/badge";\nimport { Button } from "@samarinara/polli-ui/web/components/button";`,
     `  const [visible, setVisible] = useState(true);\n  const [removing, setRemoving] = useState(false);\n  const restore = useRef<HTMLButtonElement>(null);\n  return (\n    <${surface ? "Surface" : "div"}>\n      <ListRow leading={<Avatar name={${q(person)}} />} title={${q(person)}}\n        description="Birthday · 12 June" trailing={<Badge tone="${tone}">People</Badge>} />\n      <Separator />\n      {visible ? <InkRemoval removed={removing} onExitComplete={() => setVisible(false)}><ListRow leading={<Bookmark size={20} />} title={<InkText>A few things to remember</InkText>}\n        description="Home · Saved note" trailing={\n          <Button variant="ghost" size="icon" aria-label="Remove saved note" onClick={() => { restore.current?.focus(); setRemoving(true); }}><Trash2 /></Button>\n        } /></InkRemoval> : null}\n      <Button ref={restore} variant="secondary" onClick={() => { setRemoving(false); setVisible(true); }}>Restore saved note</Button>\n    </${surface ? "Surface" : "div"}>\n  );`,
   );
   return (
