@@ -1,29 +1,96 @@
-'use client';
-import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../lib/utils';
-export const buttonVariants = cva('inline-flex max-w-full items-center justify-center gap-2 rounded-full border-0 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring disabled:opacity-45 aria-disabled:opacity-45 [&_svg]:size-4 [&_svg]:shrink-0', { variants: { variant: { default:'bg-primary text-primary-foreground hover:not-disabled:not-aria-disabled:brightness-110', secondary:'bg-mint text-mint-foreground hover:not-disabled:not-aria-disabled:brightness-95', coral:'bg-coral text-coral-foreground hover:not-disabled:not-aria-disabled:brightness-95', butter:'bg-butter text-butter-foreground hover:not-disabled:not-aria-disabled:brightness-95', sky:'bg-sky text-sky-foreground hover:not-disabled:not-aria-disabled:brightness-95', ghost:'bg-transparent text-foreground hover:not-disabled:not-aria-disabled:bg-muted', destructive:'bg-destructive text-background hover:not-disabled:not-aria-disabled:brightness-110' }, size:{ default:'min-h-11 px-5 py-2', sm:'min-h-9 px-4 py-1.5', lg:'min-h-12 px-6 py-2.5', icon:'size-11 shrink-0 p-0' } }, defaultVariants:{ variant:'default',size:'default' } });
-export type ButtonProps = React.ComponentPropsWithoutRef<'button'> & VariantProps<typeof buttonVariants> & { asChild?: boolean };
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, type, disabled, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : 'button';
-    const blockClick = (event: React.SyntheticEvent) => { event.preventDefault(); event.stopPropagation(); };
-    const blockActivation = (event: React.KeyboardEvent) => {
-      if (['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(event.key)) { event.preventDefault(); event.stopPropagation(); }
-    };
-    const disabledHandlers = { 'aria-disabled': true, tabIndex: -1, onClick: blockClick, onClickCapture: blockClick, onDoubleClick: blockClick, onPointerDown: blockClick, onPointerUp: blockClick, onKeyDown: blockActivation } as const;
-    // Slot merges child handlers before parent handlers, so replace the child's
-    // activation handlers too when an anchor is disabled.
-    const child = asChild && disabled && React.isValidElement<React.ComponentPropsWithoutRef<'button'>>(children)
-      ? React.cloneElement(children, disabledHandlers)
-      : children;
-    const childIsButton = asChild && React.isValidElement(children) && children.type === 'button';
-    return <Comp data-polli="button" ref={ref} className={cn(buttonVariants({ variant, size }), className)}
-      {...props} {...(!asChild || childIsButton ? { type: type ?? 'button', disabled } : type ? { type } : {})}
-      {...(asChild && disabled ? disabledHandlers : {})}>
-      {child}
-    </Comp>;
+import * as React from "react";
+import {
+  Pressable,
+  type PressableProps,
+  type PressableStateCallbackType,
+  type StyleProp,
+  type TextStyle,
+} from "react-native";
+import { Pressable as SlotPressable } from "@rn-primitives/slot";
+import { palette } from "../tokens";
+import { textChildren, usePolliTheme } from "../theme";
+export type ButtonProps = PressableProps & {
+  variant?:
+    | "default"
+    | "secondary"
+    | "coral"
+    | "butter"
+    | "sky"
+    | "ghost"
+    | "destructive";
+  size?: "default" | "sm" | "lg" | "icon";
+  textStyle?: StyleProp<TextStyle>;
+  asChild?: boolean;
+};
+export const Button: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ButtonProps> &
+    React.RefAttributes<React.ComponentRef<typeof Pressable>>
+> = React.forwardRef<React.ComponentRef<typeof Pressable>, ButtonProps>(
+  (
+    {
+      variant = "default",
+      size = "default",
+      style,
+      textStyle,
+      children,
+      disabled,
+      asChild,
+      ...props
+    },
+    ref,
+  ) => {
+    const { colors } = usePolliTheme();
+    const backgroundColor = {
+      default: colors.primary,
+      secondary: palette.mint,
+      coral: palette.coral,
+      butter: palette.yellow,
+      sky: palette.blue,
+      ghost: "transparent",
+      destructive: colors.destructive,
+    }[variant];
+    const color =
+      variant === "default"
+        ? colors.primaryForeground
+        : variant === "destructive"
+          ? colors.background
+          : variant === "ghost"
+            ? colors.foreground
+            : palette.ink;
+    const Comp = asChild ? SlotPressable : Pressable;
+    return (
+      <Comp
+        ref={ref}
+        accessibilityRole="button"
+        disabled={disabled}
+        accessibilityState={{ disabled: !!disabled }}
+        {...props}
+        style={(state) => [
+          {
+            minHeight: size === "lg" ? 48 : 44,
+            minWidth: 44,
+            borderRadius: 999,
+            paddingHorizontal: size === "icon" ? 0 : size === "sm" ? 16 : 20,
+            paddingVertical: 10,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 8,
+            backgroundColor,
+            opacity: disabled ? 0.45 : state.pressed ? 0.75 : 1,
+          },
+          typeof style === "function" ? style(state) : style,
+        ]}
+      >
+        {asChild
+          ? React.Children.only(children as React.ReactNode)
+          : (state: PressableStateCallbackType) =>
+              textChildren(
+                typeof children === "function" ? children(state) : children,
+                [{ color, fontWeight: "600" }, textStyle],
+              )}
+      </Comp>
+    );
   },
 );
-Button.displayName='Button';
+Button.displayName = "Button";

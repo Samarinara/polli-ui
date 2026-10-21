@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/react';
-import { AnimatedIcon } from '../src/components/animated-icon';
-import { InkText, InkRemoval } from '../src/components/ink';
+import { AnimatedIcon } from '../src/web/components/animated-icon';
+import { InkText, InkRemoval } from '../src/web/components/ink';
 
 afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); vi.restoreAllMocks(); });
 

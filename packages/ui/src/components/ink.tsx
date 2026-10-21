@@ -1,80 +1,87 @@
-'use client';
-import * as React from 'react';
-import { cn } from '../lib/utils';
-import { useActionRevision } from '../lib/motion';
-import type { ActionKey } from './animated-icon';
-
-export type InkTextProps = React.ComponentPropsWithoutRef<'span'> & {
+import * as React from "react";
+import { Animated, type TextProps, type ViewProps } from "react-native";
+import { Text } from "../theme";
+import { useReducedMotion } from "../lib/motion";
+import type { ActionKey } from "./animated-icon";
+export type InkTextProps = TextProps & {
   crossedOut?: boolean;
-  /** Change after a successful save; wrap the Save button label to underline it. */
   underlineKey?: ActionKey;
 };
-
-export const InkText = React.forwardRef<HTMLSpanElement, InkTextProps>(
-  ({ crossedOut = false, underlineKey, className, children, ...props }, ref) => {
-    const revision = useActionRevision(underlineKey);
-    return <span ref={ref} data-polli="ink-text" data-crossed-out={crossedOut || undefined}
-      className={cn('polli-handwritten', className)} {...props}>
-      <span data-polli="ink-words">{children}</span>
-      <span key={revision} data-polli="ink-underline" data-polli-motion={revision ? 'interaction' : undefined} aria-hidden="true" />
-    </span>;
+export const InkText: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<InkTextProps> &
+    React.RefAttributes<React.ComponentRef<typeof Text>>
+> = React.forwardRef<React.ComponentRef<typeof Text>, InkTextProps>(
+  ({ crossedOut, underlineKey, style, ...props }, ref) => {
+    const initialKey = React.useRef(underlineKey);
+    return (
+      <Text
+        ref={ref}
+        variant="input"
+        style={[
+          {
+            textDecorationLine: crossedOut
+              ? "line-through"
+              : !Object.is(initialKey.current, underlineKey)
+                ? "underline"
+                : "none",
+          },
+          style,
+        ]}
+        {...props}
+      />
+    );
   },
 );
-InkText.displayName = 'InkText';
-
-export type InkRemovalProps = React.ComponentPropsWithoutRef<'div'> & {
+InkText.displayName = "InkText";
+export type InkRemovalProps = ViewProps & {
   removed: boolean;
-  /** Commit deletion after the mark and gap closure finish. */
   onExitComplete: () => void;
 };
-
-export function InkRemoval({ removed, onExitComplete, children, className, onAnimationEnd, ...props }: InkRemovalProps) {
-  const revision = useActionRevision(removed);
-  const root = React.useRef<HTMLDivElement>(null);
+export function InkRemoval({
+  removed,
+  onExitComplete,
+  style,
+  ...props
+}: InkRemovalProps) {
+  const progress = React.useRef(new Animated.Value(removed ? 0 : 1)).current;
+  const reduced = useReducedMotion();
+  const complete = React.useRef(onExitComplete);
+  complete.current = onExitComplete;
   const completed = React.useRef(false);
-  const complete = React.useCallback(() => {
-    if (!completed.current) {
-      completed.current = true;
-      onExitComplete();
-    }
-  }, [onExitComplete]);
-
   React.useEffect(() => {
-    if (!removed) { completed.current = false; return; }
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const finishIfStill = () => { if (!revision || media.matches) complete(); };
-    finishIfStill();
-    // Styles can be missing or an app can suppress animations. Deletion must
-    // still finish if animationend never arrives. Follow the actual CSS timing.
-    const style = root.current ? window.getComputedStyle(root.current) : undefined;
-    const milliseconds = (value: string) => value.endsWith('ms') ? parseFloat(value) : parseFloat(value) * 1000;
-    const durations = (style?.animationDuration ?? '').split(',').map(milliseconds);
-    const delays = (style?.animationDelay ?? '').split(',').map(milliseconds);
-    const deadline = Math.max(0, ...durations.map((duration, index) => (duration || 0) + (delays[index % delays.length] || 0)));
-    let timeout: number;
-    const finishWhenSettled = () => {
-      if (completed.current) return;
-      const active = root.current?.getAnimations?.().some(animation =>
-        'animationName' in animation && animation.animationName === 'polli-close-gap' && (animation.playState === 'running' || animation.playState === 'paused'));
-      // Respect deliberately paused motion and a throttled animation timeline.
-      // If the animation disappears or finishes without an event, still commit.
-      if (active) timeout = window.setTimeout(finishWhenSettled, 50);
-      else complete();
+    if (!removed) {
+      completed.current = false;
+      progress.setValue(1);
+      return;
+    }
+    const finish = () => {
+      if (!completed.current) {
+        completed.current = true;
+        complete.current();
+      }
     };
-    timeout = window.setTimeout(finishWhenSettled, deadline + 50);
-    media.addEventListener('change', finishIfStill);
-    return () => { window.clearTimeout(timeout); media.removeEventListener('change', finishIfStill); };
-  }, [removed, revision, complete]);
-
-  // React 18 treats inert as an unknown string attribute; React 19 knows its
-  // boolean semantics. Emit valid HTML in both supported React versions.
-  const inertProps = { inert: removed ? (parseInt(React.version, 10) < 19 ? '' : true) : undefined } as React.HTMLAttributes<HTMLDivElement>;
-  return <div ref={root} data-polli="ink-removal" data-removed={removed || undefined}
-    data-polli-motion={revision ? 'interaction' : undefined} className={className}
-    {...inertProps} {...props} onAnimationEnd={event => {
-      onAnimationEnd?.(event);
-      if (removed && event.target === event.currentTarget && event.animationName === 'polli-close-gap') complete();
-    }}>
-    <div data-polli="ink-removal-content">{children}</div>
-  </div>;
+    if (reduced) {
+      progress.setValue(0);
+      finish();
+      return;
+    }
+    const animation = Animated.timing(progress, {
+      toValue: 0,
+      duration: 180,
+      useNativeDriver: true,
+    });
+    animation.start(({ finished }) => {
+      if (finished) finish();
+    });
+    return () => animation.stop();
+  }, [removed, progress, reduced]);
+  return (
+    <Animated.View
+      pointerEvents={removed ? "none" : "auto"}
+      accessibilityElementsHidden={removed}
+      importantForAccessibility={removed ? "no-hide-descendants" : "auto"}
+      style={[{ opacity: progress }, style]}
+      {...props}
+    />
+  );
 }

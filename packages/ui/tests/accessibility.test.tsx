@@ -2,15 +2,15 @@ import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Button } from '../src/components/button';
-import { Field, Input, Label, NativeSelect, Textarea } from '../src/components/field';
-import { Checkbox, Switch } from '../src/components/selection';
-import { Avatar, ListRow, Surface } from '../src/components/layout';
-import { Badge } from '../src/components/badge';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../src/components/accordion';
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../src/components/dialog';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../src/components/menu';
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '../src/components/tooltip';
+import { Button } from '../src/web/components/button';
+import { Field, Input, Label, NativeSelect, Textarea } from '../src/web/components/field';
+import { Checkbox, Switch } from '../src/web/components/selection';
+import { Avatar, ListRow, Surface } from '../src/web/components/layout';
+import { Badge } from '../src/web/components/badge';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../src/web/components/accordion';
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../src/web/components/dialog';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../src/web/components/menu';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '../src/web/components/tooltip';
 
 describe('drop-in accessibility and composition', () => {
   it('connects unique field labels, help text, errors, and explicit descriptions', async () => {

@@ -1,7 +1,7 @@
 @layer theme, polli-base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
-@source "./components";
+@source "./web/components";
 @theme inline {
  --color-background: var(--background); --color-foreground: var(--foreground);
  --color-primary: var(--primary); --color-primary-foreground: var(--primary-foreground);

@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Polli UI",
+    "slug": "polli-ui",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "automatic",
+    "web": { "bundler": "metro", "output": "single" },
+    "ios": { "supportsTablet": true },
+    "android": { "package": "page.polli.ui" }
+  }
+}

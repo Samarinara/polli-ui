@@ -1,7 +1,7 @@
 {
   "name": "@samarinara/polli-ui",
-  "version": "0.1.0",
-  "description": "Polli brand tokens and shared shadcn-style React components",
+  "version": "0.2.0",
+  "description": "Polli components for React Native, Expo, and web",
   "type": "module",
   "license": "MIT",
   "repository": {
@@ -20,20 +20,42 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "react-native": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./components/*": {
       "types": "./dist/components/*.d.ts",
-      "import": "./dist/components/*.js"
+      "import": "./dist/components/*.js",
+      "react-native": "./dist/components/*.js",
+      "default": "./dist/components/*.js"
     },
     "./styles.css": "./dist/styles.css",
     "./tokens": {
       "types": "./dist/tokens.d.ts",
-      "import": "./dist/tokens.js"
+      "import": "./dist/tokens.js",
+      "react-native": "./dist/tokens.js",
+      "default": "./dist/tokens.js"
     },
     "./lib/utils": {
-      "types": "./dist/lib/utils.d.ts",
-      "import": "./dist/lib/utils.js"
+      "types": "./dist/web/lib/utils.d.ts",
+      "import": "./dist/web/lib/utils.js",
+      "default": "./dist/web/lib/utils.js"
+    },
+    "./web": {
+      "types": "./dist/web/index.d.ts",
+      "import": "./dist/web/index.js",
+      "default": "./dist/web/index.js"
+    },
+    "./web/components/*": {
+      "types": "./dist/web/components/*.d.ts",
+      "import": "./dist/web/components/*.js",
+      "default": "./dist/web/components/*.js"
+    },
+    "./theme": {
+      "types": "./dist/theme.d.ts",
+      "import": "./dist/theme.js",
+      "default": "./dist/theme.js"
     }
   },
   "publishConfig": {
@@ -43,8 +65,11 @@
     "build": "tsup && tailwindcss -i src/styles.css -o dist/styles.css --minify"
   },
   "peerDependencies": {
-    "react": "^18.3.0 || ^19.0.0",
-    "react-dom": "^18.3.0 || ^19.0.0"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-native": ">=0.83.0 <1",
+    "react-native-web": ">=0.21.0 <1",
+    "react-native-svg": ">=15.0.0 <16"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
@@ -55,9 +80,20 @@
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@rn-primitives/accordion": "^1.5.2",
+    "@rn-primitives/checkbox": "^1.5.2",
+    "@rn-primitives/dialog": "^1.5.2",
+    "@rn-primitives/dropdown-menu": "^1.5.2",
+    "@rn-primitives/portal": "^1.5.3",
+    "@rn-primitives/select": "^1.5.2",
+    "@rn-primitives/slot": "^1.5.2",
+    "@rn-primitives/switch": "^1.5.2",
+    "@rn-primitives/tabs": "^1.5.2",
+    "@rn-primitives/tooltip": "^1.5.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.468.0",
+    "lucide-react-native": "^1.61.0",
     "tabbable": "^6.5.0",
     "tailwind-merge": "^3.3.1"
   },
@@ -67,5 +103,13 @@
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.1.17",
     "tsup": "^8.5.0"
+  },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    },
+    "react-native-web": {
+      "optional": true
+    }
   }
 }

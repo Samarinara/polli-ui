@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
-import { AnimatedIcon } from "@samarinara/polli-ui/components/animated-icon";
-import { InkText, InkRemoval } from "@samarinara/polli-ui/components/ink";
-import { Button } from "@samarinara/polli-ui/components/button";
-import { Input, Label } from "@samarinara/polli-ui/components/field";
-import { Checkbox, Switch } from "@samarinara/polli-ui/components/selection";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@samarinara/polli-ui/components/accordion";
+import { AnimatedIcon } from "@samarinara/polli-ui/web/components/animated-icon";
+import { InkText, InkRemoval } from "@samarinara/polli-ui/web/components/ink";
+import { Button } from "@samarinara/polli-ui/web/components/button";
+import { Input, Label } from "@samarinara/polli-ui/web/components/field";
+import { Checkbox, Switch } from "@samarinara/polli-ui/web/components/selection";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@samarinara/polli-ui/web/components/accordion";
 
 export function NotebookMotionExample() {
   const [finished, setFinished] = useState(false);

@@ -1,79 +1,214 @@
-'use client';
-
-import * as React from 'react';
-import { Slot, Slottable } from '@radix-ui/react-slot';
-import { cn } from '../lib/utils';
-
-export type SurfaceProps = React.ComponentPropsWithoutRef<'div'> & { asChild?: boolean };
-export const Surface = React.forwardRef<HTMLDivElement, SurfaceProps>(({ className, asChild = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : 'div';
-  return <Comp data-polli="surface" ref={ref} className={cn('min-w-0 rounded-xl bg-muted p-6', className)} {...props} />;
-});
-Surface.displayName = 'Surface';
-
-export const Separator = React.forwardRef<HTMLHRElement, React.ComponentPropsWithoutRef<'hr'>>(({ className, ...props }, ref) =>
-  <hr data-polli="separator" ref={ref} className={cn('my-6 border-0 border-t border-border', className)} {...props} />,
+import * as React from "react";
+import { View, Image, type ViewProps } from "react-native";
+import { Text, textChildren, usePolliTheme } from "../theme";
+import { palette } from "../tokens";
+export type SurfaceProps = ViewProps;
+export const Surface: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<SurfaceProps> &
+    React.RefAttributes<React.ComponentRef<typeof View>>
+> = React.forwardRef<React.ComponentRef<typeof View>, SurfaceProps>(
+  ({ style, ...props }, ref) => {
+    const { colors } = usePolliTheme();
+    return (
+      <View
+        ref={ref}
+        style={[
+          {
+            minWidth: 0,
+            borderRadius: 16,
+            padding: 24,
+            gap: 12,
+            backgroundColor: colors.muted,
+          },
+          style,
+        ]}
+        {...props}
+      />
+    );
+  },
 );
-Separator.displayName = 'Separator';
-
-export const Skeleton = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'>>(({ className, ...props }, ref) =>
-  <div data-polli="skeleton" ref={ref} aria-hidden="true" className={cn('h-4 rounded-full bg-muted', className)} {...props} />,
+Surface.displayName = "Surface";
+export const Separator: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ViewProps> &
+    React.RefAttributes<React.ComponentRef<typeof View>>
+> = React.forwardRef<React.ComponentRef<typeof View>, ViewProps>(
+  ({ style, ...props }, ref) => {
+    const { colors } = usePolliTheme();
+    return (
+      <View
+        ref={ref}
+        accessibilityRole="separator"
+        style={[
+          { height: 1, backgroundColor: colors.border, marginVertical: 16 },
+          style,
+        ]}
+        {...props}
+      />
+    );
+  },
 );
-Skeleton.displayName = 'Skeleton';
-
-export type AvatarProps = React.ComponentPropsWithoutRef<'span'> & { name: string; src?: string };
-export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(({ name, src, className, ...props }, ref) => {
-  const [image, setImage] = React.useState({ src, failed: false });
-  if (image.src !== src) setImage({ src, failed: false });
-  const initials = name.trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => Array.from(part)[0]).join('').toLocaleUpperCase() || '?';
-  return <span data-polli="avatar" ref={ref} role="img" aria-label={name.trim() || 'Unknown person'} className={cn('inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-mint text-sm font-medium text-mint-foreground', className)} {...props}>
-    {src && !image.failed ? <img key={src} src={src} alt="" onError={() => setImage({ src, failed: true })} className="size-full object-cover" /> : initials}
-  </span>;
-});
-Avatar.displayName = 'Avatar';
-
-export type EmptyStateProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'title'> & {
+Separator.displayName = "Separator";
+export const Skeleton: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ViewProps> &
+    React.RefAttributes<React.ComponentRef<typeof View>>
+> = React.forwardRef<React.ComponentRef<typeof View>, ViewProps>(
+  ({ style, ...props }, ref) => {
+    const { colors } = usePolliTheme();
+    return (
+      <View
+        ref={ref}
+        accessible={false}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+        style={[
+          { height: 16, borderRadius: 999, backgroundColor: colors.muted },
+          style,
+        ]}
+        {...props}
+      />
+    );
+  },
+);
+Skeleton.displayName = "Skeleton";
+export type AvatarProps = ViewProps & { name: string; src?: string };
+export const Avatar: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<AvatarProps> &
+    React.RefAttributes<React.ComponentRef<typeof View>>
+> = React.forwardRef<React.ComponentRef<typeof View>, AvatarProps>(
+  ({ name, src, style, ...props }, ref) => {
+    const [failed, setFailed] = React.useState<string>();
+    const initials =
+      name
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => Array.from(part)[0])
+        .join("")
+        .toLocaleUpperCase() || "?";
+    return (
+      <View
+        ref={ref}
+        accessibilityRole="image"
+        accessibilityLabel={name.trim() || "Unknown person"}
+        style={[
+          {
+            width: 44,
+            height: 44,
+            borderRadius: 22,
+            overflow: "hidden",
+            backgroundColor: palette.mint,
+            alignItems: "center",
+            justifyContent: "center",
+          },
+          style,
+        ]}
+        {...props}
+      >
+        {src && failed !== src ? (
+          <Image
+            key={src}
+            source={{ uri: src }}
+            style={{ width: "100%", height: "100%" }}
+            onError={() => setFailed(src)}
+            accessible={false}
+          />
+        ) : (
+          <Text style={{ color: palette.ink }}>{initials}</Text>
+        )}
+      </View>
+    );
+  },
+);
+Avatar.displayName = "Avatar";
+export type EmptyStateProps = ViewProps & {
   title: string;
   description: string;
   action?: React.ReactNode;
   icon?: React.ReactNode;
 };
-export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(({ title, description, action, icon, className, ...props }, ref) =>
-  <div data-polli="empty-state" ref={ref} className={cn('grid min-w-0 justify-items-center gap-3 py-12 text-center', className)} {...props}>
-    {icon ? <span aria-hidden="true">{icon}</span> : null}
-    <h3 className="m-0 text-lg font-semibold">{title}</h3>
-    <p className="m-0 max-w-sm text-sm text-muted-foreground">{description}</p>
-    {action}
-  </div>,
+export const EmptyState: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<EmptyStateProps> &
+    React.RefAttributes<React.ComponentRef<typeof View>>
+> = React.forwardRef<React.ComponentRef<typeof View>, EmptyStateProps>(
+  ({ title, description, action, icon, style, ...props }, ref) => (
+    <View
+      ref={ref}
+      style={[{ alignItems: "center", paddingVertical: 40, gap: 12 }, style]}
+      {...props}
+    >
+      {icon}
+      <Text variant="heading">{title}</Text>
+      <Text style={{ textAlign: "center" }}>{description}</Text>
+      {action}
+    </View>
+  ),
 );
-EmptyState.displayName = 'EmptyState';
-
-export type ListRowProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'title'> & {
+EmptyState.displayName = "EmptyState";
+export type ListRowProps = ViewProps & {
   leading?: React.ReactNode;
   title: React.ReactNode;
   description?: React.ReactNode;
   trailing?: React.ReactNode;
-  asChild?: boolean;
 };
-export const ListRow = React.forwardRef<HTMLDivElement, ListRowProps>(({ leading, title, description, trailing, className, children, asChild = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : 'div';
-  return <Comp data-polli="list-row" ref={ref} className={cn('flex min-w-0 items-center gap-4 rounded-lg py-4', className)} {...props}>
-    <Slottable>{children}</Slottable>
-    {leading}
-    <div className="min-w-0 flex-1">
-      <div data-polli="list-title" className="text-xl leading-normal font-medium">{title}</div>
-      {description !== undefined && description !== null ? <div className="mt-1 text-sm text-muted-foreground">{description}</div> : null}
-    </div>
-    {trailing}
-  </Comp>;
-});
-ListRow.displayName = 'ListRow';
-
-export type AlertProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'title'> & { title: string };
-export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(({ title, children, className, ...props }, ref) =>
-  <div data-polli="alert" ref={ref} role="status" aria-atomic="true" className={cn('min-w-0 rounded-lg bg-mint p-4 text-mint-foreground', className)} {...props}>
-    <div data-polli="alert-title" className="text-sm font-medium">{title}</div>
-    <div className="mt-1 text-sm">{children}</div>
-  </div>,
+export const ListRow: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<ListRowProps> &
+    React.RefAttributes<React.ComponentRef<typeof View>>
+> = React.forwardRef<React.ComponentRef<typeof View>, ListRowProps>(
+  (
+    { leading, title, description, trailing, style, children, ...props },
+    ref,
+  ) => (
+    <View
+      ref={ref}
+      style={[
+        {
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 16,
+          paddingVertical: 16,
+        },
+        style,
+      ]}
+      {...props}
+    >
+      {leading}
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Text style={{ fontSize: 20 }}>{title}</Text>
+        {description != null ? (
+          <Text style={{ fontSize: 14 }}>{description}</Text>
+        ) : null}
+        {children}
+      </View>
+      {trailing}
+    </View>
+  ),
 );
-Alert.displayName = 'Alert';
+ListRow.displayName = "ListRow";
+export type AlertProps = ViewProps & { title: string };
+export const Alert: React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<AlertProps> &
+    React.RefAttributes<React.ComponentRef<typeof View>>
+> = React.forwardRef<React.ComponentRef<typeof View>, AlertProps>(
+  ({ title, children, style, ...props }, ref) => (
+    <View
+      ref={ref}
+      accessibilityRole="alert"
+      accessibilityLiveRegion="polite"
+      style={[
+        {
+          borderRadius: 12,
+          padding: 16,
+          gap: 8,
+          backgroundColor: palette.mint,
+        },
+        style,
+      ]}
+      {...props}
+    >
+      <Text style={{ fontWeight: "600", color: palette.ink }}>{title}</Text>
+      {textChildren(children, { color: palette.ink })}
+    </View>
+  ),
+);
+Alert.displayName = "Alert";

@@ -5,7 +5,7 @@ import {
   ArrowUpRight,
   ChevronRight,
 } from "lucide-react";
-import { AnimatedIcon } from "@samarinara/polli-ui/components/animated-icon";
+import { AnimatedIcon } from "@samarinara/polli-ui/web/components/animated-icon";
 import { groups, pages, pageHref, searchDocs, type PageId } from "./pages";
 
 export function Sidebar({ active }: { active: PageId }) {

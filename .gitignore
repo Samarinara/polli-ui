@@ -10,3 +10,5 @@ test-results/
 .browsers/
 polli-ui-preview.html
 polli-ui-preview/
+
+.expo/
